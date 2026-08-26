@@ -12,13 +12,16 @@
   const heroEl = document.getElementById('home');
 
   // --- Reveal sections on scroll (IntersectionObserver = cheap & smooth) ---
+  // Low threshold + positive rootMargin so sections reveal *before* they're
+  // fully in view — prevents the "pop in abruptly" jank on fast scrolls.
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target); // reveal once, then stop watching (cheaper)
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.05, rootMargin: '0px 0px -10% 0px' });
 
   sections.forEach((s) => revealObserver.observe(s));
 
@@ -42,9 +45,11 @@
         }
 
         // Subtle parallax on hero scene (only while hero is in view, perf-friendly)
+        // Capped so it never moves the scene more than a small amount —
+        // large translateY values were causing visible layout jitter on some phones.
         if (scrollTop < heroEl.offsetHeight) {
-          const parallaxAmount = scrollTop * 0.3;
-          heroScene.style.transform = `translateY(${parallaxAmount}px)`;
+          const parallaxAmount = Math.min(scrollTop * 0.2, 60);
+          heroScene.style.transform = `translate3d(0, ${parallaxAmount}px, 0)`;
         }
 
         ticking = false;
