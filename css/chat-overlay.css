@@ -175,3 +175,20 @@
 }
 
 .chat-send-btn:active { transform: scale(0.9); }
+
+/* Free-text input is hidden for now — suggestion chips are the only
+   input method until the input is wired to a real backend.
+   Re-enable by removing the [hidden] attribute in index.html. */
+.chat-input-row[hidden] {
+  display: none;
+}
+
+.chat-hint-footer {
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  padding: var(--sp-2) var(--sp-4) calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  background: var(--color-white);
+  border-top: 1px solid rgba(36,20,23,0.06);
+  flex-shrink: 0;
+}
