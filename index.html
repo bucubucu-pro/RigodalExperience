@@ -19,289 +19,56 @@
 </head>
 <body>
 
-<!-- Scroll progress indicator -->
+<!-- Scroll progress indicator (shell — always present) -->
 <div class="nav-progress" id="navProgress"></div>
 
 <!-- ============================================
-     HERO
+     MODULE MOUNT POINT
+     All enabled modules (hero, stay, explore, adventure,
+     rewards, chat teaser, proof, cta, faq — whatever is
+     turned on in js/modules.config.js) get injected here,
+     in order, by js/moduleRegistry.js.
+
+     Do NOT hand-edit content here — it's rebuilt on every
+     page load from the module files. Edit the module's
+     own js/modules/*.js file instead.
      ============================================ -->
-<section class="hero" id="home" data-section>
-  <div class="hero-topbar">
-    <div class="weather-chip" id="weatherChip">
-      <span>☀️</span><span id="weatherTemp">24°C</span>
-    </div>
-  </div>
-
-  <div class="hero-scene" id="heroScene">
-    <div class="hero-stars"></div>
-    <div class="hero-hill"></div>
-    <div class="hero-house">
-      <svg viewBox="0 0 200 160" fill="none">
-        <path d="M20 90 L100 30 L180 90 V150 H20 Z" fill="#E8C67D"/>
-        <path d="M10 95 L100 25 L190 95 L180 100 L100 40 L20 100 Z" fill="#5C1A2E"/>
-        <rect x="45" y="105" width="28" height="28" rx="3" fill="#5C1A2E" class="hero-window"/>
-        <rect x="90" y="105" width="28" height="28" rx="3" fill="#5C1A2E" class="hero-window"/>
-        <rect x="135" y="105" width="28" height="28" rx="3" fill="#5C1A2E" class="hero-window"/>
-        <rect x="88" y="55" width="24" height="34" fill="#3E0F1F" class="hero-window"/>
-      </svg>
-    </div>
-    <button class="hero-rudi" id="rudiTapTarget" aria-label="Tap to hear Rudi greet you">
-      <svg viewBox="0 0 60 60" fill="none">
-        <ellipse cx="30" cy="36" rx="18" ry="16" fill="#5C1A2E"/>
-        <circle cx="30" cy="18" r="13" fill="#5C1A2E"/>
-        <path d="M30 18 L44 22 L30 26 Z" fill="#D4A24C"/>
-        <circle cx="35" cy="15" r="2.4" fill="white"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="hero-content">
-    <div class="hero-speech">
-      <div class="speech-bubble" id="rudiGreeting" data-i18n="hero.greeting">Szia! I've been expecting you 🐦</div>
-    </div>
-
-    <div class="countdown-card">
-      <div class="countdown-label" id="countdownLabel" data-i18n="hero.checkinLabel">Check-in in</div>
-      <div class="countdown-ring-wrap">
-        <svg viewBox="0 0 140 140">
-          <circle class="countdown-ring-bg" cx="70" cy="70" r="60"/>
-          <circle class="countdown-ring-fg" id="countdownRing" cx="70" cy="70" r="60"
-                  stroke-dasharray="377" stroke-dashoffset="150"/>
-        </svg>
-        <div class="countdown-numbers">
-          <div class="countdown-value" id="countdownValue">2</div>
-          <div class="countdown-unit" id="countdownUnit">days</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero-actions">
-      <a href="#stay" class="hero-action-card" data-nav-link>
-        <span class="hero-action-icon">🔑</span>
-        <span class="hero-action-label" data-i18n="hero.actionStay">House Guide</span>
-      </a>
-      <a href="#explore" class="hero-action-card" data-nav-link>
-        <span class="hero-action-icon">🗺️</span>
-        <span class="hero-action-label" data-i18n="hero.actionExplore">Explore Eger</span>
-      </a>
-      <a href="#adventure" class="hero-action-card" data-nav-link>
-        <span class="hero-action-icon">🪶</span>
-        <span class="hero-action-label" data-i18n="hero.actionHunt">Treasure Hunt</span>
-      </a>
-      <button class="hero-action-card" data-open-chat>
-        <span class="hero-action-icon">💬</span>
-        <span class="hero-action-label" data-i18n="hero.actionContact">Contact Host</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="hero-scroll-cue">
-    <span data-i18n="hero.scrollCue">Scroll to explore</span>
-    <span>↓</span>
-  </div>
-</section>
+<main id="moduleMount"></main>
 
 <!-- ============================================
-     MY STAY
+     PERSISTENT NAV (shell — always present)
+     Tab items are generated automatically from
+     modules.config.js (any module with inNav: true).
      ============================================ -->
-<section class="section stay-section" id="stay" data-section>
-  <div class="container">
-    <div class="section-eyebrow" data-i18n="stay.eyebrow">Inside the house</div>
-    <h2 class="section-title" data-i18n="stay.title">My Stay</h2>
-    <p class="section-subtitle" data-i18n="stay.subtitle">Everything you need, right where you need it.</p>
+<nav class="tab-bar" id="tabBar">
+  <!-- Populated by moduleRegistry.js buildNav() -->
+</nav>
 
-    <div class="stay-hotspot-grid">
-      <button class="hotspot-card is-pulsing" data-sheet="wifi">
-        <span class="hotspot-icon">📶</span>
-        <span class="hotspot-label" data-i18n="stay.wifi">Wi-Fi</span>
-        <span class="hotspot-preview" data-i18n="stay.wifiPreview">Tap for password</span>
-      </button>
-      <button class="hotspot-card" data-sheet="checkin">
-        <span class="hotspot-icon">🚪</span>
-        <span class="hotspot-label" data-i18n="stay.checkin">Check-in / out</span>
-        <span class="hotspot-preview" data-i18n="stay.checkinPreview">Times & lockbox</span>
-      </button>
-      <button class="hotspot-card" data-sheet="parking">
-        <span class="hotspot-icon">🚗</span>
-        <span class="hotspot-label" data-i18n="stay.parking">Parking</span>
-        <span class="hotspot-preview" data-i18n="stay.parkingPreview">Where to park</span>
-      </button>
-      <button class="hotspot-card" data-sheet="appliances">
-        <span class="hotspot-icon">📺</span>
-        <span class="hotspot-label" data-i18n="stay.appliances">Appliances</span>
-        <span class="hotspot-preview" data-i18n="stay.appliancesPreview">TV, AC, dishwasher</span>
-      </button>
-      <button class="hotspot-card" data-sheet="rules">
-        <span class="hotspot-icon">📖</span>
-        <span class="hotspot-label" data-i18n="stay.rules">House Rules</span>
-        <span class="hotspot-preview" data-i18n="stay.rulesPreview">Quick read</span>
-      </button>
-      <button class="hotspot-card" data-sheet="guestbook">
-        <span class="hotspot-icon">✍️</span>
-        <span class="hotspot-label" data-i18n="stay.guestbook">Guestbook</span>
-        <span class="hotspot-preview" data-i18n="stay.guestbookPreview">Leave a note</span>
-      </button>
-    </div>
-
-    <button class="btn btn-primary btn-block" data-sheet="checklist">
-      ✅ <span data-i18n="stay.checklistBtn">Checkout Checklist</span>
-    </button>
-  </div>
-</section>
+<!-- Floating chat button (shell — always present, visibility handled by scrollEngine.js) -->
+<button class="rudi-fab" id="rudiFab" data-open-module="chat" aria-label="Ask Rudi">🐦</button>
 
 <!-- ============================================
-     EXPLORE EGER
+     BOTTOM SHEET (shell — used by the "stay" module,
+     but lives here since only one sheet is ever open
+     at a time; harmless if "stay" module is disabled)
      ============================================ -->
-<section class="section explore-section" id="explore" data-section>
-  <div class="container">
-    <div class="section-eyebrow" data-i18n="explore.eyebrow">The village map</div>
-    <h2 class="section-title" data-i18n="explore.title">Explore Eger</h2>
-    <p class="section-subtitle" data-i18n="explore.subtitle">Rudi's personal recommendations, curated for you.</p>
-  </div>
-
-  <div class="filter-scroll" id="filterScroll">
-    <button class="chip is-active" data-filter="all" data-i18n="explore.filterAll">✨ All</button>
-    <button class="chip" data-filter="wine" data-i18n="explore.filterWine">🍷 Wineries</button>
-    <button class="chip" data-filter="food" data-i18n="explore.filterFood">🍽 Restaurants</button>
-    <button class="chip" data-filter="cafe" data-i18n="explore.filterCafe">☕ Cafés</button>
-    <button class="chip" data-filter="sights" data-i18n="explore.filterSights">🏰 Attractions</button>
-    <button class="chip" data-filter="shop" data-i18n="explore.filterShop">🛒 Supermarkets</button>
-    <button class="chip" data-filter="pharmacy" data-i18n="explore.filterPharmacy">🚑 Pharmacy</button>
-    <button class="chip" data-filter="taxi" data-i18n="explore.filterTaxi">🚕 Taxi</button>
-    <button class="chip" data-filter="family" data-i18n="explore.filterFamily">👨‍👩‍👧 Family</button>
-  </div>
-
-  <div class="container" id="placeList">
-    <!-- Populated by js/explore.js -->
-  </div>
-</section>
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div id="sheetContent"></div>
+</div>
 
 <!-- ============================================
-     RIGÓ RUDI ADVENTURE
+     OVERLAY MOUNT POINT
+     Full-screen overlays (like chat) get injected here
+     by their own module's init(), separate from the
+     scrolling page flow in #moduleMount.
      ============================================ -->
-<section class="section adventure-section" id="adventure" data-section>
-  <div class="container">
-    <div class="feather-jar"><span id="featherCount">0</span> 🪶</div>
-    <div class="section-eyebrow" data-i18n="adventure.eyebrow">Family adventure</div>
-    <h2 class="section-title" data-i18n="adventure.title">Rigó Rudi's Treasure Hunt</h2>
-    <p class="section-subtitle" data-i18n="adventure.subtitle">Solve, explore, and earn feathers together.</p>
-
-    <div class="quest-trail" id="questTrail">
-      <!-- Populated by js/adventure.js -->
-    </div>
-  </div>
-</section>
+<div id="overlayMount"></div>
 
 <!-- ============================================
-     REWARDS CLUB
-     ============================================ -->
-<section class="section rewards-section" id="rewards" data-section>
-  <div class="container">
-    <div class="section-eyebrow" data-i18n="rewards.eyebrow">Rudi's nest</div>
-    <h2 class="section-title" data-i18n="rewards.title">Rewards Club</h2>
-    <p class="section-subtitle" data-i18n="rewards.subtitle">Collect feathers, redeem real perks.</p>
-
-    <div class="nest-card">
-      <div class="nest-count" id="nestCount">0</div>
-      <div class="nest-label" data-i18n="rewards.nestLabel">Feathers collected</div>
-    </div>
-
-    <div class="earn-row"><span data-i18n="rewards.earnBook">📅 Book directly</span><span class="earn-value">+100</span></div>
-    <div class="earn-row"><span data-i18n="rewards.earnStay">🌙 Stay 3+ nights</span><span class="earn-value">+30</span></div>
-    <div class="earn-row"><span data-i18n="rewards.earnReview">⭐ Leave a review</span><span class="earn-value">+20</span></div>
-    <div class="earn-row"><span data-i18n="rewards.earnHunt">🪶 Complete the hunt</span><span class="earn-value">+50</span></div>
-    <div class="earn-row"><span data-i18n="rewards.earnReferral">👥 Refer a friend</span><span class="earn-value">+150</span></div>
-
-    <div class="reward-gifts">
-      <div class="gift-box"><div class="gift-icon">🛏️</div><div class="gift-name" data-i18n="rewards.giftLateCheckout">Late Checkout</div><div class="gift-cost">40 🪶</div></div>
-      <div class="gift-box"><div class="gift-icon">🏷️</div><div class="gift-name" data-i18n="rewards.giftDiscount">Next Stay Discount</div><div class="gift-cost">120 🪶</div></div>
-      <div class="gift-box is-locked"><div class="gift-icon">🍷</div><div class="gift-name" data-i18n="rewards.giftWine">Local Wine</div><div class="gift-cost">80 🪶</div></div>
-      <div class="gift-box is-locked"><div class="gift-icon">🧺</div><div class="gift-name" data-i18n="rewards.giftBasket">Welcome Basket</div><div class="gift-cost">150 🪶</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================
-     ASK RIGÓ RUDI (teaser - opens full overlay)
-     ============================================ -->
-<section class="section chat-section" id="chat" data-section>
-  <div class="container">
-    <div class="section-eyebrow" data-i18n="chat.eyebrow">Always here to help</div>
-    <h2 class="section-title" data-i18n="chat.title">Ask Rigó Rudi</h2>
-    <p class="section-subtitle" data-i18n="chat.subtitle">Instant answers, day or night.</p>
-
-    <div class="chat-preview-card">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div class="chat-avatar">🐦</div>
-        <div>
-          <div style="font-weight:700;">Rigó Rudi</div>
-          <div style="font-size:var(--fs-xs); color:var(--color-success);" data-i18n="chat.online">● Online</div>
-        </div>
-      </div>
-      <div class="chat-suggested-list">
-        <button class="chat-suggested-item" data-open-chat data-prompt="Where can I have breakfast?" data-i18n="chat.q1">🍳 Where can I have breakfast?</button>
-        <button class="chat-suggested-item" data-open-chat data-prompt="What's open on Sunday?" data-i18n="chat.q2">📅 What's open on Sunday?</button>
-        <button class="chat-suggested-item" data-open-chat data-prompt="How do I use the air conditioner?" data-i18n="chat.q3">❄️ How do I use the AC?</button>
-      </div>
-      <button class="btn btn-primary btn-block" style="margin-top:20px;" data-open-chat data-i18n="chat.startBtn">Start chatting</button>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================
-     PROOF / GUESTBOOK WALL
-     ============================================ -->
-<section class="section proof-section" id="proof" data-section>
-  <div class="container">
-    <div class="section-eyebrow" data-i18n="proof.eyebrow">From our guests</div>
-    <h2 class="section-title" data-i18n="proof.title">The Guestbook Wall</h2>
-  </div>
-
-  <div class="postcard-scroll">
-    <div class="postcard">
-      <div class="postcard-quote">"Rudi made our kids' trip unforgettable. The treasure hunt was pure joy."</div>
-      <div class="postcard-author">— Anna & family, Berlin</div>
-      <div class="postcard-stars">★★★★★</div>
-    </div>
-    <div class="postcard">
-      <div class="postcard-quote">"Best wine recommendations we've ever gotten from a host."</div>
-      <div class="postcard-author">— Marco, Milan</div>
-      <div class="postcard-stars">★★★★★</div>
-    </div>
-    <div class="postcard">
-      <div class="postcard-quote">"Felt like visiting family, not renting a room."</div>
-      <div class="postcard-author">— Kata, Budapest</div>
-      <div class="postcard-stars">★★★★★</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================
-     CTA BAND
-     ============================================ -->
-<section class="section cta-section" id="book" data-section>
-  <h2 class="section-title" data-i18n="cta.title">Stay with Rudi</h2>
-  <p class="section-subtitle" data-i18n="cta.subtitle">Your next Eger memory starts here.</p>
-  <a href="#" class="btn btn-gold" style="min-width:220px;" data-i18n="cta.button">Stay with Rudi</a>
-  <div class="cta-microcopy" data-i18n="cta.microcopy">🪶 +100 feathers for booking direct</div>
-</section>
-
-<!-- ============================================
-     FAQ
-     ============================================ -->
-<section class="section faq-section" id="faq" data-section>
-  <div class="container">
-    <div class="section-eyebrow" data-i18n="faq.eyebrow">Good to know</div>
-    <h2 class="section-title" data-i18n="faq.title">FAQ</h2>
-
-    <div id="faqList">
-      <!-- Populated by js/faq.js -->
-    </div>
-  </div>
-</section>
-
-<!-- ============================================
-     FOOTER
+     FOOTER (shell — always present; not a module
+     since every guesthouse needs contact info)
      ============================================ -->
 <footer class="site-footer">
   <div style="font-family:var(--font-display); font-size:1.25rem; color:white;">RigóDal Vendégház</div>
@@ -322,82 +89,33 @@
 </footer>
 
 <!-- ============================================
-     PERSISTENT NAV
-     ============================================ -->
-<nav class="tab-bar" id="tabBar">
-  <a href="#home" class="tab-item is-active" data-tab data-nav-link>
-    <span class="tab-icon">🏠</span><span data-i18n="nav.home">Home</span>
-  </a>
-  <a href="#stay" class="tab-item" data-tab data-nav-link>
-    <span class="tab-icon">🔑</span><span data-i18n="nav.stay">Stay</span>
-  </a>
-  <a href="#explore" class="tab-item" data-tab data-nav-link>
-    <span class="tab-icon">🗺️</span><span data-i18n="nav.explore">Explore</span>
-  </a>
-  <a href="#adventure" class="tab-item" data-tab data-nav-link>
-    <span class="tab-icon">🪶</span><span data-i18n="nav.hunt">Hunt</span>
-  </a>
-  <button class="tab-item" data-open-chat>
-    <span class="tab-icon">💬</span><span data-i18n="nav.rudi">Rudi</span>
-  </button>
-</nav>
-
-<!-- Floating chat button (appears after scrolling past hero) -->
-<button class="rudi-fab" id="rudiFab" data-open-chat aria-label="Ask Rudi">🐦</button>
-
-<!-- ============================================
-     BOTTOM SHEET (My Stay detail panel)
-     ============================================ -->
-<div class="sheet-backdrop" id="sheetBackdrop"></div>
-<div class="sheet" id="sheet">
-  <div class="sheet-handle"></div>
-  <div id="sheetContent"><!-- Populated by js/staySheets.js --></div>
-</div>
-
-<!-- ============================================
-     CHAT OVERLAY
-     ============================================ -->
-<div class="chat-overlay" id="chatOverlay">
-  <div class="chat-header">
-    <button class="chat-close-btn" id="chatCloseBtn">✕</button>
-    <div class="chat-avatar" id="chatAvatar">🐦</div>
-    <div class="chat-header-text">
-      <div class="chat-title">Rigó Rudi</div>
-      <div class="chat-status" data-i18n="chat.online">● Online</div>
-    </div>
-  </div>
-  <div class="chat-messages" id="chatMessages"></div>
-  <div class="chat-suggestions" id="chatSuggestions">
-    <button class="chip" data-chat-prompt="Where can I have breakfast?" data-i18n="chat.suggestBreakfast">🍳 Breakfast spots</button>
-    <button class="chip" data-chat-prompt="What's open on Sunday?" data-i18n="chat.suggestSunday">📅 Sunday hours</button>
-    <button class="chip" data-chat-prompt="How do I use the air conditioner?" data-i18n="chat.suggestAC">❄️ AC help</button>
-    <button class="chip" data-chat-prompt="Where should I park?" data-i18n="chat.suggestParking">🚗 Parking</button>
-    <button class="chip" data-chat-prompt="Which winery do you recommend?" data-i18n="chat.suggestWine">🍷 Wine tips</button>
-  </div>
-  <!-- Free-text input temporarily disabled — chip suggestions only.
-       To re-enable: remove the "hidden" attribute below and delete the .chat-hint-footer div. -->
-  <div class="chat-input-row" id="chatInputRow" hidden>
-    <input type="text" class="chat-input" id="chatInput" placeholder="Ask Rudi anything...">
-    <button class="chat-send-btn" id="chatSendBtn">➤</button>
-  </div>
-  <div class="chat-hint-footer" data-i18n="chat.hintFooter">Tap a question above to chat with Rudi</div>
-</div>
-
-<!-- ============================================
-     JS - each file is one focused module.
-     translations.js and i18n.js must load BEFORE
-     any module that renders text (hero, explore, etc.)
+     JS LOAD ORDER — this matters:
+     1. Data + translations first (modules read from these)
+     2. i18n engine (modules call RIGODAL_I18N.t())
+     3. Module config + registry engine (the on/off system)
+     4. Every individual module file (each self-registers)
+     5. scrollEngine + nav (generic behavior, work on any module)
+     6. app.js LAST — actually boots everything
      ============================================ -->
 <script src="js/data.js"></script>
 <script src="js/translations.js"></script>
 <script src="js/i18n.js"></script>
+
+<script src="js/modules.config.js"></script>
+<script src="js/moduleRegistry.js"></script>
+
+<script src="js/modules/hero.js"></script>
+<script src="js/modules/stay.js"></script>
+<script src="js/modules/explore.js"></script>
+<script src="js/modules/adventure.js"></script>
+<script src="js/modules/rewards.js"></script>
+<script src="js/modules/chat.js"></script>
+<script src="js/modules/proof.js"></script>
+<script src="js/modules/cta.js"></script>
+<script src="js/modules/faq.js"></script>
+<!-- Add new module <script> tags here, above app.js -->
+
 <script src="js/scrollEngine.js"></script>
-<script src="js/hero.js"></script>
-<script src="js/staySheets.js"></script>
-<script src="js/explore.js"></script>
-<script src="js/adventure.js"></script>
-<script src="js/faq.js"></script>
-<script src="js/chat.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/app.js"></script>
 </body>
