@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RigóDal Companion — Your guide to Eger</title>
+<meta name="description" content="Your personal digital guide to RigóDal Vendégház, hosted by Rigó Rudi.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/section-hero.css">
+<link rel="stylesheet" href="css/section-stay.css">
+<link rel="stylesheet" href="css/section-rest.css">
+<link rel="stylesheet" href="css/chat-overlay.css">
+</head>
+<body>
+
+<!-- Scroll progress indicator -->
+<div class="nav-progress" id="navProgress"></div>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section class="hero" id="home" data-section>
+  <div class="hero-topbar">
+    <div class="weather-chip" id="weatherChip">
+      <span>☀️</span><span id="weatherTemp">24°C</span>
+    </div>
+  </div>
+
+  <div class="hero-scene" id="heroScene">
+    <div class="hero-stars"></div>
+    <div class="hero-hill"></div>
+    <div class="hero-house">
+      <svg viewBox="0 0 200 160" fill="none">
+        <path d="M20 90 L100 30 L180 90 V150 H20 Z" fill="#E8C67D"/>
+        <path d="M10 95 L100 25 L190 95 L180 100 L100 40 L20 100 Z" fill="#5C1A2E"/>
+        <rect x="45" y="105" width="28" height="28" rx="3" fill="#5C1A2E" class="hero-window"/>
+        <rect x="90" y="105" width="28" height="28" rx="3" fill="#5C1A2E" class="hero-window"/>
+        <rect x="135" y="105" width="28" height="28" rx="3" fill="#5C1A2E" class="hero-window"/>
+        <rect x="88" y="55" width="24" height="34" fill="#3E0F1F" class="hero-window"/>
+      </svg>
+    </div>
+    <button class="hero-rudi" id="rudiTapTarget" aria-label="Tap to hear Rudi greet you">
+      <svg viewBox="0 0 60 60" fill="none">
+        <ellipse cx="30" cy="36" rx="18" ry="16" fill="#5C1A2E"/>
+        <circle cx="30" cy="18" r="13" fill="#5C1A2E"/>
+        <path d="M30 18 L44 22 L30 26 Z" fill="#D4A24C"/>
+        <circle cx="35" cy="15" r="2.4" fill="white"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-speech">
+      <div class="speech-bubble" id="rudiGreeting">Szia! I've been expecting you 🐦</div>
+    </div>
+
+    <div class="countdown-card">
+      <div class="countdown-label" id="countdownLabel">Check-in in</div>
+      <div class="countdown-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="countdown-ring-bg" cx="70" cy="70" r="60"/>
+          <circle class="countdown-ring-fg" id="countdownRing" cx="70" cy="70" r="60"
+                  stroke-dasharray="377" stroke-dashoffset="150"/>
+        </svg>
+        <div class="countdown-numbers">
+          <div class="countdown-value" id="countdownValue">2</div>
+          <div class="countdown-unit" id="countdownUnit">days</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="#stay" class="hero-action-card" data-nav-link>
+        <span class="hero-action-icon">🔑</span>
+        <span class="hero-action-label">House Guide</span>
+      </a>
+      <a href="#explore" class="hero-action-card" data-nav-link>
+        <span class="hero-action-icon">🗺️</span>
+        <span class="hero-action-label">Explore Eger</span>
+      </a>
+      <a href="#adventure" class="hero-action-card" data-nav-link>
+        <span class="hero-action-icon">🪶</span>
+        <span class="hero-action-label">Treasure Hunt</span>
+      </a>
+      <button class="hero-action-card" data-open-chat>
+        <span class="hero-action-icon">💬</span>
+        <span class="hero-action-label">Contact Host</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-scroll-cue">
+    <span>Scroll to explore</span>
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- ============================================
+     MY STAY
+     ============================================ -->
+<section class="section stay-section" id="stay" data-section>
+  <div class="container">
+    <div class="section-eyebrow">Inside the house</div>
+    <h2 class="section-title">My Stay</h2>
+    <p class="section-subtitle">Everything you need, right where you need it.</p>
+
+    <div class="stay-hotspot-grid">
+      <button class="hotspot-card is-pulsing" data-sheet="wifi">
+        <span class="hotspot-icon">📶</span>
+        <span class="hotspot-label">Wi-Fi</span>
+        <span class="hotspot-preview">Tap for password</span>
+      </button>
+      <button class="hotspot-card" data-sheet="checkin">
+        <span class="hotspot-icon">🚪</span>
+        <span class="hotspot-label">Check-in / out</span>
+        <span class="hotspot-preview">Times & lockbox</span>
+      </button>
+      <button class="hotspot-card" data-sheet="parking">
+        <span class="hotspot-icon">🚗</span>
+        <span class="hotspot-label">Parking</span>
+        <span class="hotspot-preview">Where to park</span>
+      </button>
+      <button class="hotspot-card" data-sheet="appliances">
+        <span class="hotspot-icon">📺</span>
+        <span class="hotspot-label">Appliances</span>
+        <span class="hotspot-preview">TV, AC, dishwasher</span>
+      </button>
+      <button class="hotspot-card" data-sheet="rules">
+        <span class="hotspot-icon">📖</span>
+        <span class="hotspot-label">House Rules</span>
+        <span class="hotspot-preview">Quick read</span>
+      </button>
+      <button class="hotspot-card" data-sheet="guestbook">
+        <span class="hotspot-icon">✍️</span>
+        <span class="hotspot-label">Guestbook</span>
+        <span class="hotspot-preview">Leave a note</span>
+      </button>
+    </div>
+
+    <button class="btn btn-primary btn-block" data-sheet="checklist">
+      ✅ Checkout Checklist
+    </button>
+  </div>
+</section>
+
+<!-- ============================================
+     EXPLORE EGER
+     ============================================ -->
+<section class="section explore-section" id="explore" data-section>
+  <div class="container">
+    <div class="section-eyebrow">The village map</div>
+    <h2 class="section-title">Explore Eger</h2>
+    <p class="section-subtitle">Rudi's personal recommendations, curated for you.</p>
+  </div>
+
+  <div class="filter-scroll" id="filterScroll">
+    <button class="chip is-active" data-filter="all">✨ All</button>
+    <button class="chip" data-filter="wine">🍷 Wineries</button>
+    <button class="chip" data-filter="food">🍽 Restaurants</button>
+    <button class="chip" data-filter="cafe">☕ Cafés</button>
+    <button class="chip" data-filter="sights">🏰 Attractions</button>
+    <button class="chip" data-filter="shop">🛒 Supermarkets</button>
+    <button class="chip" data-filter="pharmacy">🚑 Pharmacy</button>
+    <button class="chip" data-filter="taxi">🚕 Taxi</button>
+    <button class="chip" data-filter="family">👨‍👩‍👧 Family</button>
+  </div>
+
+  <div class="container" id="placeList">
+    <!-- Populated by js/places.js -->
+  </div>
+</section>
+
+<!-- ============================================
+     RIGÓ RUDI ADVENTURE
+     ============================================ -->
+<section class="section adventure-section" id="adventure" data-section>
+  <div class="container">
+    <div class="feather-jar"><span id="featherCount">0</span> 🪶</div>
+    <div class="section-eyebrow">Family adventure</div>
+    <h2 class="section-title">Rigó Rudi's Treasure Hunt</h2>
+    <p class="section-subtitle">Solve, explore, and earn feathers together.</p>
+
+    <div class="quest-trail" id="questTrail">
+      <!-- Populated by js/adventure.js -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     REWARDS CLUB
+     ============================================ -->
+<section class="section rewards-section" id="rewards" data-section>
+  <div class="container">
+    <div class="section-eyebrow">Rudi's nest</div>
+    <h2 class="section-title">Rewards Club</h2>
+    <p class="section-subtitle">Collect feathers, redeem real perks.</p>
+
+    <div class="nest-card">
+      <div class="nest-count" id="nestCount">0</div>
+      <div class="nest-label">Feathers collected</div>
+    </div>
+
+    <div class="earn-row"><span>📅 Book directly</span><span class="earn-value">+100</span></div>
+    <div class="earn-row"><span>🌙 Stay 3+ nights</span><span class="earn-value">+30</span></div>
+    <div class="earn-row"><span>⭐ Leave a review</span><span class="earn-value">+20</span></div>
+    <div class="earn-row"><span>🪶 Complete the hunt</span><span class="earn-value">+50</span></div>
+    <div class="earn-row"><span>👥 Refer a friend</span><span class="earn-value">+150</span></div>
+
+    <div class="reward-gifts">
+      <div class="gift-box"><div class="gift-icon">🛏️</div><div class="gift-name">Late Checkout</div><div class="gift-cost">40 feathers</div></div>
+      <div class="gift-box"><div class="gift-icon">🏷️</div><div class="gift-name">Next Stay Discount</div><div class="gift-cost">120 feathers</div></div>
+      <div class="gift-box is-locked"><div class="gift-icon">🍷</div><div class="gift-name">Local Wine</div><div class="gift-cost">80 feathers</div></div>
+      <div class="gift-box is-locked"><div class="gift-icon">🧺</div><div class="gift-name">Welcome Basket</div><div class="gift-cost">150 feathers</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     ASK RIGÓ RUDI (teaser - opens full overlay)
+     ============================================ -->
+<section class="section chat-section" id="chat" data-section>
+  <div class="container">
+    <div class="section-eyebrow">Always here to help</div>
+    <h2 class="section-title">Ask Rigó Rudi</h2>
+    <p class="section-subtitle">Instant answers, day or night.</p>
+
+    <div class="chat-preview-card">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="chat-avatar">🐦</div>
+        <div>
+          <div style="font-weight:700;">Rigó Rudi</div>
+          <div style="font-size:var(--fs-xs); color:var(--color-success);">● Online</div>
+        </div>
+      </div>
+      <div class="chat-suggested-list">
+        <button class="chat-suggested-item" data-open-chat data-prompt="Where can I have breakfast?">🍳 Where can I have breakfast?</button>
+        <button class="chat-suggested-item" data-open-chat data-prompt="What's open on Sunday?">📅 What's open on Sunday?</button>
+        <button class="chat-suggested-item" data-open-chat data-prompt="How do I use the air conditioner?">❄️ How do I use the AC?</button>
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:20px;" data-open-chat>Start chatting</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PROOF / GUESTBOOK WALL
+     ============================================ -->
+<section class="section proof-section" id="proof" data-section>
+  <div class="container">
+    <div class="section-eyebrow">From our guests</div>
+    <h2 class="section-title">The Guestbook Wall</h2>
+  </div>
+
+  <div class="postcard-scroll">
+    <div class="postcard">
+      <div class="postcard-quote">"Rudi made our kids' trip unforgettable. The treasure hunt was pure joy."</div>
+      <div class="postcard-author">— Anna & family, Berlin</div>
+      <div class="postcard-stars">★★★★★</div>
+    </div>
+    <div class="postcard">
+      <div class="postcard-quote">"Best wine recommendations we've ever gotten from a host."</div>
+      <div class="postcard-author">— Marco, Milan</div>
+      <div class="postcard-stars">★★★★★</div>
+    </div>
+    <div class="postcard">
+      <div class="postcard-quote">"Felt like visiting family, not renting a room."</div>
+      <div class="postcard-author">— Kata, Budapest</div>
+      <div class="postcard-stars">★★★★★</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     CTA BAND
+     ============================================ -->
+<section class="section cta-section" id="book" data-section>
+  <h2 class="section-title">Stay with Rudi</h2>
+  <p class="section-subtitle">Your next Eger memory starts here.</p>
+  <a href="#" class="btn btn-gold" style="min-width:220px;">Stay with Rudi</a>
+  <div class="cta-microcopy">🪶 +100 feathers for booking direct</div>
+</section>
+
+<!-- ============================================
+     FAQ
+     ============================================ -->
+<section class="section faq-section" id="faq" data-section>
+  <div class="container">
+    <div class="section-eyebrow">Good to know</div>
+    <h2 class="section-title">FAQ</h2>
+
+    <div id="faqList">
+      <!-- Populated by js/faq.js -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer class="site-footer">
+  <div style="font-family:var(--font-display); font-size:1.25rem; color:white;">RigóDal Vendégház</div>
+  <div style="font-size:var(--fs-xs); margin-top:4px;">Eger, Hungary</div>
+
+  <div class="footer-contact-row">
+    <a href="tel:+36000000000" class="footer-contact-icon">📞</a>
+    <a href="https://wa.me/36000000000" class="footer-contact-icon">💬</a>
+    <a href="mailto:hello@rigodal.hu" class="footer-contact-icon">✉️</a>
+  </div>
+
+  <div class="footer-lang-switch">
+    <button class="is-active">HU</button>
+    <button>EN</button>
+    <button>DE</button>
+  </div>
+
+  <div class="footer-legal">Made with ♥ in Eger · © 2026 RigóDal Vendégház</div>
+</footer>
+
+<!-- ============================================
+     PERSISTENT NAV
+     ============================================ -->
+<nav class="tab-bar" id="tabBar">
+  <a href="#home" class="tab-item is-active" data-tab data-nav-link>
+    <span class="tab-icon">🏠</span><span>Home</span>
+  </a>
+  <a href="#stay" class="tab-item" data-tab data-nav-link>
+    <span class="tab-icon">🔑</span><span>Stay</span>
+  </a>
+  <a href="#explore" class="tab-item" data-tab data-nav-link>
+    <span class="tab-icon">🗺️</span><span>Explore</span>
+  </a>
+  <a href="#adventure" class="tab-item" data-tab data-nav-link>
+    <span class="tab-icon">🪶</span><span>Hunt</span>
+  </a>
+  <button class="tab-item" data-open-chat>
+    <span class="tab-icon">💬</span><span>Rudi</span>
+  </button>
+</nav>
+
+<!-- Floating chat button (appears after scrolling past hero) -->
+<button class="rudi-fab" id="rudiFab" data-open-chat aria-label="Ask Rudi">🐦</button>
+
+<!-- ============================================
+     BOTTOM SHEET (My Stay detail panel)
+     ============================================ -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div id="sheetContent"><!-- Populated by js/staySheets.js --></div>
+</div>
+
+<!-- ============================================
+     CHAT OVERLAY
+     ============================================ -->
+<div class="chat-overlay" id="chatOverlay">
+  <div class="chat-header">
+    <button class="chat-close-btn" id="chatCloseBtn">✕</button>
+    <div class="chat-avatar" id="chatAvatar">🐦</div>
+    <div class="chat-header-text">
+      <div class="chat-title">Rigó Rudi</div>
+      <div class="chat-status">● Online</div>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button class="chip" data-chat-prompt="Where can I have breakfast?">🍳 Breakfast spots</button>
+    <button class="chip" data-chat-prompt="What's open on Sunday?">📅 Sunday hours</button>
+    <button class="chip" data-chat-prompt="How do I use the air conditioner?">❄️ AC help</button>
+    <button class="chip" data-chat-prompt="Where should I park?">🚗 Parking</button>
+    <button class="chip" data-chat-prompt="Which winery do you recommend?">🍷 Wine tips</button>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask Rudi anything...">
+    <button class="chat-send-btn" id="chatSendBtn">➤</button>
+  </div>
+</div>
+
+<!-- ============================================
+     JS - each file is one focused module
+     ============================================ -->
+<script src="js/data.js"></script>
+<script src="js/scrollEngine.js"></script>
+<script src="js/hero.js"></script>
+<script src="js/staySheets.js"></script>
+<script src="js/explore.js"></script>
+<script src="js/adventure.js"></script>
+<script src="js/faq.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
