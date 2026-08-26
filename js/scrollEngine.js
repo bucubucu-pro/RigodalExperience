@@ -36,9 +36,11 @@
         const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         navProgress.style.width = progress + '%';
 
-        // FAB appears once user scrolls past hero
+        // FAB appears once user scrolls past hero and stays visible
+        // for the rest of the page (previously it flickered near the
+        // hero/CTA/FAQ sections due to a narrow show/hide window).
         const heroHeight = heroEl.offsetHeight;
-        if (scrollTop > heroHeight * 0.6) {
+        if (scrollTop > heroHeight * 0.5) {
           rudiFab.classList.add('is-visible');
         } else {
           rudiFab.classList.remove('is-visible');

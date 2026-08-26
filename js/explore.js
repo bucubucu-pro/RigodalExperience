@@ -1,7 +1,8 @@
 /* ============================================
    EXPLORE EGER
    Handles: category filtering, place card rendering,
-   navigation handoff to Google/Apple Maps.
+   navigation handoff to Google/Apple Maps, and
+   re-rendering text when the language changes.
    ============================================ */
 
 (function () {
@@ -9,7 +10,12 @@
   const filterEl = document.getElementById('filterScroll');
   let activeFilter = 'all';
 
+  function lang() {
+    return (window.RIGODAL_I18N && window.RIGODAL_I18N.getLang()) || 'hu';
+  }
+
   function renderPlaces() {
+    const currentLang = lang();
     const places = RIGODAL_DATA.places.filter(
       (p) => activeFilter === 'all' || p.category === activeFilter
     );
@@ -21,11 +27,11 @@
           <span class="place-status-dot ${p.open ? 'open' : 'closed'}"></span>
         </div>
         <div class="place-info">
-          <div class="place-name">${p.name}</div>
-          <div class="place-meta">${p.meta}</div>
-          <div class="place-rec">"${p.rec}"</div>
+          <div class="place-name">${p.name[currentLang]}</div>
+          <div class="place-meta">${p.meta[currentLang]}</div>
+          <div class="place-rec">"${p.rec[currentLang]}"</div>
         </div>
-        <a class="place-nav-btn" href="https://maps.google.com/?q=${p.lat},${p.lng}" target="_blank" rel="noopener" aria-label="Navigate to ${p.name}">➤</a>
+        <a class="place-nav-btn" href="https://maps.google.com/?q=${p.lat},${p.lng}" target="_blank" rel="noopener" aria-label="Navigate to ${p.name[currentLang]}">➤</a>
       </div>
     `).join('');
   }
@@ -39,6 +45,10 @@
     activeFilter = chip.dataset.filter;
     renderPlaces();
   });
+
+  // Re-render place cards in the new language (chips themselves
+  // are static HTML with data-i18n, handled by i18n.js already)
+  document.addEventListener('rigodal:langchange', renderPlaces);
 
   renderPlaces();
 })();

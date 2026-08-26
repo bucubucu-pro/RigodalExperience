@@ -1,7 +1,8 @@
 /* ============================================
    RIGÓ RUDI ADVENTURE (treasure hunt)
    Handles: quest trail rendering, completion state,
-   feather rewards (shared with Rewards Club via localStorage).
+   feather rewards (shared with Rewards Club via localStorage),
+   and re-rendering text when the language changes.
    ============================================ */
 
 (function () {
@@ -10,6 +11,14 @@
   const nestCountEl = document.getElementById('nestCount');
 
   const STORAGE_KEY = 'rigodal_progress';
+
+  function lang() {
+    return (window.RIGODAL_I18N && window.RIGODAL_I18N.getLang()) || 'hu';
+  }
+
+  function t(key, fallback) {
+    return (window.RIGODAL_I18N && window.RIGODAL_I18N.t(key)) || fallback;
+  }
 
   function loadProgress() {
     try {
@@ -32,6 +41,7 @@
   }
 
   function renderTrail() {
+    const currentLang = lang();
     const quests = RIGODAL_DATA.quests;
 
     trailEl.innerHTML = quests.map((q, i) => {
@@ -47,8 +57,8 @@
         <div class="quest-node ${stateClass}" data-quest-id="${q.id}">
           <div class="quest-number">${isComplete ? '✓' : i + 1}</div>
           <div class="quest-info">
-            <div class="quest-name">${q.name}</div>
-            <div class="quest-hint">${q.hint}</div>
+            <div class="quest-name">${q.name[currentLang]}</div>
+            <div class="quest-hint">${q.hint[currentLang]}</div>
           </div>
           <div class="quest-check">${isComplete ? '🪶' : '+' + q.feathers}</div>
         </div>
@@ -72,7 +82,8 @@
       saveProgress(progress);
       renderFeatherCount();
       // Future: trigger full-screen celebration animation + certificate generation here
-      setTimeout(() => alert('🎉 Adventure complete! +50 bonus feathers. Certificate coming soon.'), 300);
+      const msg = t('adventure.complete', '🎉 Adventure complete! +50 bonus feathers. Certificate coming soon.');
+      setTimeout(() => alert(msg), 300);
     }
   }
 
@@ -82,6 +93,8 @@
     const id = Number(node.dataset.questId);
     completeQuest(id);
   });
+
+  document.addEventListener('rigodal:langchange', renderTrail);
 
   renderTrail();
   renderFeatherCount();
