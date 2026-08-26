@@ -1,0 +1,465 @@
+/* ============================================
+   EXPLORE EGER SECTION
+   ============================================ */
+
+.explore-section {
+  background: var(--color-bg-elevated);
+}
+
+.filter-scroll {
+  display: flex;
+  gap: var(--sp-2);
+  overflow-x: auto;
+  padding: 0 var(--sp-4) var(--sp-4);
+  margin: 0 calc(-1 * var(--sp-4)) var(--sp-2);
+  scrollbar-width: none;
+}
+
+.filter-scroll::-webkit-scrollbar { display: none; }
+
+.place-card {
+  display: flex;
+  gap: var(--sp-3);
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3);
+  margin-bottom: var(--sp-3);
+  box-shadow: var(--shadow-sm);
+  align-items: center;
+  transition: transform var(--duration-fast) var(--ease-settle);
+}
+
+.place-card:active { transform: scale(0.97); }
+
+.place-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  position: relative;
+}
+
+.place-status-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-white);
+}
+
+.place-status-dot.open {
+  background: var(--color-success);
+  box-shadow: 0 0 0 3px rgba(47,74,60,0.2);
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+.place-status-dot.closed {
+  background: #B0A69A;
+}
+
+@keyframes status-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(47,74,60,0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(47,74,60,0); }
+}
+
+.place-info { flex: 1; min-width: 0; }
+
+.place-name {
+  font-weight: 600;
+  font-size: var(--fs-base);
+  margin-bottom: 2px;
+}
+
+.place-meta {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.place-rec {
+  font-size: var(--fs-xs);
+  color: var(--color-accent-strong);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.place-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-strong);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+/* ============================================
+   ADVENTURE / TREASURE HUNT SECTION
+   ============================================ */
+
+.adventure-section {
+  background: linear-gradient(180deg, var(--color-forest) 0%, #1F3329 100%);
+  color: var(--color-white);
+}
+
+.adventure-section .section-eyebrow { color: var(--color-gold-light); }
+.adventure-section .section-title { color: var(--color-white); }
+.adventure-section .section-subtitle { color: rgba(255,255,255,0.7); }
+
+.feather-jar {
+  position: sticky;
+  top: var(--sp-3);
+  float: right;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  z-index: 5;
+}
+
+.quest-trail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+.quest-node {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  transition: transform var(--duration-fast) var(--ease-settle),
+              background var(--duration-base) var(--ease-settle);
+}
+
+.quest-node:active { transform: scale(0.97); }
+
+.quest-node.is-complete {
+  background: rgba(212,162,76,0.18);
+  border-color: var(--color-gold);
+}
+
+.quest-node.is-locked {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.quest-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  color: var(--color-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.quest-node.is-complete .quest-number {
+  background: var(--color-white);
+}
+
+.quest-node.is-locked .quest-number {
+  background: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5);
+}
+
+.quest-info { flex: 1; }
+
+.quest-name { font-weight: 600; font-size: var(--fs-sm); }
+.quest-hint { font-size: var(--fs-xs); color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+.quest-check {
+  font-size: 20px;
+}
+
+/* ============================================
+   REWARDS CLUB SECTION
+   ============================================ */
+
+.rewards-section { background: var(--color-bg); }
+
+.nest-card {
+  background: linear-gradient(160deg, var(--color-gold-light), var(--color-gold));
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6) var(--sp-5);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--sp-5);
+}
+
+.nest-count {
+  font-family: var(--font-display);
+  font-size: var(--fs-4xl);
+  color: var(--color-accent-strong);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.nest-label {
+  font-size: var(--fs-sm);
+  color: var(--color-accent-strong);
+  font-weight: 600;
+  margin-top: var(--sp-1);
+}
+
+.earn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid rgba(36,20,23,0.06);
+  font-size: var(--fs-sm);
+}
+
+.earn-value {
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.reward-gifts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+.gift-box {
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease-settle);
+}
+
+.gift-box:active { transform: scale(0.95); }
+
+.gift-box.is-locked { opacity: 0.55; }
+
+.gift-icon { font-size: 28px; margin-bottom: var(--sp-2); }
+.gift-name { font-weight: 600; font-size: var(--fs-sm); }
+.gift-cost { font-size: var(--fs-xs); color: var(--color-text-muted); margin-top: 2px; }
+
+/* ============================================
+   CHAT TEASER (full chat lives behind FAB / #chat)
+   ============================================ */
+
+.chat-section { background: var(--color-bg-elevated); }
+
+.chat-preview-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  box-shadow: var(--shadow-md);
+}
+
+.chat-suggested-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.chat-suggested-item {
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  transition: transform var(--duration-fast) var(--ease-settle);
+}
+
+.chat-suggested-item:active { transform: scale(0.97); }
+
+/* ============================================
+   PROOF / GUESTBOOK WALL
+   ============================================ */
+
+.proof-section { background: var(--color-bg); }
+
+.postcard-scroll {
+  display: flex;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  padding: var(--sp-2) var(--sp-4) var(--sp-4);
+  margin: 0 calc(-1 * var(--sp-4));
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.postcard-scroll::-webkit-scrollbar { display: none; }
+
+.postcard {
+  scroll-snap-align: center;
+  flex: 0 0 240px;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-md);
+  transform: rotate(-2deg);
+  position: relative;
+}
+
+.postcard:nth-child(even) { transform: rotate(2deg); }
+
+.postcard::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+  width: 36px;
+  height: 14px;
+  background: rgba(212,162,76,0.5);
+}
+
+.postcard-quote {
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  font-style: italic;
+  color: var(--color-text);
+  margin-bottom: var(--sp-3);
+  line-height: 1.4;
+}
+
+.postcard-author {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-accent-strong);
+}
+
+.postcard-stars { font-size: var(--fs-xs); margin-top: 2px; }
+
+/* ============================================
+   CTA BAND
+   ============================================ */
+
+.cta-section {
+  background: linear-gradient(180deg, var(--color-burgundy) 0%, var(--color-burgundy-dark) 100%);
+  text-align: center;
+  color: var(--color-white);
+  padding: var(--sp-9) var(--sp-4);
+}
+
+.cta-section .section-title { color: var(--color-white); font-size: var(--fs-3xl); }
+.cta-section .section-subtitle { color: rgba(255,255,255,0.75); }
+
+.cta-microcopy {
+  font-size: var(--fs-xs);
+  color: var(--color-gold-light);
+  margin-top: var(--sp-3);
+  font-weight: 600;
+}
+
+/* ============================================
+   FAQ SECTION
+   ============================================ */
+
+.faq-section { background: var(--color-bg); }
+
+.faq-item {
+  border-bottom: 1px solid rgba(36,20,23,0.08);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-4) 0;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  text-align: left;
+}
+
+.faq-icon {
+  transition: transform var(--duration-fast) var(--ease-settle);
+  flex-shrink: 0;
+  margin-left: var(--sp-3);
+}
+
+.faq-item.is-open .faq-icon { transform: rotate(45deg); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-fast) var(--ease-settle);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.faq-item.is-open .faq-answer {
+  max-height: 300px;
+  padding-bottom: var(--sp-4);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.site-footer {
+  background: #241D26;
+  color: rgba(255,255,255,0.7);
+  padding: var(--sp-7) var(--sp-4) var(--sp-5);
+  text-align: center;
+}
+
+.footer-contact-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin: var(--sp-5) 0;
+}
+
+.footer-contact-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.footer-lang-switch {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+  font-size: var(--fs-xs);
+}
+
+.footer-lang-switch button.is-active {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.footer-legal {
+  font-size: var(--fs-xs);
+  margin-top: var(--sp-4);
+  opacity: 0.5;
+}
