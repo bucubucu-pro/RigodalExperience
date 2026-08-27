@@ -5,16 +5,23 @@
 .chat-overlay {
   position: fixed;
   inset: 0;
+  height: 100vh;
+  height: 100dvh; /* dynamic viewport height — avoids mobile browser chrome resize jumps */
   background: var(--color-bg);
   z-index: 200;
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
-  transition: transform var(--duration-slow) var(--ease-settle);
+  transition: transform var(--duration-slow) var(--ease-settle),
+              visibility var(--duration-slow) var(--ease-settle);
+  visibility: hidden; /* fully removed from paint/hit-test when closed —
+                          prevents any edge from being visible during
+                          mobile viewport resize while scrolling */
 }
 
 .chat-overlay.is-open {
   transform: translateY(0);
+  visibility: visible;
 }
 
 .chat-header {

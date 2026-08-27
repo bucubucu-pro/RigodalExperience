@@ -15,55 +15,68 @@
 
 .tab-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: var(--nav-height);
-  background: var(--color-white);
-  border-top: 1px solid rgba(36, 20, 23, 0.08);
+  left: var(--sp-4);
+  right: var(--sp-4);
+  bottom: calc(var(--sp-3) + env(safe-area-inset-bottom, 0px));
+  height: 64px;
+  background: rgba(36, 20, 23, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: space-around;
+  padding: var(--sp-1);
   z-index: 90;
-  box-shadow: 0 -4px 16px rgba(36, 20, 23, 0.06);
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-shadow: 0 12px 32px rgba(36, 20, 23, 0.35), 0 2px 8px rgba(36, 20, 23, 0.2);
+  transform: translateZ(0); /* forces its own compositor layer — stops
+                                 the bar from visually jumping/lagging
+                                 when the mobile browser chrome
+                                 collapses or expands during scroll */
 }
 
 .tab-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  color: var(--color-text-muted);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-  flex: 1;
-  height: 100%;
   justify-content: center;
-  transition: transform var(--duration-fast) var(--ease-settle),
-              color var(--duration-fast) var(--ease-settle);
+  gap: 2px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  font-weight: 600;
+  flex: 1;
+  height: 52px;
+  margin: 0 2px;
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: color var(--duration-fast) var(--ease-settle),
+              background var(--duration-base) var(--ease-settle);
 }
 
 .tab-item.is-active {
   color: var(--color-accent-strong);
-  transform: translateY(-2px);
+  background: var(--color-gold);
+  box-shadow: 0 4px 12px rgba(212, 162, 76, 0.4);
 }
 
 .tab-icon {
-  width: 24px;
-  height: 24px;
-  transition: filter var(--duration-fast) var(--ease-settle);
+  width: 22px;
+  height: 22px;
+  font-size: 19px;
+  line-height: 1;
+  transition: transform var(--duration-base) var(--ease-settle);
 }
 
 .tab-item.is-active .tab-icon {
-  filter: drop-shadow(0 2px 6px rgba(212, 162, 76, 0.6));
+  transform: translateY(-1px) scale(1.05);
 }
 
 /* Chat floating action button - appears once user scrolls past hero */
 .rudi-fab {
   position: fixed;
   right: var(--sp-4);
-  bottom: calc(var(--nav-height) + var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  bottom: calc(64px + var(--sp-3) + var(--sp-4) + env(safe-area-inset-bottom, 0px));
   width: 56px;
   height: 56px;
   border-radius: var(--radius-full);
@@ -75,7 +88,7 @@
   font-size: 24px;
   z-index: 95;
   opacity: 0;
-  transform: scale(0.6) translateY(20px);
+  transform: translateZ(0) scale(0.6) translateY(20px);
   transition: opacity var(--duration-base) var(--ease-settle),
               transform var(--duration-base) var(--ease-settle);
   pointer-events: none;
@@ -83,12 +96,12 @@
 
 .rudi-fab.is-visible {
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: translateZ(0) scale(1) translateY(0);
   pointer-events: auto;
 }
 
 .rudi-fab:active {
-  transform: scale(0.9);
+  transform: translateZ(0) scale(0.9);
 }
 
 .rudi-fab.is-hidden-for-chat {
