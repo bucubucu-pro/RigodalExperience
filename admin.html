@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RigóDal Admin — Generate Guest Link</title>
+
+<!-- This page is intentionally NOT linked from the main app anywhere.
+     Only people with this exact URL can reach it. It is still technically
+     public (anyone with the link could open it) — it doesn't store or
+     expose any existing guest data, it only HELPS YOU BUILD a link to send.
+     Nothing here is a security boundary; keep this URL to yourself. -->
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    background: #F7F0E4;
+    color: #241417;
+    padding: 24px 16px 64px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.4rem;
+    color: #5C1A2E;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: #7A6A63;
+    margin-bottom: 24px;
+  }
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 16px 0 6px;
+    color: #5C1A2E;
+  }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(36,20,23,0.15);
+    font-size: 1rem;
+    font-family: inherit;
+    background: white;
+  }
+  input:focus {
+    outline: none;
+    border-color: #D4A24C;
+  }
+  button {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    border-radius: 999px;
+    border: none;
+    background: #5C1A2E;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:active { transform: scale(0.98); }
+
+  #result {
+    margin-top: 32px;
+    display: none;
+  }
+  #result.is-visible { display: block; }
+
+  .result-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(36,20,23,0.1);
+    text-align: center;
+  }
+  .result-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #7A6A63;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  #qrcode {
+    margin: 16px auto;
+    display: flex;
+    justify-content: center;
+  }
+  #qrcode img {
+    border-radius: 8px;
+    border: 8px solid white;
+    box-shadow: 0 4px 16px rgba(36,20,23,0.15);
+  }
+  .link-box {
+    background: #F7F0E4;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 0.75rem;
+    word-break: break-all;
+    color: #5C1A2E;
+    margin: 12px 0;
+    text-align: left;
+  }
+  .copy-btn {
+    background: #D4A24C;
+    color: #5C1A2E;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: auto;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  .copy-btn.is-copied { background: #2F4A3C; color: white; }
+
+  .note {
+    font-size: 0.75rem;
+    color: #7A6A63;
+    margin-top: 24px;
+    line-height: 1.5;
+    padding: 12px;
+    background: rgba(212,162,76,0.12);
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>🐦 Generate a Guest Link</h1>
+<p class="subtitle">Fill in the stay details, then send the link (or QR code) to your guest.</p>
+
+<label for="guestName">Guest name</label>
+<input type="text" id="guestName" placeholder="e.g. Anna" autocomplete="off">
+
+<label for="checkIn">Check-in date &amp; time</label>
+<input type="datetime-local" id="checkIn">
+
+<label for="checkOut">Check-out date &amp; time</label>
+<input type="datetime-local" id="checkOut">
+
+<button id="generateBtn">Generate Link</button>
+
+<div id="result">
+  <div class="result-card">
+    <div class="result-label">Personalized link</div>
+    <div class="link-box" id="linkOutput"></div>
+    <button class="copy-btn" id="copyBtn">Copy link</button>
+
+    <div id="qrcode"></div>
+    <div class="result-label">Guest scans this QR code, or opens the link above</div>
+  </div>
+
+  <div class="note">
+    This link only works for the guest you send it to — it's not listed
+    anywhere public. Once they open it, their name and dates are saved on
+    their own device automatically, so they won't need to keep the link.
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // CHANGE THIS to your actual live site URL if it ever changes.
+  const SITE_URL = 'https://bucubucu-pro.github.io/RigodalExperience/';
+
+  const generateBtn = document.getElementById('generateBtn');
+  const resultEl = document.getElementById('result');
+  const linkOutput = document.getElementById('linkOutput');
+  const copyBtn = document.getElementById('copyBtn');
+  const qrcodeEl = document.getElementById('qrcode');
+
+  function toUrlDateTime(inputValue) {
+    // datetime-local gives "2026-09-01T14:00" — already the format our
+    // app's Date parsing expects, so no conversion needed.
+    return inputValue;
+  }
+
+  generateBtn.addEventListener('click', () => {
+    const name = document.getElementById('guestName').value.trim();
+    const checkIn = document.getElementById('checkIn').value;
+    const checkOut = document.getElementById('checkOut').value;
+
+    if (!name || !checkIn || !checkOut) {
+      alert('Please fill in name, check-in, and check-out.');
+      return;
+    }
+
+    const params = new URLSearchParams({
+      name: name,
+      in: toUrlDateTime(checkIn),
+      out: toUrlDateTime(checkOut)
+    });
+
+    const fullUrl = `${SITE_URL}?${params.toString()}`;
+
+    linkOutput.textContent = fullUrl;
+    resultEl.classList.add('is-visible');
+
+    qrcodeEl.innerHTML = '';
+    new QRCode(qrcodeEl, {
+      text: fullUrl,
+      width: 180,
+      height: 180,
+      colorDark: '#5C1A2E',
+      colorLight: '#ffffff'
+    });
+
+    copyBtn.textContent = 'Copy link';
+    copyBtn.classList.remove('is-copied');
+  });
+
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(linkOutput.textContent).then(() => {
+      copyBtn.textContent = 'Copied!';
+      copyBtn.classList.add('is-copied');
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy link';
+        copyBtn.classList.remove('is-copied');
+      }, 1500);
+    });
+  });
+</script>
+</body>
+</html>
