@@ -13,33 +13,37 @@ RigodalModules.register('stay', {
         <h2 class="section-title" data-i18n="stay.title">My Stay</h2>
         <p class="section-subtitle" data-i18n="stay.subtitle">Everything you need, right where you need it.</p>
 
-        <div class="stay-hotspot-grid">
-          <button class="hotspot-card is-pulsing" data-sheet="wifi">
+        <!-- Contextual banner: time-of-day / stay-stage / weather aware.
+             Hidden by default, shown only when a relevant message applies. -->
+        <div class="stay-banner" id="stayBanner" style="display:none;"></div>
+
+        <div class="stay-hotspot-grid" id="stayHotspotGrid">
+          <button class="hotspot-card" data-sheet="wifi" data-hotspot="wifi">
             <span class="hotspot-icon">📶</span>
             <span class="hotspot-label" data-i18n="stay.wifi">Wi-Fi</span>
             <span class="hotspot-preview" data-i18n="stay.wifiPreview">Tap for password</span>
           </button>
-          <button class="hotspot-card" data-sheet="checkin">
+          <button class="hotspot-card" data-sheet="checkin" data-hotspot="checkin">
             <span class="hotspot-icon">🚪</span>
             <span class="hotspot-label" data-i18n="stay.checkin">Check-in / out</span>
             <span class="hotspot-preview" data-i18n="stay.checkinPreview">Times & lockbox</span>
           </button>
-          <button class="hotspot-card" data-sheet="parking">
+          <button class="hotspot-card" data-sheet="parking" data-hotspot="parking">
             <span class="hotspot-icon">🚗</span>
             <span class="hotspot-label" data-i18n="stay.parking">Parking</span>
             <span class="hotspot-preview" data-i18n="stay.parkingPreview">Where to park</span>
           </button>
-          <button class="hotspot-card" data-sheet="appliances">
+          <button class="hotspot-card" data-sheet="appliances" data-hotspot="appliances">
             <span class="hotspot-icon">📺</span>
             <span class="hotspot-label" data-i18n="stay.appliances">Appliances</span>
             <span class="hotspot-preview" data-i18n="stay.appliancesPreview">TV, AC, dishwasher</span>
           </button>
-          <button class="hotspot-card" data-sheet="rules">
+          <button class="hotspot-card" data-sheet="rules" data-hotspot="rules">
             <span class="hotspot-icon">📖</span>
             <span class="hotspot-label" data-i18n="stay.rules">House Rules</span>
             <span class="hotspot-preview" data-i18n="stay.rulesPreview">Quick read</span>
           </button>
-          <button class="hotspot-card" data-sheet="guestbook">
+          <button class="hotspot-card" data-sheet="guestbook" data-hotspot="guestbook">
             <span class="hotspot-icon">✍️</span>
             <span class="hotspot-label" data-i18n="stay.guestbook">Guestbook</span>
             <span class="hotspot-preview" data-i18n="stay.guestbookPreview">Leave a note</span>
@@ -173,5 +177,125 @@ RigodalModules.register('stay', {
     });
 
     backdrop.addEventListener('click', closeSheet);
+
+    // ============================================
+    // FEATURE 1: Time-aware hotspot ordering
+    // Reorders the hotspot grid based on where the guest is in
+    // their stay — the most relevant card always comes first.
+    // ============================================
+    function getStayStage() {
+      const now = new Date();
+      const inDate = new Date(RIGODAL_DATA.booking.checkIn);
+      const outDate = new Date(RIGODAL_DATA.booking.checkOut);
+      const hoursToCheckin = (inDate - now) / (1000 * 60 * 60);
+      const hoursToCheckout = (outDate - now) / (1000 * 60 * 60);
+
+      if (now < inDate) return hoursToCheckin <= 24 ? 'arriving-soon' : 'before-stay';
+      if (now < outDate) return hoursToCheckout <= 12 ? 'leaving-soon' : 'during-stay';
+      return 'after-stay';
+    }
+
+    // Priority order per stage — hotspot ids not listed keep their
+    // original relative order and are appended after the priority ones.
+    const STAGE_PRIORITY = {
+      'before-stay': ['checkin', 'parking', 'wifi'],
+      'arriving-soon': ['checkin', 'parking', 'wifi'],
+      'during-stay': ['wifi', 'appliances', 'rules'],
+      'leaving-soon': [],           // checkout checklist button (outside grid) is the real priority here
+      'after-stay': ['guestbook']
+    };
+
+    function reorderHotspots() {
+      const grid = document.getElementById('stayHotspotGrid');
+      const stage = getStayStage();
+      const priority = STAGE_PRIORITY[stage] || [];
+      if (priority.length === 0) return; // nothing to reorder, keep default order
+
+      const cards = Array.from(grid.querySelectorAll('[data-hotspot]'));
+      cards.sort((a, b) => {
+        const aIndex = priority.indexOf(a.dataset.hotspot);
+        const bIndex = priority.indexOf(b.dataset.hotspot);
+        const aRank = aIndex === -1 ? 999 : aIndex;
+        const bRank = bIndex === -1 ? 999 : bIndex;
+        return aRank - bRank;
+      });
+
+      cards.forEach((card) => grid.appendChild(card)); // re-append in new order
+    }
+
+    // ============================================
+    // FEATURE 2: Contextual banner
+    // One line at the top of My Stay that adapts to time-of-day
+    // and stay-stage. Hidden entirely if nothing relevant applies.
+    // ============================================
+    function renderBanner() {
+      const banner = document.getElementById('stayBanner');
+      const stage = getStayStage();
+      const hour = new Date().getHours();
+
+      let key = null;
+
+      if (stage === 'leaving-soon') {
+        key = 'stay.bannerLeavingSoon';
+      } else if (stage === 'arriving-soon') {
+        key = 'stay.bannerArrivingSoon';
+      } else if (hour >= 22 || hour < 7) {
+        key = 'stay.bannerQuietHours';
+      }
+
+      if (!key) {
+        banner.style.display = 'none';
+        return;
+      }
+
+      banner.textContent = t(key);
+      banner.style.display = 'block';
+    }
+
+    // ============================================
+    // FEATURE 3: Weather-based tip
+    // Appends a short, practical tip to the banner (or shows its
+    // own line) based on real current conditions. No live weather
+    // available -> simply shows nothing extra, never a fake tip.
+    // ============================================
+    function renderWeatherTip() {
+      const w = RigodalWeather.get();
+      if (!w) return; // no data yet or fetch failed — say nothing, don't guess
+
+      let tipKey = null;
+      if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(w.weatherCode)) {
+        tipKey = 'stay.tipRain';
+      } else if (w.tempC >= 28) {
+        tipKey = 'stay.tipHot';
+      } else if (w.tempC <= 2) {
+        tipKey = 'stay.tipCold';
+      }
+
+      if (!tipKey) return;
+
+      const banner = document.getElementById('stayBanner');
+      const tipText = t(tipKey);
+
+      if (banner.style.display === 'block' && banner.textContent) {
+        banner.textContent += '  ·  ' + tipText;
+      } else {
+        banner.textContent = tipText;
+        banner.style.display = 'block';
+      }
+    }
+
+    reorderHotspots();
+    renderBanner();
+    renderWeatherTip();
+
+    // Weather may resolve after this module has already rendered —
+    // re-run the tip (and only the tip) once it's ready.
+    document.addEventListener('rigodal:weatherready', renderWeatherTip);
+
+    // Re-run everything on language switch, since banner/tip text changes
+    document.addEventListener('rigodal:langchange', () => {
+      renderBanner();
+      renderWeatherTip();
+    });
   }
 });

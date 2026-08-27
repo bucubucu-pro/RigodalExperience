@@ -123,8 +123,20 @@ RigodalModules.register('hero', {
     setInterval(updateCountdown, 60 * 1000);
     document.addEventListener('rigodal:langchange', updateCountdown);
 
-    // Weather placeholder — swap for a real API call later
-    document.getElementById('weatherTemp').textContent = '24°C';
+    // Live weather (from js/weatherService.js — Open-Meteo, no API key needed)
+    function renderWeather() {
+      const w = RigodalWeather.get();
+      const chip = document.getElementById('weatherChip');
+      if (!w) {
+        chip.style.display = 'none'; // no fake data — hide the chip rather than guess
+        return;
+      }
+      chip.innerHTML = `<span>${w.icon}</span><span>${w.tempC}°C</span>`;
+      chip.style.display = '';
+    }
+
+    renderWeather();
+    document.addEventListener('rigodal:weatherready', renderWeather);
 
     // Personalize Rudi's greeting with the guest's name, if we have one
     // (comes from guestResolver.js — a personalized link or cached visit).
