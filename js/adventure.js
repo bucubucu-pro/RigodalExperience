@@ -1,101 +1,100 @@
 /* ============================================
-   RIGÓ RUDI ADVENTURE (treasure hunt)
-   Handles: quest trail rendering, completion state,
-   feather rewards (shared with Rewards Club via localStorage),
-   and re-rendering text when the language changes.
+   MODULE: ADVENTURE (Treasure Hunt)
+   Quest trail with feather rewards (shared storage
+   key with the rewards module).
    ============================================ */
 
-(function () {
-  const trailEl = document.getElementById('questTrail');
-  const featherCountEl = document.getElementById('featherCount');
-  const nestCountEl = document.getElementById('nestCount');
+RigodalModules.register('adventure', {
 
-  const STORAGE_KEY = 'rigodal_progress';
+  html: `
+    <section class="section adventure-section" data-section>
+      <div class="container">
+        <div class="feather-jar"><span id="featherCount">0</span> 🪶</div>
+        <div class="section-eyebrow" data-i18n="adventure.eyebrow">Family adventure</div>
+        <h2 class="section-title" data-i18n="adventure.title">Rigó Rudi's Treasure Hunt</h2>
+        <p class="section-subtitle" data-i18n="adventure.subtitle">Solve, explore, and earn feathers together.</p>
 
-  function lang() {
-    return (window.RIGODAL_I18N && window.RIGODAL_I18N.getLang()) || 'hu';
-  }
+        <div class="quest-trail" id="questTrail"></div>
+      </div>
+    </section>
+  `,
 
-  function t(key, fallback) {
-    return (window.RIGODAL_I18N && window.RIGODAL_I18N.t(key)) || fallback;
-  }
+  init: function () {
+    const trailEl = document.getElementById('questTrail');
+    const featherCountEl = document.getElementById('featherCount');
+    const STORAGE_KEY = 'rigodal_progress';
 
-  function loadProgress() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : { completedQuests: [], feathers: 0 };
-    } catch (e) {
-      return { completedQuests: [], feathers: 0 };
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : { completedQuests: [], feathers: 0 };
+      } catch (e) {
+        return { completedQuests: [], feathers: 0 };
+      }
     }
-  }
 
-  function saveProgress(progress) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  }
+    function saveProgress(progress) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      // Tell other modules (rewards) that feather count changed
+      document.dispatchEvent(new CustomEvent('rigodal:feathersChanged', { detail: progress }));
+    }
 
-  let progress = loadProgress();
+    let progress = loadProgress();
 
-  function renderFeatherCount() {
-    featherCountEl.textContent = progress.feathers;
-    if (nestCountEl) nestCountEl.textContent = progress.feathers;
-  }
+    function renderFeatherCount() {
+      featherCountEl.textContent = progress.feathers;
+    }
 
-  function renderTrail() {
-    const currentLang = lang();
-    const quests = RIGODAL_DATA.quests;
+    function renderTrail() {
+      const quests = RIGODAL_DATA.quests;
 
-    trailEl.innerHTML = quests.map((q, i) => {
-      const isComplete = progress.completedQuests.includes(q.id);
-      const prevComplete = i === 0 || progress.completedQuests.includes(quests[i - 1].id);
-      const isLocked = !isComplete && !prevComplete;
+      trailEl.innerHTML = quests.map((q, i) => {
+        const isComplete = progress.completedQuests.includes(q.id);
+        const prevComplete = i === 0 || progress.completedQuests.includes(quests[i - 1].id);
+        const isLocked = !isComplete && !prevComplete;
 
-      let stateClass = '';
-      if (isComplete) stateClass = 'is-complete';
-      else if (isLocked) stateClass = 'is-locked';
+        let stateClass = '';
+        if (isComplete) stateClass = 'is-complete';
+        else if (isLocked) stateClass = 'is-locked';
 
-      return `
-        <div class="quest-node ${stateClass}" data-quest-id="${q.id}">
-          <div class="quest-number">${isComplete ? '✓' : i + 1}</div>
-          <div class="quest-info">
-            <div class="quest-name">${q.name[currentLang]}</div>
-            <div class="quest-hint">${q.hint[currentLang]}</div>
+        return `
+          <div class="quest-node ${stateClass}" data-quest-id="${q.id}">
+            <div class="quest-number">${isComplete ? '✓' : i + 1}</div>
+            <div class="quest-info">
+              <div class="quest-name">${q.name}</div>
+              <div class="quest-hint">${q.hint}</div>
+            </div>
+            <div class="quest-check">${isComplete ? '🪶' : '+' + q.feathers}</div>
           </div>
-          <div class="quest-check">${isComplete ? '🪶' : '+' + q.feathers}</div>
-        </div>
-      `;
-    }).join('');
-  }
+        `;
+      }).join('');
+    }
 
-  function completeQuest(id) {
-    const quest = RIGODAL_DATA.quests.find((q) => q.id === id);
-    if (!quest || progress.completedQuests.includes(id)) return;
+    function completeQuest(id) {
+      const quest = RIGODAL_DATA.quests.find((q) => q.id === id);
+      if (!quest || progress.completedQuests.includes(id)) return;
 
-    progress.completedQuests.push(id);
-    progress.feathers += quest.feathers;
-    saveProgress(progress);
+      progress.completedQuests.push(id);
+      progress.feathers += quest.feathers;
+      saveProgress(progress);
+      renderTrail();
+      renderFeatherCount();
+
+      if (progress.completedQuests.length === RIGODAL_DATA.quests.length) {
+        progress.feathers += 50;
+        saveProgress(progress);
+        renderFeatherCount();
+        setTimeout(() => alert(RIGODAL_I18N.t('adventure.complete')), 300);
+      }
+    }
+
+    trailEl.addEventListener('click', (e) => {
+      const node = e.target.closest('.quest-node');
+      if (!node || node.classList.contains('is-locked')) return;
+      completeQuest(Number(node.dataset.questId));
+    });
+
     renderTrail();
     renderFeatherCount();
-
-    // Bonus for completing the whole hunt
-    if (progress.completedQuests.length === RIGODAL_DATA.quests.length) {
-      progress.feathers += 50;
-      saveProgress(progress);
-      renderFeatherCount();
-      // Future: trigger full-screen celebration animation + certificate generation here
-      const msg = t('adventure.complete', '🎉 Adventure complete! +50 bonus feathers. Certificate coming soon.');
-      setTimeout(() => alert(msg), 300);
-    }
   }
-
-  trailEl.addEventListener('click', (e) => {
-    const node = e.target.closest('.quest-node');
-    if (!node || node.classList.contains('is-locked')) return;
-    const id = Number(node.dataset.questId);
-    completeQuest(id);
-  });
-
-  document.addEventListener('rigodal:langchange', renderTrail);
-
-  renderTrail();
-  renderFeatherCount();
-})();
+});

@@ -1,7 +1,14 @@
 /* ============================================
    APP BOOTSTRAP
-   Runs last. Keep this file tiny — it's just
-   a place for one-off startup logic, if needed.
+   Runs last, after all modules have registered
+   themselves. Kicks off the module engine, which:
+     - mounts enabled modules' HTML
+     - builds nav + hero action buttons from config
+     - runs each module's init()
    ============================================ */
 
-console.log('RigóDal Companion loaded 🐦');
+document.addEventListener('DOMContentLoaded', () => {
+  RigodalModules.init();
+  console.log('RigóDal Companion loaded 🐦 — modules active:',
+    RIGODAL_MODULES_CONFIG.filter((m) => m.enabled).map((m) => m.id));
+});

@@ -57,13 +57,17 @@ const RIGODAL_I18N = (function () {
     document.dispatchEvent(new CustomEvent('rigodal:langchange', { detail: { lang } }));
   }
 
-  // Wire up language switch buttons once DOM is ready
+  // Apply translations once modules have mounted (module HTML has
+  // data-i18n attributes that don't exist until then). Also apply
+  // immediately for any static shell text (nav, footer) already in the DOM.
   document.addEventListener('DOMContentLoaded', () => {
     applyToDOM();
     document.querySelectorAll('[data-lang]').forEach((btn) => {
       btn.addEventListener('click', () => switchLang(btn.dataset.lang));
     });
   });
+
+  document.addEventListener('rigodal:modulesmounted', applyToDOM);
 
   return { t, getLang, switchLang, applyToDOM };
 })();
