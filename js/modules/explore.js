@@ -43,14 +43,17 @@ RigodalModules.register('explore', {
         <div class="place-card">
           <div class="place-thumb">
             ${p.icon}
-            <span class="place-status-dot ${p.open ? 'open' : 'closed'}"></span>
           </div>
           <div class="place-info">
             <div class="place-name">${p.name}</div>
-            <div class="place-meta">${p.meta}</div>
+            ${p.rating ? `<div class="place-meta">⭐ ${p.rating.toFixed(1)} on Google</div>` : ''}
             <div class="place-rec">"${p.rec}"</div>
           </div>
-          <a class="place-nav-btn" href="https://maps.google.com/?q=${p.lat},${p.lng}" target="_blank" rel="noopener" aria-label="Navigate to ${p.name}">➤</a>
+          <div class="place-actions">
+            <a class="place-nav-btn" href="${p.gmaps}" target="_blank" rel="noopener" aria-label="Open ${p.name} in Google Maps">📍</a>
+            ${p.website ? `<a class="place-nav-btn place-web-btn" href="${p.website}" target="_blank" rel="noopener" aria-label="Visit ${p.name} website">🌐</a>` : ''}
+            ${p.phone ? `<a class="place-nav-btn place-web-btn" href="tel:${p.phone}" aria-label="Call ${p.name}">📞</a>` : ''}
+          </div>
         </div>
       `).join('');
     }
