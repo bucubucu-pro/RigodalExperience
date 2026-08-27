@@ -96,6 +96,8 @@ const RIGODAL_TRANSLATIONS = {
     "explore.filterPharmacy": "🚑 Pharmacy",
     "explore.filterTaxi": "🚕 Taxi",
     "explore.filterFamily": "👨‍👩‍👧 Family",
+    "explore.filterDaytrip": "🚂 Day Trips",
+    "explore.showMore": "Show more",
 
     "adventure.eyebrow": "Family adventure",
     "adventure.title": "Rigó Rudi's Treasure Hunt",
@@ -237,6 +239,8 @@ const RIGODAL_TRANSLATIONS = {
     "explore.filterPharmacy": "🚑 Gyógyszertár",
     "explore.filterTaxi": "🚕 Taxi",
     "explore.filterFamily": "👨‍👩‍👧 Családi programok",
+    "explore.filterDaytrip": "🚂 Egynapos kirándulások",
+    "explore.showMore": "Több mutatása",
 
     "adventure.eyebrow": "Családi kaland",
     "adventure.title": "Rigó Rudi kincsvadászata",
