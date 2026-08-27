@@ -8,6 +8,7 @@ const RIGODAL_TRANSLATIONS = {
 
   en: {
     "hero.greeting": "Szia! I've been expecting you 🐦",
+    "hero.greetingNamed": "Szia {name}! I've been expecting you 🐦",
     "hero.checkinLabel": "Check-in in",
     "hero.checkoutLabel": "Check-out in",
     "hero.thanksLabel": "We hope you enjoyed your stay!",
@@ -142,6 +143,7 @@ const RIGODAL_TRANSLATIONS = {
 
   hu: {
     "hero.greeting": "Szia! Már vártalak 🐦",
+    "hero.greetingNamed": "Szia {name}! Már vártalak 🐦",
     "hero.checkinLabel": "Bejelentkezésig",
     "hero.checkoutLabel": "Kijelentkezésig",
     "hero.thanksLabel": "Reméljük, jól érezted magad nálunk!",
