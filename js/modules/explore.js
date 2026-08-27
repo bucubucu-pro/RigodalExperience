@@ -13,16 +13,19 @@ RigodalModules.register('explore', {
         <p class="section-subtitle" data-i18n="explore.subtitle">Rudi's personal recommendations, curated for you.</p>
       </div>
 
-      <div class="filter-scroll" id="filterScroll">
-        <button class="chip is-active" data-filter="all" data-i18n="explore.filterAll">✨ All</button>
-        <button class="chip" data-filter="wine" data-i18n="explore.filterWine">🍷 Wineries</button>
-        <button class="chip" data-filter="food" data-i18n="explore.filterFood">🍽 Restaurants</button>
-        <button class="chip" data-filter="cafe" data-i18n="explore.filterCafe">☕ Cafés</button>
-        <button class="chip" data-filter="sights" data-i18n="explore.filterSights">🏰 Attractions</button>
-        <button class="chip" data-filter="shop" data-i18n="explore.filterShop">🛒 Supermarkets</button>
-        <button class="chip" data-filter="pharmacy" data-i18n="explore.filterPharmacy">🚑 Pharmacy</button>
-        <button class="chip" data-filter="taxi" data-i18n="explore.filterTaxi">🚕 Taxi</button>
-        <button class="chip" data-filter="family" data-i18n="explore.filterFamily">👨‍👩‍👧 Family</button>
+      <div class="filter-scroll-wrap">
+        <div class="filter-scroll" id="filterScroll">
+          <button class="chip is-active" data-filter="all" data-i18n="explore.filterAll">✨ All</button>
+          <button class="chip" data-filter="daytrip" data-i18n="explore.filterDaytrip">🚂 Day Trips</button>
+          <button class="chip" data-filter="wine" data-i18n="explore.filterWine">🍷 Wineries</button>
+          <button class="chip" data-filter="food" data-i18n="explore.filterFood">🍽 Restaurants</button>
+          <button class="chip" data-filter="cafe" data-i18n="explore.filterCafe">☕ Cafés</button>
+          <button class="chip" data-filter="sights" data-i18n="explore.filterSights">🏰 Attractions</button>
+          <button class="chip" data-filter="family" data-i18n="explore.filterFamily">👨‍👩‍👧 Family</button>
+          <button class="chip" data-filter="shop" data-i18n="explore.filterShop">🛒 Supermarkets</button>
+          <button class="chip" data-filter="pharmacy" data-i18n="explore.filterPharmacy">🚑 Pharmacy</button>
+          <button class="chip" data-filter="taxi" data-i18n="explore.filterTaxi">🚕 Taxi</button>
+        </div>
       </div>
 
       <div class="container" id="placeList"></div>
@@ -34,12 +37,11 @@ RigodalModules.register('explore', {
     const filterEl = document.getElementById('filterScroll');
     let activeFilter = 'all';
 
-    function renderPlaces() {
-      const places = RIGODAL_DATA.places.filter(
-        (p) => activeFilter === 'all' || p.category === activeFilter
-      );
+    const PAGE_SIZE = 5;
+    let visibleCount = PAGE_SIZE;
 
-      listEl.innerHTML = places.map((p) => `
+    function placeCardHtml(p) {
+      return `
         <div class="place-card">
           <div class="place-thumb">
             ${p.icon}
@@ -52,10 +54,37 @@ RigodalModules.register('explore', {
           <div class="place-actions">
             <a class="place-nav-btn" href="${p.gmaps}" target="_blank" rel="noopener" aria-label="Open ${p.name} in Google Maps">📍</a>
             ${p.website ? `<a class="place-nav-btn place-web-btn" href="${p.website}" target="_blank" rel="noopener" aria-label="Visit ${p.name} website">🌐</a>` : ''}
-            ${p.phone ? `<a class="place-nav-btn place-web-btn" href="tel:${p.phone}" aria-label="Call ${p.name}">📞</a>` : ''}
           </div>
         </div>
-      `).join('');
+      `;
+    }
+
+    function renderPlaces() {
+      const allMatches = RIGODAL_DATA.places.filter(
+        (p) => activeFilter === 'all' || p.category === activeFilter
+      );
+      const shown = allMatches.slice(0, visibleCount);
+      const remaining = allMatches.length - shown.length;
+
+      let html = shown.map(placeCardHtml).join('');
+
+      if (remaining > 0) {
+        html += `
+          <button class="show-more-btn" id="showMoreBtn">
+            <span data-i18n="explore.showMore">Show more</span> (${remaining})
+          </button>
+        `;
+      }
+
+      listEl.innerHTML = html;
+
+      const showMoreBtn = document.getElementById('showMoreBtn');
+      if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', () => {
+          visibleCount += PAGE_SIZE;
+          renderPlaces();
+        });
+      }
     }
 
     filterEl.addEventListener('click', (e) => {
@@ -65,6 +94,7 @@ RigodalModules.register('explore', {
       filterEl.querySelectorAll('.chip').forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       activeFilter = chip.dataset.filter;
+      visibleCount = PAGE_SIZE; // reset paging whenever the filter changes
       renderPlaces();
     });
 
