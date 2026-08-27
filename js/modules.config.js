@@ -38,7 +38,7 @@ const RIGODAL_MODULES_CONFIG = [
   },
   {
     id: 'adventure',
-    enabled: true,
+    enabled: false, // Turned off for now — focusing on core info modules first
     inNav: true,
     navIcon: '🪶',
     navLabelKey: 'nav.hunt',
@@ -48,7 +48,7 @@ const RIGODAL_MODULES_CONFIG = [
   },
   {
     id: 'rewards',
-    enabled: true,
+    enabled: false, // Turned off for now — depends on adventure's feather system
     inNav: false,
     inHeroActions: false
   },
