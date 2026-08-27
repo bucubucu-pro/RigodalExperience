@@ -67,7 +67,7 @@
   --duration-slow: 600ms;
 
   /* --- Layout --- */
-  --nav-height: 64px;
+  --nav-height: 58px;
   --max-width: 480px; /* mobile-first container cap */
   --section-padding-y: var(--sp-8);
 }
