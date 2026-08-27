@@ -126,11 +126,23 @@ RigodalModules.register('hero', {
     // Weather placeholder — swap for a real API call later
     document.getElementById('weatherTemp').textContent = '24°C';
 
+    // Personalize Rudi's greeting with the guest's name, if we have one
+    // (comes from guestResolver.js — a personalized link or cached visit).
+    function renderGreeting() {
+      const name = RIGODAL_DATA.booking.guestName;
+      const template = RIGODAL_I18N.t('hero.greetingNamed');
+      greetingBubble.textContent = name ? template.replace('{name}', name) : RIGODAL_I18N.t('hero.greeting');
+      greetingBubble.removeAttribute('data-i18n'); // now dynamically set, don't let i18n overwrite it
+    }
+
     // Rudi tap greeting
     const greetingKeys = ['hero.greeting']; // add more keys here for a rotation
     let greetingIndex = 0;
     const rudiBtn = document.getElementById('rudiTapTarget');
     const greetingBubble = document.getElementById('rudiGreeting');
+
+    renderGreeting();
+    document.addEventListener('rigodal:langchange', renderGreeting);
 
     rudiBtn.addEventListener('click', () => {
       greetingIndex = (greetingIndex + 1) % greetingKeys.length;
