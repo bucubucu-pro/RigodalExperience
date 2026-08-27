@@ -18,9 +18,28 @@
   padding: 0 var(--sp-4) var(--sp-4);
   margin: 0 0 var(--sp-2);
   scrollbar-width: none;
+  position: relative;
 }
 
 .filter-scroll::-webkit-scrollbar { display: none; }
+
+/* Visual cue that the filter row scrolls further — fades out the right
+   edge so guests notice there are more categories (like Day Trips)
+   beyond what's currently visible. Sits in a wrapper below. */
+.filter-scroll-wrap {
+  position: relative;
+}
+
+.filter-scroll-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: var(--sp-4);
+  width: 32px;
+  background: linear-gradient(90deg, transparent, var(--color-bg-elevated));
+  pointer-events: none;
+}
 
 .place-card {
   display: flex;
@@ -102,9 +121,29 @@
 .place-nav-btn:active { transform: scale(0.9); }
 
 .place-web-btn {
-  background: var(--color-bg-elevated);
+  background: var(--color-accent-strong);
+  color: white;
+}
+
+.show-more-btn {
+  display: block;
+  width: 100%;
+  padding: var(--sp-3);
+  margin-top: var(--sp-2);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  border: 1.5px dashed rgba(92,26,46,0.25);
   color: var(--color-accent-strong);
-  border: 1.5px solid rgba(92,26,46,0.12);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: center;
+  transition: transform var(--duration-fast) var(--ease-settle),
+              background var(--duration-fast) var(--ease-settle);
+}
+
+.show-more-btn:active {
+  transform: scale(0.98);
+  background: var(--color-bg-elevated);
 }
 
 /* ============================================
