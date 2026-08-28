@@ -25,8 +25,19 @@ const RIGODAL_I18N = (function () {
 
   function t(key) {
     const lang = getLang();
-    const dict = RIGODAL_TRANSLATIONS[lang] || RIGODAL_TRANSLATIONS[DEFAULT_LANG];
-    return dict[key] || RIGODAL_TRANSLATIONS[DEFAULT_LANG][key] || key;
+    const dict = RIGODAL_TRANSLATIONS[lang] || RIGODAL_TRANSLATIONS[DEFAULT_LANG] || {};
+    if (dict[key]) return dict[key];
+
+    // Fallback chain: current language -> Hungarian default -> English
+    // (the most complete "source" language) -> the raw key as a last resort.
+    const huDict = RIGODAL_TRANSLATIONS[DEFAULT_LANG] || {};
+    if (huDict[key]) return huDict[key];
+
+    const enDict = RIGODAL_TRANSLATIONS['en'] || {};
+    if (enDict[key]) return enDict[key];
+
+    console.warn(`RIGODAL_I18N: missing translation for key "${key}" in every language.`);
+    return key;
   }
 
   function applyToDOM() {
@@ -49,7 +60,10 @@ const RIGODAL_I18N = (function () {
   }
 
   function switchLang(lang) {
-    if (!RIGODAL_TRANSLATIONS[lang]) return;
+    if (!RIGODAL_TRANSLATIONS[lang]) {
+      console.warn(`RIGODAL_I18N: tried to switch to "${lang}" but no translations exist for it. Check that translations.js was uploaded correctly and includes a "${lang}:" block.`);
+      return;
+    }
     setLang(lang);
     applyToDOM();
     // Let other modules (explore.js, adventure.js, faq.js) know they
