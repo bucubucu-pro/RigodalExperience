@@ -24,24 +24,20 @@ RigodalModules.register('hero', {
 
       <div class="hero-content">
 
-        <!-- Rudi's speech bubble: full-width row above everything else.
-             Height is fixed via JS to the tallest of the (up to 3)
-             rotating messages, so switching messages never resizes
-             the box — it's measured once on render, then locked.
-             #rudiMeasure is an invisible, full-width clone used only
-             for measuring text height accurately (it sits in normal
-             document flow, unlike the absolutely-positioned real
-             message elements, so its width — and therefore its
-             wrapped line count — always matches what will actually
-             render). -->
+        <!-- Rudi's speech bubble: full-width row at the very top of the
+             hero. Height is fixed via JS to the tallest of the (up to 3)
+             rotating messages, so switching between a short and a long
+             message never resizes the box.
+
+             IMPORTANT: this uses a SINGLE text element (#rudiMsgText),
+             not several overlapping ones — the message is swapped by
+             changing its textContent during a brief fade, never by
+             showing/hiding multiple stacked elements. This makes it
+             structurally impossible for two messages to ever be visible
+             at once, no matter how a transition is timed or screenshotted. -->
         <div class="rudi-bubble-row">
           <div class="speech-bubble rudi-bubble" id="rudiBubble">
-            <div class="rudi-bubble-track" id="rudiBubbleTrack">
-              <div class="rudi-bubble-msg" id="rudiMsg0"></div>
-              <div class="rudi-bubble-msg" id="rudiMsg1"></div>
-              <div class="rudi-bubble-msg" id="rudiMsg2"></div>
-            </div>
-            <div class="rudi-bubble-measure" id="rudiMeasure"></div>
+            <div class="rudi-bubble-msg" id="rudiMsgText"></div>
           </div>
           <div class="rudi-bubble-dots" id="rudiBubbleDots"></div>
         </div>
@@ -252,6 +248,7 @@ RigodalModules.register('hero', {
 
     const dotsWrap = document.getElementById('rudiBubbleDots');
     const bubble = document.getElementById('rudiBubble');
+    const msgText = document.getElementById('rudiMsgText');
     let activeIndex = 0;
     let rotateTimer = null;
     let messages = [];
@@ -262,16 +259,21 @@ RigodalModules.register('hero', {
       ).join('');
     }
 
-    // Fade-based switching: only the active message is visible (via the
-    // .is-active class) — no horizontal track movement, so nothing can
-    // ever visually overlap or stagger regardless of message length.
+    // Single-element swap: fade the one text node out, change its
+    // content, fade it back in. Because there is only ever ONE message
+    // element in the DOM (not several stacked/absolutely-positioned
+    // ones), two messages overlapping is not structurally possible —
+    // there's nothing for a second message to overlap with.
     function goTo(index, userInitiated) {
       if (messages.length === 0) return;
       activeIndex = ((index % messages.length) + messages.length) % messages.length;
-      for (let i = 0; i < 3; i++) {
-        const el = document.getElementById('rudiMsg' + i);
-        el.classList.toggle('is-active', i === activeIndex);
-      }
+
+      msgText.classList.add('is-fading');
+      setTimeout(() => {
+        msgText.textContent = messages[activeIndex];
+        msgText.classList.remove('is-fading');
+      }, 180);
+
       renderDots();
       if (userInitiated) restartAutoRotate();
     }
@@ -284,35 +286,29 @@ RigodalModules.register('hero', {
 
     function renderMessages() {
       messages = buildRudiMessages();
-      for (let i = 0; i < 3; i++) {
-        const el = document.getElementById('rudiMsg' + i);
-        el.textContent = messages[i] || '';
-      }
-
       lockBubbleHeight();
-
       activeIndex = 0;
-      goTo(0, false);
+      msgText.textContent = messages[0] || '';
+      renderDots();
       restartAutoRotate();
     }
 
-    // Measures every active message's natural height using a hidden,
-    // full-width "measure" element that sits in normal document flow
-    // (so its wrapping width always matches the real bubble exactly),
-    // then locks the bubble to the tallest of the (up to 3) messages.
-    // This means switching between a short and a long message never
-    // resizes the box, and the text can never overflow its container.
+    // Measures every candidate message's natural height using the SAME
+    // element that will display it (briefly, before any message is
+    // shown) so the bubble is sized to the tallest of the (up to 3)
+    // messages up front. This means switching between a short and a
+    // long message never resizes the box, and text can never overflow.
     function lockBubbleHeight() {
-      const measureEl = document.getElementById('rudiMeasure');
+      bubble.style.height = 'auto';
+      const prevText = msgText.textContent;
       let maxHeight = 0;
 
-      for (let i = 0; i < 3; i++) {
-        if (!messages[i]) continue;
-        measureEl.textContent = messages[i];
-        maxHeight = Math.max(maxHeight, measureEl.offsetHeight);
-      }
+      messages.forEach((m) => {
+        msgText.textContent = m;
+        maxHeight = Math.max(maxHeight, msgText.offsetHeight);
+      });
 
-      measureEl.textContent = '';
+      msgText.textContent = prevText;
 
       const bubbleStyles = getComputedStyle(bubble);
       const verticalPadding = parseFloat(bubbleStyles.paddingTop) + parseFloat(bubbleStyles.paddingBottom);
