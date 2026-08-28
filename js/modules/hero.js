@@ -241,7 +241,6 @@ RigodalModules.register('hero', {
       return messages.slice(0, 3); // hard cap at 3, per design
     }
 
-    const track = document.getElementById('rudiBubbleTrack');
     const dotsWrap = document.getElementById('rudiBubbleDots');
     const bubble = document.getElementById('rudiBubble');
     let activeIndex = 0;
@@ -254,14 +253,16 @@ RigodalModules.register('hero', {
       ).join('');
     }
 
+    // Fade-based switching: only the active message is visible (via the
+    // .is-active class) — no horizontal track movement, so nothing can
+    // ever visually overlap or stagger regardless of message length.
     function goTo(index, userInitiated) {
       if (messages.length === 0) return;
       activeIndex = ((index % messages.length) + messages.length) % messages.length;
-      // Track is always 300% wide (3 slots) regardless of how many
-      // messages are actually active, so the offset math stays simple —
-      // but we only ever navigate within messages.length, so an empty
-      // slot is never reachable by swipe or tap.
-      track.style.transform = `translateX(-${activeIndex * (100 / 3)}%)`;
+      for (let i = 0; i < 3; i++) {
+        const el = document.getElementById('rudiMsg' + i);
+        el.classList.toggle('is-active', i === activeIndex);
+      }
       renderDots();
       if (userInitiated) restartAutoRotate();
     }
@@ -269,7 +270,7 @@ RigodalModules.register('hero', {
     function restartAutoRotate() {
       if (rotateTimer) clearInterval(rotateTimer);
       if (messages.length <= 1) return;
-      rotateTimer = setInterval(() => goTo(activeIndex + 1, false), 5000);
+      rotateTimer = setInterval(() => goTo(activeIndex + 1, false), 10000);
     }
 
     function renderMessages() {
@@ -277,11 +278,9 @@ RigodalModules.register('hero', {
       for (let i = 0; i < 3; i++) {
         const el = document.getElementById('rudiMsg' + i);
         el.textContent = messages[i] || '';
-        el.style.display = messages[i] ? '' : 'none';
       }
       activeIndex = 0;
-      track.style.transform = 'translateX(0%)';
-      renderDots();
+      goTo(0, false);
       restartAutoRotate();
     }
 
