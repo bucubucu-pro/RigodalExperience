@@ -5,29 +5,27 @@
 .hero {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   position: relative;
   padding: 0;
   opacity: 1;
   transform: none;
   overflow: hidden;
   background: linear-gradient(180deg, #2A2038 0%, #5C1A2E 45%, #8A3B4C 75%, var(--color-gold-light) 100%);
-  /* No forced min-height anymore — the hero's height now comes purely
-     from its actual content (scene illustration + content block).
-     The old 100svh + justify-content:flex-end combo made sense when
-     the hero content was small relative to a big illustrated scene,
-     but now that the content itself is taller/denser, that combo
-     left a large empty gap at the top of the screen on load. */
+  /* Height comes purely from .hero-content (the only element in normal
+     document flow — .hero-scene below is an absolutely-positioned
+     background layer and does not add to this element's height). */
 }
 
+/* .hero-scene is a BACKGROUND layer — it fills whatever height .hero
+   ends up being (driven entirely by .hero-content), the same way it
+   did in the very first version. It must NOT take up its own space in
+   the flex flow, or it pushes the real content down (that was the bug
+   introduced last round: giving it position:relative + a fixed height
+   turned it into a large empty block above everything else). */
 .hero-scene {
-  position: relative;
-  width: 100%;
-  height: 200px; /* fixed illustration height instead of filling the
-                     whole hero via position:absolute + inset:0, since
-                     the hero no longer has a forced full-screen height
-                     for the scene to stretch to fill */
-  flex-shrink: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   will-change: transform;
 }
 
@@ -83,21 +81,25 @@
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  padding: var(--sp-4) var(--sp-4) var(--sp-7);
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
 }
 
 /* ============================================
-   RUDI'S SPEECH BUBBLE — full-width row above the status bar.
-   Height is locked via JS (see hero.js lockBubbleHeight()) to the
-   tallest of the up to 3 rotating messages, so it never resizes
-   when switching between a short and a long message.
+   RUDI'S SPEECH BUBBLE — full-width row at the very top of the
+   hero (first thing in .hero-content, so it starts right below
+   the status bar / notch, no gap above it).
+
+   Uses a SINGLE text element, not several stacked ones — see
+   hero.js goTo() for why. Height is locked via JS to the tallest
+   of the (up to 3) rotating messages, so it never resizes when
+   switching between a short and a long message.
    ============================================ */
 
 .rudi-bubble-row {
-  animation: bubble-in var(--duration-slow) var(--ease-settle) 0.5s both;
+  animation: bubble-in var(--duration-slow) var(--ease-settle) 0.3s both;
 }
 
 @keyframes bubble-in {
@@ -129,45 +131,16 @@
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-.rudi-bubble-track {
-  position: relative;
-  width: 100%;
-}
-
 .rudi-bubble-msg {
-  position: absolute;
-  inset: 0;
-  align-items: center;
+  width: 100%;
   font-size: var(--fs-sm);
   line-height: 1.4;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity var(--duration-base) var(--ease-settle),
-              transform var(--duration-base) var(--ease-settle);
-  pointer-events: none;
-}
-
-.rudi-bubble-msg.is-active {
   opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  transition: opacity 180ms var(--ease-settle);
 }
 
-/* Invisible measuring element — same font/line-height/width as a real
-   message, but in normal document flow (not position:absolute), so
-   its wrapped height always matches what will actually render. Used
-   only by JS (lockBubbleHeight()) to size the bubble correctly. */
-.rudi-bubble-measure {
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  font-size: var(--fs-sm);
-  line-height: 1.4;
-  padding: 0 var(--sp-4);
-  pointer-events: none;
-  z-index: -1;
+.rudi-bubble-msg.is-fading {
+  opacity: 0;
 }
 
 .rudi-bubble-dots {
