@@ -1,7 +1,7 @@
 /* ============================================
    MODULE: STAY (My Stay)
    House guide: Wi-Fi, check-in/out, parking,
-   appliances, rules, guestbook, checkout checklist.
+   appliances, rules, guestbook.
    ============================================ */
 
 RigodalModules.register('stay', {
@@ -45,10 +45,6 @@ RigodalModules.register('stay', {
             <span class="hotspot-preview" data-i18n="stay.guestbookPreview">Leave a note</span>
           </button>
         </div>
-
-        <button class="btn btn-primary btn-block" data-sheet="checklist">
-          ✅ <span data-i18n="stay.checklistBtn">Checkout Checklist</span>
-        </button>
       </div>
     </section>
   `,
@@ -108,19 +104,8 @@ RigodalModules.register('stay', {
           <div class="sheet-body">${t('sheet.guestbookBody')}</div>
           <textarea placeholder="${t('sheet.guestbookPlaceholder')}" style="width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1.5px solid rgba(36,20,23,0.1); min-height:80px; font-family:inherit;"></textarea>
           <button class="btn btn-primary btn-block" style="margin-top:12px;">${t('sheet.guestbookSubmit')}</button>
-        `,
-        checklist: `
-          <div class="sheet-title">${t('sheet.checklistTitle')}</div>
-          <div id="checklistItems"></div>
         `
       };
-    }
-
-    function checklistItems() {
-      return [
-        t('sheet.checklist1'), t('sheet.checklist2'), t('sheet.checklist3'),
-        t('sheet.checklist4'), t('sheet.checklist5')
-      ];
     }
 
     function openSheet(key) {
@@ -140,23 +125,6 @@ RigodalModules.register('stay', {
               copyBtn.textContent = t('sheet.copy');
               copyBtn.classList.remove('is-copied');
             }, 1500);
-          });
-        });
-      }
-
-      const checklistWrap = document.getElementById('checklistItems');
-      if (checklistWrap) {
-        checklistWrap.innerHTML = checklistItems().map((item, i) => `
-          <div class="checklist-item" data-index="${i}">
-            <div class="checklist-checkbox"></div>
-            <div class="checklist-text">${item}</div>
-          </div>
-        `).join('');
-
-        checklistWrap.querySelectorAll('.checklist-item').forEach((el) => {
-          el.addEventListener('click', () => {
-            el.classList.toggle('is-checked');
-            el.querySelector('.checklist-checkbox').classList.toggle('is-checked');
           });
         });
       }
@@ -197,7 +165,7 @@ RigodalModules.register('stay', {
       'before-stay': ['checkin', 'parking', 'wifi'],
       'arriving-soon': ['checkin', 'parking', 'wifi'],
       'during-stay': ['wifi', 'appliances', 'rules'],
-      'leaving-soon': [],           // checkout checklist button (outside grid) is the real priority here
+      'leaving-soon': ['checkin', 'guestbook'], // checkout times + a nudge to leave a note before heading out
       'after-stay': ['guestbook']
     };
 
