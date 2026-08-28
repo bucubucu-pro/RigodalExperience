@@ -6,25 +6,9 @@
   background: var(--color-bg);
 }
 
-.stay-banner {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  background: linear-gradient(135deg, rgba(212,162,76,0.16), rgba(212,162,76,0.08));
-  border: 1px solid rgba(212,162,76,0.35);
-  border-radius: var(--radius-md);
-  padding: var(--sp-3) var(--sp-4);
-  font-size: var(--fs-sm);
-  color: var(--color-accent-strong);
-  font-weight: 500;
-  margin-bottom: var(--sp-5);
-  animation: banner-in var(--duration-slow) var(--ease-settle) both;
-}
-
-@keyframes banner-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* NOTE: the .stay-banner rule that used to live here was removed —
+   contextual messaging now lives in Rudi's speech bubble in the hero
+   section instead (see css/section-hero.css .rudi-bubble). */
 
 .stay-hotspot-grid {
   display: grid;

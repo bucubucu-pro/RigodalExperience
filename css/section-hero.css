@@ -80,15 +80,13 @@
 }
 
 /* ============================================
-   RUDI TALK ROW — avatar + swipeable speech bubble.
-   Replaces the old floating-on-the-scene bird icon +
-   separate static banner box further down the page.
+   RUDI'S SPEECH BUBBLE — full-width row above the status bar.
+   Height is locked via JS (see hero.js lockBubbleHeight()) to the
+   tallest of the up to 3 rotating messages, so it never resizes
+   when switching between a short and a long message.
    ============================================ */
 
-.rudi-talk-row {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--sp-3);
+.rudi-bubble-row {
   animation: bubble-in var(--duration-slow) var(--ease-settle) 0.5s both;
 }
 
@@ -97,52 +95,24 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.rudi-avatar {
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.14);
-  border: 2px solid rgba(255,255,255,0.35);
-  padding: 6px;
-  cursor: pointer;
-  transition: transform var(--duration-base) var(--ease-settle);
-  animation: rudi-bob 3.5s ease-in-out infinite;
-}
-
-.rudi-avatar:active {
-  transform: scale(0.92);
-}
-
-@keyframes rudi-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-.rudi-bubble-wrap {
-  flex: 1;
-  min-width: 0;
-}
-
 .rudi-bubble {
   max-width: none; /* overrides base .speech-bubble's 260px cap —
-                       this bubble should fill the flex row, not
-                       be artificially narrow */
+                       this bubble spans the full content width */
+  width: 100%;
+  box-sizing: border-box;
   position: relative;
   padding: var(--sp-3) var(--sp-4);
-  height: 56px; /* fixed height, not min-height — keeps the box a
-                    consistent, compact size no matter which message
-                    is showing, so text never overflows or staggers */
   display: flex;
   align-items: center;
   touch-action: pan-y; /* allow horizontal swipe gesture without blocking page scroll */
+  transition: height var(--duration-base) var(--ease-settle);
 }
 
 .rudi-bubble::after {
   content: "";
   position: absolute;
   bottom: -7px;
-  left: 22px;
+  left: 34px;
   width: 14px;
   height: 14px;
   background: var(--color-white);
@@ -152,7 +122,6 @@
 .rudi-bubble-track {
   position: relative;
   width: 100%;
-  height: 100%;
 }
 
 .rudi-bubble-msg {
@@ -160,17 +129,7 @@
   inset: 0;
   align-items: center;
   font-size: var(--fs-sm);
-  line-height: 1.35;
-  /* Clamp to 2 lines max — if a translation runs long, it truncates
-     with an ellipsis instead of overflowing the fixed-height box.
-     -webkit-box + line-clamp is the only cross-browser-supported way
-     to do multi-line ellipsis truncation, so it's used as the real
-     "display" value here (not flex — that's just for icon/text align
-     if ever needed inside a single line). */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  line-height: 1.4;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity var(--duration-base) var(--ease-settle),
@@ -186,9 +145,9 @@
 
 .rudi-bubble-dots {
   display: flex;
+  justify-content: center;
   gap: 5px;
   margin-top: var(--sp-2);
-  padding-left: 2px;
 }
 
 .rudi-dot {
@@ -206,39 +165,74 @@
 }
 
 /* ============================================
-   COMPACT COUNTDOWN CARD
-   Smaller than before — the big dominant ring felt
-   oversized; this keeps it legible but proportionate.
+   STATUS ROW — Rudi avatar, countdown, and weather,
+   all sharing the same height, in one continuous
+   "glass card" visual language.
    ============================================ */
 
-.countdown-card-compact {
+.hero-status-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+  height: 64px;
+}
+
+.rudi-avatar-sm {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-lg);
+  padding: 6px;
+  cursor: pointer;
+  transition: transform var(--duration-base) var(--ease-settle);
+}
+
+.rudi-avatar-sm:active {
+  transform: scale(0.92);
+}
+
+.countdown-card-inline {
+  flex: 1 1 auto;
+  min-width: 0;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-lg);
-  padding: var(--sp-4);
   box-shadow: var(--shadow-lg);
+  padding: var(--sp-2) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.countdown-card-compact .countdown-label {
-  font-size: var(--fs-xs);
+.countdown-label-inline {
+  font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--color-text-muted);
   font-weight: 600;
-  margin-bottom: var(--sp-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
 }
 
-.countdown-row {
+.countdown-row-inline {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-2);
+  min-width: 0;
 }
 
 .countdown-ring-wrap-sm {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
 }
 
@@ -251,13 +245,13 @@
 .countdown-ring-bg {
   fill: none;
   stroke: rgba(92, 26, 46, 0.1);
-  stroke-width: 8;
+  stroke-width: 10;
 }
 
 .countdown-ring-fg {
   fill: none;
   stroke: var(--color-accent);
-  stroke-width: 8;
+  stroke-width: 10;
   stroke-linecap: round;
   transition: stroke-dashoffset 1s var(--ease-settle);
 }
@@ -265,59 +259,69 @@
 .countdown-numbers-sm {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
 }
 
 .countdown-value-sm {
   font-family: var(--font-display);
-  font-size: var(--fs-2xl);
+  font-size: var(--fs-lg);
   font-weight: 700;
   color: var(--color-accent-strong);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .countdown-unit-sm {
-  font-size: var(--fs-sm);
+  font-size: 11px;
   color: var(--color-text-muted);
-}
-
-.hero-topbar {
-  position: absolute;
-  top: calc(var(--sp-5) + env(safe-area-inset-top, 0px));
-  left: var(--sp-4);
-  right: var(--sp-4);
-  z-index: 3;
-  display: flex;
-  justify-content: flex-end; /* was space-between with only one child —
-                                 that's what caused the chip to drift
-                                 unpredictably across browsers */
-  align-items: flex-start;
-}
-
-.weather-chip {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  background: rgba(255,255,255,0.16);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.18);
-  padding: var(--sp-2) var(--sp-3);
-  border-radius: var(--radius-full);
-  color: var(--color-white);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  flex-shrink: 0;
   white-space: nowrap;
-  line-height: 1;
-  transition: opacity var(--duration-base) var(--ease-settle),
-              transform var(--duration-base) var(--ease-settle);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.weather-chip.is-hidden {
+.weather-chip-inline {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--sp-2) var(--sp-3);
+  min-width: 56px;
+  text-decoration: none;
+  transition: opacity var(--duration-base) var(--ease-settle),
+              transform var(--duration-fast) var(--ease-settle);
+}
+
+.weather-chip-inline:active {
+  transform: scale(0.94);
+}
+
+.weather-chip-inline.is-hidden {
   opacity: 0;
-  transform: scale(0.8);
   pointer-events: none;
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.weather-icon-inline {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.weather-temp-inline {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-accent-strong);
+  white-space: nowrap;
 }
 
 .hero-actions {
