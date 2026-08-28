@@ -15,6 +15,13 @@ const RIGODAL_DATA = {
     wifiPassword: "kismadar2026"
   },
 
+  // ---- Business info ----
+  // googleReviewUrl: the direct link that opens Google's "write a
+  // review" box for this guesthouse.
+  business: {
+    googleReviewUrl: "https://g.page/r/CdjABHZgoNi9EBI/review"
+  },
+
   // ---- Places for Explore Eger ----
   // Curated, real businesses/attractions with Google ratings ≥ 4.0,
   // cross-checked against current listings, official sites, and local
