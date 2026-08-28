@@ -371,9 +371,10 @@ const RIGODAL_DATA = {
   ],
 
   // ---- Guestbook wall postcards ----
-  // NOTE: these quotes are shown as-is in every language (not translated)
-  // since they're real guest testimonials — translating a real quote
-  // would misrepresent what the guest actually wrote.
+  // NOTE: no longer displayed on the site — the "proof" module now
+  // shows a live Booking.com reviews widget (Elfsight) instead of
+  // these hand-picked quotes. Left here in case you want to revert
+  // or reuse them somewhere else later.
   guestbookPosts: [
     { quote: "Rudi made our kids' trip unforgettable. The treasure hunt was pure joy.", author: "Anna & family, Berlin", stars: 5 },
     { quote: "Best wine recommendations we've ever gotten from a host.", author: "Marco, Milan", stars: 5 },

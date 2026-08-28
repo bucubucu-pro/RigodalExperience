@@ -152,7 +152,7 @@ const RIGODAL_TRANSLATIONS = {
     "chat.suggestWine": "🍷 Wine tips",
 
     "proof.eyebrow": "From our guests",
-    "proof.title": "The Guestbook Wall",
+    "proof.title": "Guest Reviews",
 
     "cta.title": "Stay with Rudi",
     "cta.subtitle": "Your next Eger memory starts here.",
@@ -331,7 +331,7 @@ const RIGODAL_TRANSLATIONS = {
     "chat.suggestWine": "🍷 Bor tippek",
 
     "proof.eyebrow": "Vendégeinktől",
-    "proof.title": "A vendégkönyv fala",
+    "proof.title": "Vendégértékelések",
 
     "cta.title": "Foglalj Rudinál",
     "cta.subtitle": "A következő egri élményed itt kezdődik.",
@@ -510,7 +510,7 @@ const RIGODAL_TRANSLATIONS = {
     "chat.suggestWine": "🍷 Weintipps",
 
     "proof.eyebrow": "Von unseren Gästen",
-    "proof.title": "Die Gästebuch-Wand",
+    "proof.title": "Gästebewertungen",
 
     "cta.title": "Bei Rudi übernachten",
     "cta.subtitle": "Deine nächste Eger-Erinnerung beginnt hier.",
@@ -689,7 +689,7 @@ const RIGODAL_TRANSLATIONS = {
     "chat.suggestWine": "🍷 Wskazówki o winie",
 
     "proof.eyebrow": "Od naszych gości",
-    "proof.title": "Ściana księgi gości",
+    "proof.title": "Opinie gości",
 
     "cta.title": "Zamieszkaj u Rudiego",
     "cta.subtitle": "Twoje kolejne wspomnienie z Eger zaczyna się tutaj.",
@@ -868,7 +868,7 @@ const RIGODAL_TRANSLATIONS = {
     "chat.suggestWine": "🍷 Conseils vin",
 
     "proof.eyebrow": "Nos invités témoignent",
-    "proof.title": "Le mur du livre d'or",
+    "proof.title": "Avis des voyageurs",
 
     "cta.title": "Séjournez chez Rudi",
     "cta.subtitle": "Votre prochain souvenir à Eger commence ici.",
