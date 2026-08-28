@@ -58,16 +58,22 @@
 
 .hotspot-icon {
   font-size: 28px;
+  text-align: left;
+  width: 100%;
 }
 
 .hotspot-label {
   font-weight: 600;
   font-size: var(--fs-sm);
+  text-align: left;
+  width: 100%;
 }
 
 .hotspot-preview {
   font-size: var(--fs-xs);
   color: var(--color-text-muted);
+  text-align: left;
+  width: 100%;
 }
 
 /* --- Bottom sheet for hotspot detail --- */
