@@ -497,14 +497,34 @@
 .footer-lang-switch {
   display: flex;
   justify-content: center;
-  gap: var(--sp-3);
-  margin: var(--sp-4) 0;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: var(--sp-5) 0;
+}
+
+.footer-lang-switch button {
   font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  padding: 7px 16px;
+  min-width: 48px;
+  transition: color var(--duration-fast) var(--ease-settle),
+              background var(--duration-fast) var(--ease-settle),
+              border-color var(--duration-fast) var(--ease-settle);
+}
+
+.footer-lang-switch button:active {
+  transform: scale(0.95);
 }
 
 .footer-lang-switch button.is-active {
-  color: var(--color-gold);
-  font-weight: 700;
+  color: var(--color-accent-strong);
+  background: var(--color-gold);
+  border-color: var(--color-gold);
 }
 
 .footer-legal {
