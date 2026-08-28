@@ -8,9 +8,9 @@ RigodalModules.register('hero', {
   html: `
     <section class="hero" id="home" data-section>
       <div class="hero-topbar">
-        <div class="weather-chip" id="weatherChip">
-          <span>☀️</span><span id="weatherTemp">24°C</span>
-        </div>
+        <button class="weather-chip" id="weatherChip" type="button">
+          <span id="weatherIcon">☀️</span><span id="weatherTemp">24°C</span>
+        </button>
       </div>
 
       <div class="hero-scene" id="heroScene">
@@ -26,32 +26,80 @@ RigodalModules.register('hero', {
             <rect x="88" y="55" width="24" height="34" fill="#3E0F1F" class="hero-window"/>
           </svg>
         </div>
-        <button class="hero-rudi" id="rudiTapTarget" aria-label="Tap to hear Rudi greet you">
-          <svg viewBox="0 0 60 60" fill="none">
-            <ellipse cx="30" cy="36" rx="18" ry="16" fill="#5C1A2E"/>
-            <circle cx="30" cy="18" r="13" fill="#5C1A2E"/>
-            <path d="M30 18 L44 22 L30 26 Z" fill="#D4A24C"/>
-            <circle cx="35" cy="15" r="2.4" fill="white"/>
-          </svg>
-        </button>
       </div>
 
       <div class="hero-content">
-        <div class="hero-speech">
-          <div class="speech-bubble" id="rudiGreeting" data-i18n="hero.greeting">Szia! I've been expecting you 🐦</div>
+
+        <!-- Rudi + speech bubble: this is now where all contextual
+             messaging lives (greeting, arrival/checkout/quiet-hours
+             banners, weather tips) — rotates through up to 3 messages,
+             swipeable, instead of a separate box lower on the page. -->
+        <div class="rudi-talk-row">
+          <button class="rudi-avatar" id="rudiTapTarget" aria-label="Tap to hear Rudi speak">
+            <svg viewBox="0 0 100 100" fill="none">
+              <!-- tail -->
+              <path d="M8 62 Q2 58 4 50 Q10 54 16 58 Z" fill="#2A2A2E"/>
+              <!-- body -->
+              <ellipse cx="46" cy="60" rx="30" ry="26" fill="#302F35"/>
+              <!-- backpack -->
+              <rect x="16" y="46" width="16" height="26" rx="7" fill="#2563A8"/>
+              <rect x="19" y="40" width="10" height="12" rx="4" fill="#8B5E3C"/>
+              <path d="M26 50 Q34 54 34 64 Q34 72 27 76" stroke="#D4922E" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <rect x="30" y="58" width="6" height="6" rx="1.5" fill="#D4922E"/>
+              <!-- head -->
+              <circle cx="52" cy="34" r="22" fill="#302F35"/>
+              <path d="M46 14 Q49 8 53 13 Q56 9 58 15" stroke="#302F35" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <!-- eyes -->
+              <circle cx="45" cy="33" r="9" fill="white"/>
+              <circle cx="45" cy="34" r="6.4" fill="#8A5A2B"/>
+              <circle cx="45" cy="34" r="3.6" fill="#1A1210"/>
+              <circle cx="47" cy="31.5" r="1.6" fill="white"/>
+              <circle cx="62" cy="33" r="9.5" fill="white"/>
+              <circle cx="62" cy="34" r="6.8" fill="#8A5A2B"/>
+              <circle cx="62" cy="34" r="3.9" fill="#1A1210"/>
+              <circle cx="64.2" cy="31" r="1.7" fill="white"/>
+              <!-- beak -->
+              <path d="M53 40 Q54 47 61 48 Q56 51 51 49 Q49 44 53 40 Z" fill="#F0A030"/>
+              <path d="M53.5 41.5 Q57 44.5 59.5 46" stroke="#C9401E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- wing holding key -->
+              <path d="M74 52 Q86 48 90 38" stroke="#302F35" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <g transform="translate(88,26) rotate(35)">
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#D4A24C" stroke-width="3.5"/>
+                <rect x="-2" y="6" width="4" height="14" fill="#D4A24C"/>
+                <rect x="-2" y="16" width="7" height="3.5" fill="#D4A24C"/>
+                <rect x="-2" y="20" width="5" height="3.5" fill="#D4A24C"/>
+              </g>
+              <!-- feet -->
+              <path d="M40 84 L38 92 M40 84 L42 92 M40 84 L44 90" stroke="#F0A030" stroke-width="3" stroke-linecap="round"/>
+              <path d="M56 84 L54 92 M56 84 L58 92 M56 84 L60 90" stroke="#F0A030" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+          <div class="rudi-bubble-wrap">
+            <div class="speech-bubble rudi-bubble" id="rudiBubble">
+              <div class="rudi-bubble-track" id="rudiBubbleTrack">
+                <div class="rudi-bubble-msg" id="rudiMsg0"></div>
+                <div class="rudi-bubble-msg" id="rudiMsg1"></div>
+                <div class="rudi-bubble-msg" id="rudiMsg2"></div>
+              </div>
+            </div>
+            <div class="rudi-bubble-dots" id="rudiBubbleDots"></div>
+          </div>
         </div>
 
-        <div class="countdown-card">
+        <div class="countdown-card countdown-card-compact">
           <div class="countdown-label" id="countdownLabel" data-i18n="hero.checkinLabel">Check-in in</div>
-          <div class="countdown-ring-wrap">
-            <svg viewBox="0 0 140 140">
-              <circle class="countdown-ring-bg" cx="70" cy="70" r="60"/>
-              <circle class="countdown-ring-fg" id="countdownRing" cx="70" cy="70" r="60"
-                      stroke-dasharray="377" stroke-dashoffset="150"/>
-            </svg>
-            <div class="countdown-numbers">
-              <div class="countdown-value" id="countdownValue">2</div>
-              <div class="countdown-unit" id="countdownUnit">days</div>
+          <div class="countdown-row">
+            <div class="countdown-ring-wrap-sm">
+              <svg viewBox="0 0 100 100">
+                <circle class="countdown-ring-bg" cx="50" cy="50" r="42"/>
+                <circle class="countdown-ring-fg" id="countdownRing" cx="50" cy="50" r="42"
+                        stroke-dasharray="264" stroke-dashoffset="100"/>
+              </svg>
+            </div>
+            <div class="countdown-numbers-sm">
+              <span class="countdown-value-sm" id="countdownValue">2</span>
+              <span class="countdown-unit-sm" id="countdownUnit">days</span>
             </div>
           </div>
         </div>
@@ -68,7 +116,7 @@ RigodalModules.register('hero', {
   `,
 
   init: function () {
-    const RING_CIRCUMFERENCE = 377;
+    const RING_CIRCUMFERENCE = 264;
 
     const ring = document.getElementById('countdownRing');
     const valueEl = document.getElementById('countdownValue');
@@ -123,43 +171,145 @@ RigodalModules.register('hero', {
     setInterval(updateCountdown, 60 * 1000);
     document.addEventListener('rigodal:langchange', updateCountdown);
 
-    // Live weather (from js/weatherService.js — Open-Meteo, no API key needed)
+    // ============================================
+    // WEATHER CHIP
+    // Fixed: chip is now a real <button> with explicit
+    // sizing/position via CSS (no more drifting across
+    // browsers), and simply hides itself if no weather
+    // data is available rather than showing stale info.
+    // ============================================
     function renderWeather() {
       const w = RigodalWeather.get();
       const chip = document.getElementById('weatherChip');
+      const iconEl = document.getElementById('weatherIcon');
+      const tempEl = document.getElementById('weatherTemp');
       if (!w) {
-        chip.style.display = 'none'; // no fake data — hide the chip rather than guess
+        chip.classList.add('is-hidden');
         return;
       }
-      chip.innerHTML = `<span>${w.icon}</span><span>${w.tempC}°C</span>`;
-      chip.style.display = '';
+      iconEl.textContent = w.icon;
+      tempEl.textContent = w.tempC + '°C';
+      chip.classList.remove('is-hidden');
     }
 
     renderWeather();
     document.addEventListener('rigodal:weatherready', renderWeather);
 
-    // Personalize Rudi's greeting with the guest's name, if we have one
-    // (comes from guestResolver.js — a personalized link or cached visit).
-    function renderGreeting() {
+    // ============================================
+    // RUDI'S SPEECH — up to 3 rotating, swipeable messages.
+    // Replaces the old separate "contextual banner" box:
+    // greeting + arrival/checkout/quiet-hours state + weather
+    // tip now all live here, in Rudi's own voice.
+    // ============================================
+    function buildRudiMessages() {
+      const messages = [];
       const name = RIGODAL_DATA.booking.guestName;
-      const template = RIGODAL_I18N.t('hero.greetingNamed');
-      greetingBubble.textContent = name ? template.replace('{name}', name) : RIGODAL_I18N.t('hero.greeting');
-      greetingBubble.removeAttribute('data-i18n'); // now dynamically set, don't let i18n overwrite it
+
+      // 1. Always: personalized greeting
+      const greetingTemplate = RIGODAL_I18N.t('hero.greetingNamed');
+      messages.push(name ? greetingTemplate.replace('{name}', name) : RIGODAL_I18N.t('hero.greeting'));
+
+      // 2. Stay-stage contextual message (arriving soon / leaving soon / quiet hours)
+      const { checkIn, checkOut } = RIGODAL_DATA.booking;
+      const now = new Date();
+      const inDate = new Date(checkIn);
+      const outDate = new Date(checkOut);
+      const hoursToCheckin = (inDate - now) / (1000 * 60 * 60);
+      const hoursToCheckout = (outDate - now) / (1000 * 60 * 60);
+      const hour = now.getHours();
+
+      if (now < inDate && hoursToCheckin <= 24) {
+        messages.push(RIGODAL_I18N.t('stay.bannerArrivingSoon'));
+      } else if (now >= inDate && now < outDate && hoursToCheckout <= 12) {
+        messages.push(RIGODAL_I18N.t('stay.bannerLeavingSoon'));
+      } else if (hour >= 22 || hour < 7) {
+        messages.push(RIGODAL_I18N.t('stay.bannerQuietHours'));
+      }
+
+      // 3. Weather tip, if real conditions warrant one
+      const w = RigodalWeather.get();
+      if (w) {
+        if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(w.weatherCode)) {
+          messages.push(RIGODAL_I18N.t('stay.tipRain'));
+        } else if (w.tempC >= 28) {
+          messages.push(RIGODAL_I18N.t('stay.tipHot'));
+        } else if (w.tempC <= 2) {
+          messages.push(RIGODAL_I18N.t('stay.tipCold'));
+        }
+      }
+
+      return messages.slice(0, 3); // hard cap at 3, per design
     }
 
-    // Rudi tap greeting
-    const greetingKeys = ['hero.greeting']; // add more keys here for a rotation
-    let greetingIndex = 0;
-    const rudiBtn = document.getElementById('rudiTapTarget');
-    const greetingBubble = document.getElementById('rudiGreeting');
+    const track = document.getElementById('rudiBubbleTrack');
+    const dotsWrap = document.getElementById('rudiBubbleDots');
+    const bubble = document.getElementById('rudiBubble');
+    let activeIndex = 0;
+    let rotateTimer = null;
+    let messages = [];
 
-    renderGreeting();
-    document.addEventListener('rigodal:langchange', renderGreeting);
+    function renderDots() {
+      dotsWrap.innerHTML = messages.map((_, i) =>
+        `<span class="rudi-dot ${i === activeIndex ? 'is-active' : ''}"></span>`
+      ).join('');
+    }
 
-    rudiBtn.addEventListener('click', () => {
-      greetingIndex = (greetingIndex + 1) % greetingKeys.length;
-      rudiBtn.style.transform = 'scale(1.15) rotate(8deg)';
-      setTimeout(() => { rudiBtn.style.transform = ''; }, 250);
+    function goTo(index, userInitiated) {
+      if (messages.length === 0) return;
+      activeIndex = ((index % messages.length) + messages.length) % messages.length;
+      // Track is always 300% wide (3 slots) regardless of how many
+      // messages are actually active, so the offset math stays simple —
+      // but we only ever navigate within messages.length, so an empty
+      // slot is never reachable by swipe or tap.
+      track.style.transform = `translateX(-${activeIndex * (100 / 3)}%)`;
+      renderDots();
+      if (userInitiated) restartAutoRotate();
+    }
+
+    function restartAutoRotate() {
+      if (rotateTimer) clearInterval(rotateTimer);
+      if (messages.length <= 1) return;
+      rotateTimer = setInterval(() => goTo(activeIndex + 1, false), 5000);
+    }
+
+    function renderMessages() {
+      messages = buildRudiMessages();
+      for (let i = 0; i < 3; i++) {
+        const el = document.getElementById('rudiMsg' + i);
+        el.textContent = messages[i] || '';
+        el.style.display = messages[i] ? '' : 'none';
+      }
+      activeIndex = 0;
+      track.style.transform = 'translateX(0%)';
+      renderDots();
+      restartAutoRotate();
+    }
+
+    renderMessages();
+    document.addEventListener('rigodal:langchange', renderMessages);
+    document.addEventListener('rigodal:weatherready', renderMessages);
+
+    // Swipe support (touch) — drag left/right to move between messages
+    let touchStartX = null;
+    bubble.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    bubble.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(deltaX) > 40) {
+        goTo(activeIndex + (deltaX < 0 ? 1 : -1), true);
+      }
+      touchStartX = null;
+    });
+
+    // Tap Rudi's avatar itself also advances the message (nice on desktop too)
+    document.getElementById('rudiTapTarget').addEventListener('click', () => {
+      const btn = document.getElementById('rudiTapTarget');
+      btn.style.transform = 'scale(1.1) rotate(-6deg)';
+      setTimeout(() => { btn.style.transform = ''; }, 250);
+      goTo(activeIndex + 1, true);
     });
   }
 });
