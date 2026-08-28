@@ -129,9 +129,10 @@
                        this bubble should fill the flex row, not
                        be artificially narrow */
   position: relative;
-  overflow: hidden;
   padding: var(--sp-3) var(--sp-4);
-  min-height: 52px;
+  height: 56px; /* fixed height, not min-height — keeps the box a
+                    consistent, compact size no matter which message
+                    is showing, so text never overflows or staggers */
   display: flex;
   align-items: center;
   touch-action: pan-y; /* allow horizontal swipe gesture without blocking page scroll */
@@ -149,16 +150,38 @@
 }
 
 .rudi-bubble-track {
-  display: flex;
-  width: 300%; /* 3 messages, each 100% of the bubble's width */
-  transition: transform var(--duration-slow) var(--ease-settle);
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .rudi-bubble-msg {
-  flex: 0 0 calc(100% / 3);
+  position: absolute;
+  inset: 0;
+  align-items: center;
   font-size: var(--fs-sm);
-  line-height: 1.4;
-  padding-right: var(--sp-2);
+  line-height: 1.35;
+  /* Clamp to 2 lines max — if a translation runs long, it truncates
+     with an ellipsis instead of overflowing the fixed-height box.
+     -webkit-box + line-clamp is the only cross-browser-supported way
+     to do multi-line ellipsis truncation, so it's used as the real
+     "display" value here (not flex — that's just for icon/text align
+     if ever needed inside a single line). */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--duration-base) var(--ease-settle),
+              transform var(--duration-base) var(--ease-settle);
+  pointer-events: none;
+}
+
+.rudi-bubble-msg.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .rudi-bubble-dots {
