@@ -44,6 +44,16 @@ RigodalModules.register('stay', {
             <span class="hotspot-label" data-i18n="stay.guestbook">Guestbook</span>
             <span class="hotspot-preview" data-i18n="stay.guestbookPreview">Leave a note</span>
           </button>
+          <button class="hotspot-card" data-sheet="emergency" data-hotspot="emergency">
+            <span class="hotspot-icon">🚨</span>
+            <span class="hotspot-label" data-i18n="stay.emergency">Emergency</span>
+            <span class="hotspot-preview" data-i18n="stay.emergencyPreview">Numbers & nearest help</span>
+          </button>
+          <button class="hotspot-card" data-sheet="provided" data-hotspot="provided">
+            <span class="hotspot-icon">🎁</span>
+            <span class="hotspot-label" data-i18n="stay.provided">What's Provided</span>
+            <span class="hotspot-preview" data-i18n="stay.providedPreview">Use freely during your stay</span>
+          </button>
         </div>
       </div>
     </section>
@@ -104,6 +114,25 @@ RigodalModules.register('stay', {
           <div class="sheet-body">${t('sheet.guestbookBody')}</div>
           <textarea placeholder="${t('sheet.guestbookPlaceholder')}" style="width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1.5px solid rgba(36,20,23,0.1); min-height:80px; font-family:inherit;"></textarea>
           <button class="btn btn-primary btn-block" style="margin-top:12px;">${t('sheet.guestbookSubmit')}</button>
+        `,
+        emergency: `
+          <div class="sheet-title">${t('sheet.emergencyTitle')}</div>
+          <ul class="sheet-list">
+            <li>🚨 <a href="tel:112" style="color:var(--color-accent-strong);font-weight:700;">${t('sheet.emergencyL1')}</a></li>
+            <li>🏥 ${t('sheet.emergencyL2')}</li>
+            <li>💊 ${t('sheet.emergencyL3')}</li>
+            <li>💬 ${t('sheet.emergencyL4')}</li>
+          </ul>
+        `,
+        provided: `
+          <div class="sheet-title">${t('sheet.providedTitle')}</div>
+          <div class="sheet-body">${t('sheet.providedBody')}</div>
+          <ul class="sheet-list">
+            <li>☂️ ${t('sheet.providedL1')}</li>
+            <li>🎲 ${t('sheet.providedL2')}</li>
+            <li>☕ ${t('sheet.providedL3')}</li>
+            <li>🧴 ${t('sheet.providedL4')}</li>
+          </ul>
         `
       };
     }
