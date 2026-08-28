@@ -13,10 +13,6 @@ RigodalModules.register('stay', {
         <h2 class="section-title" data-i18n="stay.title">My Stay</h2>
         <p class="section-subtitle" data-i18n="stay.subtitle">Everything you need, right where you need it.</p>
 
-        <!-- Contextual banner: time-of-day / stay-stage / weather aware.
-             Hidden by default, shown only when a relevant message applies. -->
-        <div class="stay-banner" id="stayBanner" style="display:none;"></div>
-
         <div class="stay-hotspot-grid" id="stayHotspotGrid">
           <button class="hotspot-card" data-sheet="wifi" data-hotspot="wifi">
             <span class="hotspot-icon">📶</span>
@@ -223,79 +219,15 @@ RigodalModules.register('stay', {
       cards.forEach((card) => grid.appendChild(card)); // re-append in new order
     }
 
-    // ============================================
-    // FEATURE 2: Contextual banner
-    // One line at the top of My Stay that adapts to time-of-day
-    // and stay-stage. Hidden entirely if nothing relevant applies.
-    // ============================================
-    function renderBanner() {
-      const banner = document.getElementById('stayBanner');
-      const stage = getStayStage();
-      const hour = new Date().getHours();
-
-      let key = null;
-
-      if (stage === 'leaving-soon') {
-        key = 'stay.bannerLeavingSoon';
-      } else if (stage === 'arriving-soon') {
-        key = 'stay.bannerArrivingSoon';
-      } else if (hour >= 22 || hour < 7) {
-        key = 'stay.bannerQuietHours';
-      }
-
-      if (!key) {
-        banner.style.display = 'none';
-        return;
-      }
-
-      banner.textContent = t(key);
-      banner.style.display = 'block';
-    }
-
-    // ============================================
-    // FEATURE 3: Weather-based tip
-    // Appends a short, practical tip to the banner (or shows its
-    // own line) based on real current conditions. No live weather
-    // available -> simply shows nothing extra, never a fake tip.
-    // ============================================
-    function renderWeatherTip() {
-      const w = RigodalWeather.get();
-      if (!w) return; // no data yet or fetch failed — say nothing, don't guess
-
-      let tipKey = null;
-      if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(w.weatherCode)) {
-        tipKey = 'stay.tipRain';
-      } else if (w.tempC >= 28) {
-        tipKey = 'stay.tipHot';
-      } else if (w.tempC <= 2) {
-        tipKey = 'stay.tipCold';
-      }
-
-      if (!tipKey) return;
-
-      const banner = document.getElementById('stayBanner');
-      const tipText = t(tipKey);
-
-      if (banner.style.display === 'block' && banner.textContent) {
-        banner.textContent += '  ·  ' + tipText;
-      } else {
-        banner.textContent = tipText;
-        banner.style.display = 'block';
-      }
-    }
+    // NOTE: the contextual banner and weather tip that used to live here
+    // were moved into Rudi's speech bubble in the hero section (see
+    // js/modules/hero.js) — showing the same "almost here!" style message
+    // in two places was redundant. Only hotspot reordering remains here.
 
     reorderHotspots();
-    renderBanner();
-    renderWeatherTip();
 
-    // Weather may resolve after this module has already rendered —
-    // re-run the tip (and only the tip) once it's ready.
-    document.addEventListener('rigodal:weatherready', renderWeatherTip);
-
-    // Re-run everything on language switch, since banner/tip text changes
-    document.addEventListener('rigodal:langchange', () => {
-      renderBanner();
-      renderWeatherTip();
-    });
+    // Language switch can change which hotspot labels are prioritized
+    // (translation text differs in length etc.) — safe to just re-run.
+    document.addEventListener('rigodal:langchange', reorderHotspots);
   }
 });

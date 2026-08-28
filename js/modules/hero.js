@@ -7,12 +7,6 @@ RigodalModules.register('hero', {
 
   html: `
     <section class="hero" id="home" data-section>
-      <div class="hero-topbar">
-        <button class="weather-chip" id="weatherChip" type="button">
-          <span id="weatherIcon">☀️</span><span id="weatherTemp">24°C</span>
-        </button>
-      </div>
-
       <div class="hero-scene" id="heroScene">
         <div class="hero-stars"></div>
         <div class="hero-hill"></div>
@@ -30,12 +24,25 @@ RigodalModules.register('hero', {
 
       <div class="hero-content">
 
-        <!-- Rudi + speech bubble: this is now where all contextual
-             messaging lives (greeting, arrival/checkout/quiet-hours
-             banners, weather tips) — rotates through up to 3 messages,
-             swipeable, instead of a separate box lower on the page. -->
-        <div class="rudi-talk-row">
-          <button class="rudi-avatar" id="rudiTapTarget" aria-label="Tap to hear Rudi speak">
+        <!-- Rudi's speech bubble: full-width row above everything else.
+             Height is fixed via JS to the tallest of the (up to 3)
+             rotating messages, so switching messages never resizes
+             the box — it's measured once on render, then locked. -->
+        <div class="rudi-bubble-row">
+          <div class="speech-bubble rudi-bubble" id="rudiBubble">
+            <div class="rudi-bubble-track" id="rudiBubbleTrack">
+              <div class="rudi-bubble-msg" id="rudiMsg0"></div>
+              <div class="rudi-bubble-msg" id="rudiMsg1"></div>
+              <div class="rudi-bubble-msg" id="rudiMsg2"></div>
+            </div>
+          </div>
+          <div class="rudi-bubble-dots" id="rudiBubbleDots"></div>
+        </div>
+
+        <!-- Status row: Rudi avatar + countdown + weather, all the same
+             height, styled like one continuous "glass" info bar. -->
+        <div class="hero-status-row">
+          <button class="rudi-avatar rudi-avatar-sm" id="rudiTapTarget" aria-label="Tap to hear Rudi speak">
             <svg viewBox="0 0 100 100" fill="none">
               <!-- tail -->
               <path d="M8 62 Q2 58 4 50 Q10 54 16 58 Z" fill="#2A2A2E"/>
@@ -75,33 +82,27 @@ RigodalModules.register('hero', {
             </svg>
           </button>
 
-          <div class="rudi-bubble-wrap">
-            <div class="speech-bubble rudi-bubble" id="rudiBubble">
-              <div class="rudi-bubble-track" id="rudiBubbleTrack">
-                <div class="rudi-bubble-msg" id="rudiMsg0"></div>
-                <div class="rudi-bubble-msg" id="rudiMsg1"></div>
-                <div class="rudi-bubble-msg" id="rudiMsg2"></div>
+          <div class="countdown-card countdown-card-inline">
+            <div class="countdown-label-inline" id="countdownLabel" data-i18n="hero.checkinLabel">Check-in in</div>
+            <div class="countdown-row-inline">
+              <div class="countdown-ring-wrap-sm">
+                <svg viewBox="0 0 100 100">
+                  <circle class="countdown-ring-bg" cx="50" cy="50" r="42"/>
+                  <circle class="countdown-ring-fg" id="countdownRing" cx="50" cy="50" r="42"
+                          stroke-dasharray="264" stroke-dashoffset="100"/>
+                </svg>
+              </div>
+              <div class="countdown-numbers-sm">
+                <span class="countdown-value-sm" id="countdownValue">2</span>
+                <span class="countdown-unit-sm" id="countdownUnit">days</span>
               </div>
             </div>
-            <div class="rudi-bubble-dots" id="rudiBubbleDots"></div>
           </div>
-        </div>
 
-        <div class="countdown-card countdown-card-compact">
-          <div class="countdown-label" id="countdownLabel" data-i18n="hero.checkinLabel">Check-in in</div>
-          <div class="countdown-row">
-            <div class="countdown-ring-wrap-sm">
-              <svg viewBox="0 0 100 100">
-                <circle class="countdown-ring-bg" cx="50" cy="50" r="42"/>
-                <circle class="countdown-ring-fg" id="countdownRing" cx="50" cy="50" r="42"
-                        stroke-dasharray="264" stroke-dashoffset="100"/>
-              </svg>
-            </div>
-            <div class="countdown-numbers-sm">
-              <span class="countdown-value-sm" id="countdownValue">2</span>
-              <span class="countdown-unit-sm" id="countdownUnit">days</span>
-            </div>
-          </div>
+          <a class="weather-chip weather-chip-inline" id="weatherChip" href="https://open-meteo.com" target="_blank" rel="noopener">
+            <span class="weather-icon-inline" id="weatherIcon">☀️</span>
+            <span class="weather-temp-inline" id="weatherTemp">24°C</span>
+          </a>
         </div>
 
         <!-- Populated automatically from modules.config.js (inHeroActions: true) -->
@@ -173,10 +174,9 @@ RigodalModules.register('hero', {
 
     // ============================================
     // WEATHER CHIP
-    // Fixed: chip is now a real <button> with explicit
-    // sizing/position via CSS (no more drifting across
-    // browsers), and simply hides itself if no weather
-    // data is available rather than showing stale info.
+    // Now a real <a href> link to Open-Meteo (the data source) — tapping
+    // it takes the guest to the source site, per request. Sized/aligned
+    // via CSS to match the countdown card's height in the status row.
     // ============================================
     function renderWeather() {
       const w = RigodalWeather.get();
@@ -279,9 +279,46 @@ RigodalModules.register('hero', {
         const el = document.getElementById('rudiMsg' + i);
         el.textContent = messages[i] || '';
       }
+
+      lockBubbleHeight();
+
       activeIndex = 0;
       goTo(0, false);
       restartAutoRotate();
+    }
+
+    // Measures every active message's natural height (temporarily made
+    // visible+static, off the fade transition) and locks the bubble to
+    // the tallest one. This means switching between a short and a long
+    // message never resizes the box — the height is fixed up front to
+    // whatever the longest of the (up to 3) messages needs.
+    function lockBubbleHeight() {
+      bubble.style.height = 'auto';
+      let maxHeight = 0;
+
+      for (let i = 0; i < 3; i++) {
+        const el = document.getElementById('rudiMsg' + i);
+        if (!messages[i]) continue;
+
+        const prevPosition = el.style.position;
+        const prevOpacity = el.style.opacity;
+        const prevPointerEvents = el.style.pointerEvents;
+        el.style.position = 'static';
+        el.style.opacity = '1';
+        el.style.pointerEvents = 'none';
+
+        maxHeight = Math.max(maxHeight, el.offsetHeight);
+
+        el.style.position = prevPosition;
+        el.style.opacity = prevOpacity;
+        el.style.pointerEvents = prevPointerEvents;
+      }
+
+      // Add back the bubble's own vertical padding (measured element is
+      // just the text, not the .rudi-bubble container's padding box).
+      const bubbleStyles = getComputedStyle(bubble);
+      const verticalPadding = parseFloat(bubbleStyles.paddingTop) + parseFloat(bubbleStyles.paddingBottom);
+      bubble.style.height = Math.max(maxHeight + verticalPadding, 52) + 'px';
     }
 
     renderMessages();
