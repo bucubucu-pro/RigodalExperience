@@ -27,7 +27,13 @@ RigodalModules.register('hero', {
         <!-- Rudi's speech bubble: full-width row above everything else.
              Height is fixed via JS to the tallest of the (up to 3)
              rotating messages, so switching messages never resizes
-             the box — it's measured once on render, then locked. -->
+             the box — it's measured once on render, then locked.
+             #rudiMeasure is an invisible, full-width clone used only
+             for measuring text height accurately (it sits in normal
+             document flow, unlike the absolutely-positioned real
+             message elements, so its width — and therefore its
+             wrapped line count — always matches what will actually
+             render). -->
         <div class="rudi-bubble-row">
           <div class="speech-bubble rudi-bubble" id="rudiBubble">
             <div class="rudi-bubble-track" id="rudiBubbleTrack">
@@ -35,6 +41,7 @@ RigodalModules.register('hero', {
               <div class="rudi-bubble-msg" id="rudiMsg1"></div>
               <div class="rudi-bubble-msg" id="rudiMsg2"></div>
             </div>
+            <div class="rudi-bubble-measure" id="rudiMeasure"></div>
           </div>
           <div class="rudi-bubble-dots" id="rudiBubbleDots"></div>
         </div>
@@ -99,7 +106,7 @@ RigodalModules.register('hero', {
             </div>
           </div>
 
-          <a class="weather-chip weather-chip-inline" id="weatherChip" href="https://open-meteo.com" target="_blank" rel="noopener">
+          <a class="weather-chip weather-chip-inline" id="weatherChip" href="https://www.idokep.hu/idojaras/Eger" target="_blank" rel="noopener">
             <span class="weather-icon-inline" id="weatherIcon">☀️</span>
             <span class="weather-temp-inline" id="weatherTemp">24°C</span>
           </a>
@@ -174,9 +181,11 @@ RigodalModules.register('hero', {
 
     // ============================================
     // WEATHER CHIP
-    // Now a real <a href> link to Open-Meteo (the data source) — tapping
-    // it takes the guest to the source site, per request. Sized/aligned
-    // via CSS to match the countdown card's height in the status row.
+    // Real <a href> link to Időkép's Eger forecast page (a trusted,
+    // Hungarian-language weather source) — tapping it takes the guest
+    // straight to Eger's current conditions. Data itself is still
+    // fetched live from Open-Meteo (see js/weatherService.js); this
+    // link is just where the icon/temperature take you if tapped.
     // ============================================
     function renderWeather() {
       const w = RigodalWeather.get();
@@ -287,35 +296,24 @@ RigodalModules.register('hero', {
       restartAutoRotate();
     }
 
-    // Measures every active message's natural height (temporarily made
-    // visible+static, off the fade transition) and locks the bubble to
-    // the tallest one. This means switching between a short and a long
-    // message never resizes the box — the height is fixed up front to
-    // whatever the longest of the (up to 3) messages needs.
+    // Measures every active message's natural height using a hidden,
+    // full-width "measure" element that sits in normal document flow
+    // (so its wrapping width always matches the real bubble exactly),
+    // then locks the bubble to the tallest of the (up to 3) messages.
+    // This means switching between a short and a long message never
+    // resizes the box, and the text can never overflow its container.
     function lockBubbleHeight() {
-      bubble.style.height = 'auto';
+      const measureEl = document.getElementById('rudiMeasure');
       let maxHeight = 0;
 
       for (let i = 0; i < 3; i++) {
-        const el = document.getElementById('rudiMsg' + i);
         if (!messages[i]) continue;
-
-        const prevPosition = el.style.position;
-        const prevOpacity = el.style.opacity;
-        const prevPointerEvents = el.style.pointerEvents;
-        el.style.position = 'static';
-        el.style.opacity = '1';
-        el.style.pointerEvents = 'none';
-
-        maxHeight = Math.max(maxHeight, el.offsetHeight);
-
-        el.style.position = prevPosition;
-        el.style.opacity = prevOpacity;
-        el.style.pointerEvents = prevPointerEvents;
+        measureEl.textContent = messages[i];
+        maxHeight = Math.max(maxHeight, measureEl.offsetHeight);
       }
 
-      // Add back the bubble's own vertical padding (measured element is
-      // just the text, not the .rudi-bubble container's padding box).
+      measureEl.textContent = '';
+
       const bubbleStyles = getComputedStyle(bubble);
       const verticalPadding = parseFloat(bubbleStyles.paddingTop) + parseFloat(bubbleStyles.paddingBottom);
       bubble.style.height = Math.max(maxHeight + verticalPadding, 52) + 'px';
