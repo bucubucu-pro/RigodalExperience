@@ -6,9 +6,9 @@
    PLUS the full-screen overlay markup, injected once
    into a dedicated overlay mount point.
 
-   TO UPGRADE TO REAL AI: replace getRudiResponse()'s
-   body with a fetch() call to your AI backend and keep
-   everything else as-is.
+   TO UPGRADE TO REAL AI: replace getReplyByKeyword()'s and
+   getReplyById()'s bodies with a fetch() call to your AI
+   backend and keep everything else as-is.
    ============================================ */
 
 RigodalModules.register('chat', {
@@ -29,9 +29,9 @@ RigodalModules.register('chat', {
             </div>
           </div>
           <div class="chat-suggested-list">
-            <button class="chat-suggested-item" data-open-module="chat" data-prompt="Where can I have breakfast?" data-i18n="chat.q1">🍳 Where can I have breakfast?</button>
-            <button class="chat-suggested-item" data-open-module="chat" data-prompt="What's open on Sunday?" data-i18n="chat.q2">📅 What's open on Sunday?</button>
-            <button class="chat-suggested-item" data-open-module="chat" data-prompt="How do I use the air conditioner?" data-i18n="chat.q3">❄️ How do I use the AC?</button>
+            <button class="chat-suggested-item" data-open-module="chat" data-chat-key="breakfast" data-i18n="chat.q1">🍳 Where can I have breakfast?</button>
+            <button class="chat-suggested-item" data-open-module="chat" data-chat-key="sunday" data-i18n="chat.q2">📅 What's open on Sunday?</button>
+            <button class="chat-suggested-item" data-open-module="chat" data-chat-key="ac" data-i18n="chat.q3">❄️ How do I use the AC?</button>
           </div>
           <button class="btn btn-primary btn-block" style="margin-top:20px;" data-open-module="chat" data-i18n="chat.startBtn">Start chatting</button>
         </div>
@@ -53,11 +53,11 @@ RigodalModules.register('chat', {
       </div>
       <div class="chat-messages" id="chatMessages"></div>
       <div class="chat-suggestions" id="chatSuggestions">
-        <button class="chip" data-chat-prompt="Where can I have breakfast?" data-i18n="chat.suggestBreakfast">🍳 Breakfast spots</button>
-        <button class="chip" data-chat-prompt="What's open on Sunday?" data-i18n="chat.suggestSunday">📅 Sunday hours</button>
-        <button class="chip" data-chat-prompt="How do I use the air conditioner?" data-i18n="chat.suggestAC">❄️ AC help</button>
-        <button class="chip" data-chat-prompt="Where should I park?" data-i18n="chat.suggestParking">🚗 Parking</button>
-        <button class="chip" data-chat-prompt="Which winery do you recommend?" data-i18n="chat.suggestWine">🍷 Wine tips</button>
+        <button class="chip" data-chat-key="breakfast" data-i18n="chat.suggestBreakfast">🍳 Breakfast spots</button>
+        <button class="chip" data-chat-key="sunday" data-i18n="chat.suggestSunday">📅 Sunday hours</button>
+        <button class="chip" data-chat-key="ac" data-i18n="chat.suggestAC">❄️ AC help</button>
+        <button class="chip" data-chat-key="parking" data-i18n="chat.suggestParking">🚗 Parking</button>
+        <button class="chip" data-chat-key="wine" data-i18n="chat.suggestWine">🍷 Wine tips</button>
       </div>
       <div class="chat-input-row" id="chatInputRow" hidden>
         <input type="text" class="chat-input" id="chatInput" placeholder="Ask Rudi anything...">
@@ -79,22 +79,34 @@ RigodalModules.register('chat', {
     const closeBtn = document.getElementById('chatCloseBtn');
     const suggestionsEl = document.getElementById('chatSuggestions');
     const rudiFab = document.getElementById('rudiFab');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
 
+    // Knowledge base keywords stay language-agnostic (checked against
+    // free-typed text, in any language), but the REPLIES are pulled live
+    // from translations.js via RIGODAL_I18N.t() — so the chatbot always
+    // answers in whichever language is currently active. Each entry also
+    // has an "id" so suggestion chips can jump straight to a reply without
+    // relying on keyword matching at all.
     const KNOWLEDGE_BASE = [
-      { keys: ['breakfast', 'reggeli'], reply: "For breakfast, I recommend Debrődi Fagyizó for something sweet, or the bakery two streets down (Egri Pékség) for fresh kifli. Both open by 7 AM! 🥐" },
-      { keys: ['sunday', 'vasárnap'], reply: "Most restaurants and cafés are open on Sundays, but the CBA supermarket closes early at 2 PM. The castle stays open until 6 PM though! 🏰" },
-      { keys: ['air condition', 'ac', 'klíma'], reply: "The AC remote is on the nightstand — press the ❄ button once, then use + / - to set your temperature. It usually cools the room in about 10 minutes. ❄️" },
-      { keys: ['park', 'parking'], reply: "Free private parking is right outside the house — just pull into the gated area. No booking needed! 🚗" },
-      { keys: ['winery', 'wine', 'bor'], reply: "My top pick is Thummerer Pincészet — ask for their Bikavér. It's a 10 minute walk from the house. 🍷" },
-      { keys: ['wifi', 'wi-fi', 'internet'], reply: "You'll find the Wi-Fi network and password in the My Stay tab under 'Wi-Fi' — tap to copy the password instantly. 📶" },
-      { keys: ['checkout', 'check-out', 'check out'], reply: "Checkout is by 10:00 AM. There's a handy checklist in the My Stay tab to make sure you don't forget anything! ✅" }
+      { id: 'breakfast', keys: ['breakfast', 'reggeli', 'frühstück', 'śniadanie', 'petit-déjeuner', 'petit dejeuner'], replyKey: 'chat.kb.breakfastReply' },
+      { id: 'sunday', keys: ['sunday', 'vasárnap', 'sonntag', 'niedziel', 'dimanche'], replyKey: 'chat.kb.sundayReply' },
+      { id: 'ac', keys: ['air condition', ' ac', 'klíma', 'klima', 'klimatyzacj', 'climatisation', 'clim'], replyKey: 'chat.kb.acReply' },
+      { id: 'parking', keys: ['park', 'parkolás', 'parkplatz', 'parking'], replyKey: 'chat.kb.parkingReply' },
+      { id: 'wine', keys: ['winery', 'wine', 'bor', 'wein', 'wino', 'vin'], replyKey: 'chat.kb.wineReply' },
+      { id: 'wifi', keys: ['wifi', 'wi-fi', 'internet'], replyKey: 'chat.kb.wifiReply' },
+      { id: 'checkout', keys: ['checkout', 'check-out', 'check out', 'kijelentkezés', 'auschecken', 'wymeldowanie', 'départ', 'depart'], replyKey: 'chat.kb.checkoutReply' }
     ];
 
-    function getRudiResponse(userText) {
+    function getReplyByKeyword(userText) {
       const lower = userText.toLowerCase();
       const match = KNOWLEDGE_BASE.find((k) => k.keys.some((key) => lower.includes(key)));
-      return match ? match.reply
-        : "Great question! I'm still learning that one — for anything urgent, tap Contact Host and the family will get right back to you. 🐦";
+      return RIGODAL_I18N.t(match ? match.replyKey : 'chat.kb.fallbackReply');
+    }
+
+    function getReplyById(id) {
+      const match = KNOWLEDGE_BASE.find((k) => k.id === id);
+      return RIGODAL_I18N.t(match ? match.replyKey : 'chat.kb.fallbackReply');
     }
 
     function addMessage(text, from) {
@@ -119,17 +131,18 @@ RigodalModules.register('chat', {
       if (typing) typing.remove();
     }
 
-    function sendMessage(text) {
-      if (!text.trim()) return;
-      addMessage(text, 'user');
+    function sendMessage(displayText, replyId) {
+      if (!displayText || !displayText.trim()) return;
+      addMessage(displayText, 'user');
       showTyping();
       setTimeout(() => {
         hideTyping();
-        addMessage(getRudiResponse(text), 'rudi');
+        const reply = replyId ? getReplyById(replyId) : getReplyByKeyword(displayText);
+        addMessage(reply, 'rudi');
       }, 700 + Math.random() * 500);
     }
 
-    function openChat(prefillPrompt) {
+    function openChat(prefillKey, prefillLabel) {
       overlay.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       if (rudiFab) rudiFab.classList.add('is-hidden-for-chat');
@@ -137,8 +150,8 @@ RigodalModules.register('chat', {
       if (messagesEl.children.length === 0) {
         addMessage(RIGODAL_I18N.t('chat.greeting'), 'rudi');
       }
-      if (prefillPrompt) {
-        setTimeout(() => sendMessage(prefillPrompt), 300);
+      if (prefillKey) {
+        setTimeout(() => sendMessage(prefillLabel, prefillKey), 300);
       }
     }
 
@@ -148,15 +161,31 @@ RigodalModules.register('chat', {
       if (rudiFab) rudiFab.classList.remove('is-hidden-for-chat');
     }
 
-    // Any element anywhere on the page with data-open-module="chat" opens this
+    // Any element anywhere on the page with data-open-module="chat" opens this.
+    // If it also has data-chat-key, its own (translated) label is sent as
+    // the user's message and the matching reply is looked up by id —
+    // never by re-parsing hardcoded English text.
     document.querySelectorAll('[data-open-module="chat"]').forEach((btn) => {
-      btn.addEventListener('click', () => openChat(btn.dataset.prompt));
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.chatKey;
+        const label = btn.textContent.trim();
+        openChat(key, label);
+      });
     });
 
     closeBtn.addEventListener('click', closeChat);
     suggestionsEl.addEventListener('click', (e) => {
-      const chip = e.target.closest('[data-chat-prompt]');
-      if (chip) sendMessage(chip.dataset.chatPrompt);
+      const chip = e.target.closest('[data-chat-key]');
+      if (chip) sendMessage(chip.textContent.trim(), chip.dataset.chatKey);
     });
+
+    // Free-text typing (if the input row is ever re-enabled) still works
+    // via keyword matching across all supported languages.
+    if (chatInput && chatSendBtn) {
+      chatSendBtn.addEventListener('click', () => sendMessage(chatInput.value));
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendMessage(chatInput.value);
+      });
+    }
   }
 });
