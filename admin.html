@@ -9,7 +9,12 @@
      Only people with this exact URL can reach it. It is still technically
      public (anyone with the link could open it) — it doesn't store or
      expose any existing guest data, it only HELPS YOU BUILD a link to send.
-     Nothing here is a security boundary; keep this URL to yourself. -->
+     Nothing here is a security boundary; keep this URL to yourself.
+
+     Colors below are hardcoded (not linked to css/tokens.css) on purpose —
+     this page is fully standalone so it works even if opened before the
+     main app's CSS has ever loaded. Values match tokens.css's palette;
+     if you rebrand the main site, update both places. -->
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -174,14 +179,11 @@
   const copyBtn = document.getElementById('copyBtn');
   const qrcodeEl = document.getElementById('qrcode');
 
-  function toUrlDateTime(inputValue) {
-    // datetime-local gives "2026-09-01T14:00" — already the format our
-    // app's Date parsing expects, so no conversion needed.
-    return inputValue;
-  }
-
   generateBtn.addEventListener('click', () => {
     const name = document.getElementById('guestName').value.trim();
+    // datetime-local inputs give values like "2026-09-01T14:00", which is
+    // already exactly the format the main app's Date parsing expects —
+    // no conversion needed before putting these straight into the URL.
     const checkIn = document.getElementById('checkIn').value;
     const checkOut = document.getElementById('checkOut').value;
 
@@ -190,12 +192,7 @@
       return;
     }
 
-    const params = new URLSearchParams({
-      name: name,
-      in: toUrlDateTime(checkIn),
-      out: toUrlDateTime(checkOut)
-    });
-
+    const params = new URLSearchParams({ name, in: checkIn, out: checkOut });
     const fullUrl = `${SITE_URL}?${params.toString()}`;
 
     linkOutput.textContent = fullUrl;
