@@ -89,15 +89,6 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Device tilt parallax (gyroscope) — progressive enhancement
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', (e) => {
-      if (!heroScene || window.scrollY > 100) return;
-      const tiltX = (e.gamma || 0) * 0.5;
-      heroScene.style.setProperty('--tilt-x', tiltX + 'px');
-    });
-  }
-
   // Wait until modules have injected their HTML before wiring anything up
   document.addEventListener('rigodal:modulesmounted', setup);
 })();

@@ -1,9 +1,11 @@
 /* ============================================
    GUEST RESOLVER
-   Single place that decides "who is this guest and
-   what are their stay dates?" Everything else in the
-   app calls RigodalGuest.get() and doesn't care where
-   the data actually came from.
+   Decides "who is this guest and what are their stay
+   dates?" and writes the answer into RIGODAL_DATA.booking
+   (mutating it in place) before any other module runs —
+   so every module can keep reading RIGODAL_DATA.booking.checkIn
+   etc. exactly as before, without knowing where that data
+   actually came from.
 
    CURRENT METHOD: URL parameters (?name=...&in=...&out=...)
    read once, then cached in localStorage so the guest
@@ -14,8 +16,13 @@
    change. Replace the body of resolveFromUrl() (or add a
    resolveFromDatabase() function) so it fetches from your
    backend using a short code instead of reading long URL
-   params. Every other module already calls
-   RigodalGuest.get() and will keep working unmodified.
+   params, then still writes the result into
+   RIGODAL_DATA.booking the same way. No other file needs
+   to change.
+
+   The get() function below is a small public API for any
+   code that would rather not touch RIGODAL_DATA directly —
+   not currently used elsewhere, but available if useful.
    ============================================ */
 
 const RigodalGuest = (function () {

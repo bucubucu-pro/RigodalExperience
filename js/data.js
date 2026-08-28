@@ -57,7 +57,7 @@ const RIGODAL_DATA = {
       website: "https://bolykipinceszet.hu"
     },
     {
-      id: 17, category: "wine",
+      id: 3, category: "wine",
       name: "St. Andrea Szőlőbirtok",
       rec: "One of Eger's most acclaimed producers — try their single-vineyard Egri Csillag.",
       rating: 4.7,
@@ -66,7 +66,7 @@ const RIGODAL_DATA = {
       website: "https://standrea.com"
     },
     {
-      id: 18, category: "wine",
+      id: 4, category: "wine",
       name: "Gál Tibor Fúzió",
       rec: "Downtown wine bar and shop — a relaxed tasting without leaving the center.",
       rating: 4.6,
@@ -75,7 +75,7 @@ const RIGODAL_DATA = {
       website: "https://galtibor.hu"
     },
     {
-      id: 19, category: "wine",
+      id: 5, category: "wine",
       name: "Kovács Nimród Winery",
       rec: "Modern, design-forward winery — worth the short trip for the terroir wines alone.",
       rating: 4.6,
@@ -86,7 +86,7 @@ const RIGODAL_DATA = {
 
     // ---- Restaurants ----
     {
-      id: 3, category: "food",
+      id: 6, category: "food",
       name: "HBH Bajor Sörház",
       rec: "Great for families — big portions, Bavarian & Hungarian classics, right by Dobó tér.",
       rating: 4.5,
@@ -95,7 +95,7 @@ const RIGODAL_DATA = {
       website: "https://hbh-eger.hu"
     },
     {
-      id: 4, category: "food",
+      id: 7, category: "food",
       name: "Macok Bistro & Wine Bar",
       rec: "Eger's most celebrated restaurant — Michelin Bib Gourmand. Book ahead for dinner.",
       rating: 4.7,
@@ -104,7 +104,7 @@ const RIGODAL_DATA = {
       website: "https://www.imolaudvarhaz.hu"
     },
     {
-      id: 20, category: "food",
+      id: 8, category: "food",
       name: "1552 Restaurant",
       rec: "The only restaurant inside Eger Castle itself — modern Hungarian with Ottoman-era touches.",
       rating: 4.5,
@@ -113,7 +113,7 @@ const RIGODAL_DATA = {
       website: "https://1552etterem.hu"
     },
     {
-      id: 21, category: "food",
+      id: 9, category: "food",
       name: "Palacsintavár",
       rec: "A historic-center institution — giant savory pancakes, always packed for a reason.",
       rating: 4.3,
@@ -122,7 +122,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 22, category: "food",
+      id: 10, category: "food",
       name: "Brumbrum Ételbár",
       rec: "Macok's casual little sister — great small plates with craft beer or wine.",
       rating: 4.5,
@@ -133,7 +133,7 @@ const RIGODAL_DATA = {
 
     // ---- Cafés ----
     {
-      id: 5, category: "cafe",
+      id: 11, category: "cafe",
       name: "Cafe Frei",
       rec: "Nearly 100 coffee varieties — inside Agria Park, easy stop while shopping.",
       rating: 4.4,
@@ -142,7 +142,7 @@ const RIGODAL_DATA = {
       website: "https://www.cafefrei.hu"
     },
     {
-      id: 23, category: "cafe",
+      id: 12, category: "cafe",
       name: "Marján Cukrászda",
       rec: "Eger's most iconic patisserie, right at the foot of the castle — classic Hungarian cakes.",
       rating: 4.6,
@@ -151,7 +151,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 24, category: "cafe",
+      id: 13, category: "cafe",
       name: "Café Jardin",
       rec: "Artisan patisserie in the Servita courtyard — a quiet, pretty spot for coffee.",
       rating: 4.6,
@@ -162,7 +162,7 @@ const RIGODAL_DATA = {
 
     // ---- Sights / attractions ----
     {
-      id: 6, category: "sights",
+      id: 14, category: "sights",
       name: "Egri Vár (Eger Castle)",
       rec: "Go near closing time for golden-hour views from the bastion.",
       rating: 4.7,
@@ -171,7 +171,7 @@ const RIGODAL_DATA = {
       website: "https://www.egrivar.hu/en"
     },
     {
-      id: 7, category: "sights",
+      id: 15, category: "sights",
       name: "Szépasszony-völgy (Valley of the Beautiful Women)",
       rec: "Dozens of wine cellars in one valley — walk it at golden hour.",
       rating: 4.6,
@@ -180,7 +180,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 25, category: "sights",
+      id: 16, category: "sights",
       name: "Egri Bazilika (Eger Basilica)",
       rec: "Hungary's second-largest church — free to enter, ask about organ concert times.",
       rating: 4.7,
@@ -189,7 +189,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 26, category: "sights",
+      id: 17, category: "sights",
       name: "Egri Minaret",
       rec: "Climb the 97 spiral steps of Hungary's best-preserved Ottoman minaret for a rooftop view.",
       rating: 4.5,
@@ -198,7 +198,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 27, category: "sights",
+      id: 18, category: "sights",
       name: "Líceum & Camera Obscura",
       rec: "The Baroque university building's rooftop Camera Obscura is a genuinely fun surprise.",
       rating: 4.6,
@@ -209,7 +209,7 @@ const RIGODAL_DATA = {
 
     // ---- Supermarkets ----
     {
-      id: 8, category: "shop",
+      id: 19, category: "shop",
       name: "Tesco Szupermarket (Agria Park)",
       rec: "Closest full supermarket to the guesthouse.",
       rating: 4.2,
@@ -218,7 +218,7 @@ const RIGODAL_DATA = {
       website: "https://www.tesco.hu/aruhazak/eger/torvenyhaz-u.-4"
     },
     {
-      id: 28, category: "shop",
+      id: 20, category: "shop",
       name: "SPAR / Interspar",
       rec: "Central location with an in-store pharmacy — handy for a one-stop errand run.",
       rating: 4.2,
@@ -227,7 +227,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 29, category: "shop",
+      id: 21, category: "shop",
       name: "Lidl",
       rec: "Reliable budget option, a short drive from the center.",
       rating: 4.3,
@@ -238,7 +238,7 @@ const RIGODAL_DATA = {
 
     // ---- Pharmacies ----
     {
-      id: 9, category: "pharmacy",
+      id: 22, category: "pharmacy",
       name: "Dobó Téri Kígyó Patika",
       rec: "Right on the main square — easiest to find in an emergency.",
       rating: 4.4,
@@ -247,7 +247,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 30, category: "pharmacy",
+      id: 23, category: "pharmacy",
       name: "Benu Zalár Patika",
       rec: "Open late, Mon–Sat until 8 PM — good for evening needs.",
       rating: 4.3,
@@ -258,7 +258,7 @@ const RIGODAL_DATA = {
 
     // ---- Taxi ----
     {
-      id: 10, category: "taxi",
+      id: 24, category: "taxi",
       name: "City Taxi Eger",
       rec: "The largest, most established taxi company in town.",
       rating: 4.3,
@@ -267,7 +267,7 @@ const RIGODAL_DATA = {
       website: "https://citytaxieger.hu"
     },
     {
-      id: 31, category: "taxi",
+      id: 25, category: "taxi",
       name: "A TAXI Eger",
       rec: "Fixed rates for out-of-town trips — good for winery or day-trip transfers.",
       rating: 4.4,
@@ -278,7 +278,7 @@ const RIGODAL_DATA = {
 
     // ---- Family ----
     {
-      id: 11, category: "family",
+      id: 26, category: "family",
       name: "Szépasszonyvölgyi Márai Kalandpark",
       rec: "Adventure playground in the Valley of the Beautiful Women — great half-day trip with kids. Seasonal.",
       rating: 4.6,
@@ -287,7 +287,7 @@ const RIGODAL_DATA = {
       website: "http://www.marai-eger.hu/kalandpark/"
     },
     {
-      id: 12, category: "family",
+      id: 27, category: "family",
       name: "Eger Termál (Thermal & Strand Bath)",
       rec: "Slides, kids' pools and a lazy river — a full day out with the family.",
       rating: 4.4,
@@ -296,7 +296,7 @@ const RIGODAL_DATA = {
       website: "https://www.egertermal.hu"
     },
     {
-      id: 32, category: "family",
+      id: 28, category: "family",
       name: "Noé Kertje Élménypark",
       rec: "Outdoor sculpture and experience park just outside town — a nice easy morning with kids.",
       rating: 4.4,
@@ -307,7 +307,7 @@ const RIGODAL_DATA = {
 
     // ---- Day trips (~15–45 min from Eger) ----
     {
-      id: 13, category: "daytrip",
+      id: 29, category: "daytrip",
       name: "Szalajka-völgy & Szilvásvárad",
       rec: "Rudi's favorite day out: ride the narrow-gauge forest railway to the Fátyol waterfall, ~30 min from Eger by car.",
       rating: 4.8,
@@ -316,7 +316,7 @@ const RIGODAL_DATA = {
       website: "https://www.szilvasvarad.hu"
     },
     {
-      id: 14, category: "daytrip",
+      id: 30, category: "daytrip",
       name: "Egerszalók Sódomb & Saliris Resort",
       rec: "A striking white mineral-terrace hillside next to a hot-spring bath — ~10 min from Eger, stunning lit up at night.",
       rating: 4.6,
@@ -325,7 +325,7 @@ const RIGODAL_DATA = {
       website: "https://www.saliris.hu"
     },
     {
-      id: 15, category: "daytrip",
+      id: 31, category: "daytrip",
       name: "Noszvaj & De la Motte Castle",
       rec: "A quiet, pretty wine village 15 min from Eger with cave dwellings and a small baroque castle — good half-day trip.",
       rating: 4.5,
@@ -334,7 +334,7 @@ const RIGODAL_DATA = {
       website: null
     },
     {
-      id: 16, category: "daytrip",
+      id: 32, category: "daytrip",
       name: "Lipicai Ménesbirtok, Szilvásvárad",
       rec: "Hungary's Lipizzaner stud farm — carriage rides and a small equestrian museum, next to the Szalajka valley.",
       rating: 4.5,
@@ -368,17 +368,6 @@ const RIGODAL_DATA = {
     { id: 2, name: "Birdhouse Count", hint: "Count all the birdhouses on the property.", feathers: 10 },
     { id: 3, name: "The Castle Riddle", hint: "Solve Rudi's riddle about Eger Castle.", feathers: 15 },
     { id: 4, name: "The Viewpoint Selfie", hint: "Take a selfie at Rudi's favorite viewpoint.", feathers: 15 }
-  ],
-
-  // ---- Guestbook wall postcards ----
-  // NOTE: no longer displayed on the site — the "proof" module now
-  // shows a live Booking.com reviews widget (Elfsight) instead of
-  // these hand-picked quotes. Left here in case you want to revert
-  // or reuse them somewhere else later.
-  guestbookPosts: [
-    { quote: "Rudi made our kids' trip unforgettable. The treasure hunt was pure joy.", author: "Anna & family, Berlin", stars: 5 },
-    { quote: "Best wine recommendations we've ever gotten from a host.", author: "Marco, Milan", stars: 5 },
-    { quote: "Felt like visiting family, not renting a room.", author: "Kata, Budapest", stars: 5 }
   ]
 
   // NOTE: FAQ content lives in translations.js (keys faq.q1..q5, faq.a1..a5)
