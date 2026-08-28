@@ -52,6 +52,10 @@ a {
   text-decoration: none;
 }
 
+/* Screen-reader-only utility — visually hides an element while keeping
+   it readable by assistive tech. Not currently used by any module, but
+   worth keeping on hand for accessible labels (e.g. an icon-only button
+   that needs a text description for screen readers). */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -154,6 +158,8 @@ a {
   color: var(--color-accent-strong);
   border: 1.5px solid var(--color-accent-strong);
 }
+/* ^ Not currently used by any module — kept as a ready-made secondary
+   button style for future use (e.g. a "Cancel" or "Skip" action). */
 
 .btn-block {
   width: 100%;
@@ -194,7 +200,9 @@ a {
   border-color: var(--color-accent-strong);
 }
 
-/* --- Floating decorative feather (used across sections) --- */
+/* --- Floating decorative feather --- */
+/* Not currently used by any module — kept as a ready-made icon-sizing
+   utility for a future feather/loyalty-themed decorative element. */
 .feather-icon {
   width: 20px;
   height: 20px;
@@ -224,6 +232,8 @@ a {
 }
 
 /* --- Skeleton loading state --- */
+/* Not currently used by any module — kept as a ready-made loading
+   placeholder for any future content that loads asynchronously. */
 .skeleton {
   background: linear-gradient(90deg, #e8ddc9 25%, #f2e9d8 50%, #e8ddc9 75%);
   background-size: 200% 100%;

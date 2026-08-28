@@ -6,10 +6,6 @@
   background: var(--color-bg);
 }
 
-/* NOTE: the .stay-banner rule that used to live here was removed —
-   contextual messaging now lives in Rudi's speech bubble in the hero
-   section instead (see css/section-hero.css .rudi-bubble). */
-
 .stay-hotspot-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -31,25 +27,6 @@
   overflow: hidden;
   transition: transform var(--duration-fast) var(--ease-settle),
               border-color var(--duration-base) var(--ease-settle);
-}
-
-.hotspot-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at top right, rgba(212,162,76,0.15), transparent 70%);
-  opacity: 0;
-  transition: opacity var(--duration-base) var(--ease-settle);
-}
-
-.hotspot-card.is-pulsing::before {
-  opacity: 1;
-  animation: hotspot-pulse 2.5s ease-in-out infinite;
-}
-
-@keyframes hotspot-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
 }
 
 .hotspot-card:active {
@@ -178,34 +155,4 @@
 
 .sheet-list li:last-child {
   border-bottom: none;
-}
-
-/* --- Checkout checklist --- */
-.checklist-item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-3) 0;
-  border-bottom: 1px solid rgba(36,20,23,0.06);
-}
-
-.checklist-checkbox {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--color-accent-strong);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--duration-fast) var(--ease-settle);
-}
-
-.checklist-checkbox.is-checked {
-  background: var(--color-accent-strong);
-}
-
-.checklist-item.is-checked .checklist-text {
-  text-decoration: line-through;
-  color: var(--color-text-muted);
 }

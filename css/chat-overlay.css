@@ -185,7 +185,8 @@
 
 /* Free-text input is hidden for now — suggestion chips are the only
    input method until the input is wired to a real backend.
-   Re-enable by removing the [hidden] attribute in index.html. */
+   Re-enable by removing the "hidden" attribute from #chatInputRow
+   in js/modules/chat.js's overlayHtml template. */
 .chat-input-row[hidden] {
   display: none;
 }
