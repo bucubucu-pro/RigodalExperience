@@ -1,7 +1,8 @@
 /* ============================================
    MODULE: STAY (My Stay)
    House guide: Wi-Fi, check-in/out, parking,
-   appliances, rules, guestbook.
+   appliances, rules, what's provided, emergency
+   info, and a Google review link.
    ============================================ */
 
 RigodalModules.register('stay', {
@@ -39,21 +40,25 @@ RigodalModules.register('stay', {
             <span class="hotspot-label" data-i18n="stay.rules">House Rules</span>
             <span class="hotspot-preview" data-i18n="stay.rulesPreview">Quick read</span>
           </button>
-          <button class="hotspot-card" data-sheet="guestbook" data-hotspot="guestbook">
-            <span class="hotspot-icon">✍️</span>
-            <span class="hotspot-label" data-i18n="stay.guestbook">Guestbook</span>
-            <span class="hotspot-preview" data-i18n="stay.guestbookPreview">Leave a note</span>
+          <button class="hotspot-card" data-sheet="provided" data-hotspot="provided">
+            <span class="hotspot-icon">🎁</span>
+            <span class="hotspot-label" data-i18n="stay.provided">What's Provided</span>
+            <span class="hotspot-preview" data-i18n="stay.providedPreview">Use freely during your stay</span>
           </button>
           <button class="hotspot-card" data-sheet="emergency" data-hotspot="emergency">
             <span class="hotspot-icon">🚨</span>
             <span class="hotspot-label" data-i18n="stay.emergency">Emergency</span>
             <span class="hotspot-preview" data-i18n="stay.emergencyPreview">Numbers & nearest help</span>
           </button>
-          <button class="hotspot-card" data-sheet="provided" data-hotspot="provided">
-            <span class="hotspot-icon">🎁</span>
-            <span class="hotspot-label" data-i18n="stay.provided">What's Provided</span>
-            <span class="hotspot-preview" data-i18n="stay.providedPreview">Use freely during your stay</span>
-          </button>
+          <!-- This card links straight out to Google's review box instead
+               of opening an in-app sheet — boosts real Google reviews
+               instead of collecting notes only we can see. Always pinned
+               last in the grid (see reorderHotspots() in init() below). -->
+          <a class="hotspot-card" id="reviewCard" href="#" target="_blank" rel="noopener" data-hotspot="review">
+            <span class="hotspot-icon">⭐</span>
+            <span class="hotspot-label" data-i18n="stay.review">Leave a Review</span>
+            <span class="hotspot-preview" data-i18n="stay.reviewPreview">Takes 30 seconds on Google</span>
+          </a>
         </div>
       </div>
     </section>
@@ -65,6 +70,13 @@ RigodalModules.register('stay', {
     const content = document.getElementById('sheetContent');
     const { wifiName, wifiPassword } = RIGODAL_DATA.booking;
     const t = RIGODAL_I18N.t;
+
+    // Point the review card at the real Google review link (see
+    // js/data.js -> business.googleReviewUrl for how to set your own).
+    const reviewCard = document.getElementById('reviewCard');
+    if (reviewCard && RIGODAL_DATA.business && RIGODAL_DATA.business.googleReviewUrl) {
+      reviewCard.href = RIGODAL_DATA.business.googleReviewUrl;
+    }
 
     function sheetTemplates() {
       return {
@@ -108,12 +120,6 @@ RigodalModules.register('stay', {
             <li>${t('sheet.rulesL3')}</li>
             <li>${t('sheet.rulesL4')}</li>
           </ul>
-        `,
-        guestbook: `
-          <div class="sheet-title">${t('sheet.guestbookTitle')}</div>
-          <div class="sheet-body">${t('sheet.guestbookBody')}</div>
-          <textarea placeholder="${t('sheet.guestbookPlaceholder')}" style="width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1.5px solid rgba(36,20,23,0.1); min-height:80px; font-family:inherit;"></textarea>
-          <button class="btn btn-primary btn-block" style="margin-top:12px;">${t('sheet.guestbookSubmit')}</button>
         `,
         emergency: `
           <div class="sheet-title">${t('sheet.emergencyTitle')}</div>
@@ -175,6 +181,12 @@ RigodalModules.register('stay', {
     // FEATURE 1: Time-aware hotspot ordering
     // Reorders the hotspot grid based on where the guest is in
     // their stay — the most relevant card always comes first.
+    //
+    // "review" and "emergency" are exceptions: they're always pinned
+    // to the last two positions (review last, emergency second-to-last)
+    // regardless of stay stage — review works best as the final "on
+    // your way out" card, and emergency is a constant reference point
+    // rather than something that should jump around the grid.
     // ============================================
     function getStayStage() {
       const now = new Date();
@@ -188,24 +200,32 @@ RigodalModules.register('stay', {
       return 'after-stay';
     }
 
-    // Priority order per stage — hotspot ids not listed keep their
-    // original relative order and are appended after the priority ones.
+    // Priority order per stage for the "flexible" middle cards only —
+    // ids not listed keep their original relative order and are
+    // appended after the priority ones (but always before the pinned
+    // emergency/review cards at the very end — see reorderHotspots()).
     const STAGE_PRIORITY = {
       'before-stay': ['checkin', 'parking', 'wifi'],
       'arriving-soon': ['checkin', 'parking', 'wifi'],
       'during-stay': ['wifi', 'appliances', 'rules'],
-      'leaving-soon': ['checkin', 'guestbook'], // checkout times + a nudge to leave a note before heading out
-      'after-stay': ['guestbook']
+      'leaving-soon': ['checkin', 'provided'],
+      'after-stay': ['provided']
     };
+
+    const PINNED_LAST = ['emergency', 'review']; // in this exact order
 
     function reorderHotspots() {
       const grid = document.getElementById('stayHotspotGrid');
       const stage = getStayStage();
       const priority = STAGE_PRIORITY[stage] || [];
-      if (priority.length === 0) return; // nothing to reorder, keep default order
 
-      const cards = Array.from(grid.querySelectorAll('[data-hotspot]'));
-      cards.sort((a, b) => {
+      const allCards = Array.from(grid.querySelectorAll('[data-hotspot]'));
+      const pinnedCards = PINNED_LAST
+        .map((id) => allCards.find((c) => c.dataset.hotspot === id))
+        .filter(Boolean);
+      const flexibleCards = allCards.filter((c) => !PINNED_LAST.includes(c.dataset.hotspot));
+
+      flexibleCards.sort((a, b) => {
         const aIndex = priority.indexOf(a.dataset.hotspot);
         const bIndex = priority.indexOf(b.dataset.hotspot);
         const aRank = aIndex === -1 ? 999 : aIndex;
@@ -213,7 +233,7 @@ RigodalModules.register('stay', {
         return aRank - bRank;
       });
 
-      cards.forEach((card) => grid.appendChild(card)); // re-append in new order
+      [...flexibleCards, ...pinnedCards].forEach((card) => grid.appendChild(card));
     }
 
     // NOTE: the contextual banner and weather tip that used to live here
