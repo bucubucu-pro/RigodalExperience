@@ -3,7 +3,6 @@
    ============================================ */
 
 .hero {
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -13,11 +12,22 @@
   transform: none;
   overflow: hidden;
   background: linear-gradient(180deg, #2A2038 0%, #5C1A2E 45%, #8A3B4C 75%, var(--color-gold-light) 100%);
+  /* No forced min-height anymore — the hero's height now comes purely
+     from its actual content (scene illustration + content block).
+     The old 100svh + justify-content:flex-end combo made sense when
+     the hero content was small relative to a big illustrated scene,
+     but now that the content itself is taller/denser, that combo
+     left a large empty gap at the top of the screen on load. */
 }
 
 .hero-scene {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 200px; /* fixed illustration height instead of filling the
+                     whole hero via position:absolute + inset:0, since
+                     the hero no longer has a forced full-screen height
+                     for the scene to stretch to fill */
+  flex-shrink: 0;
   will-change: transform;
 }
 
@@ -141,6 +151,23 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+/* Invisible measuring element — same font/line-height/width as a real
+   message, but in normal document flow (not position:absolute), so
+   its wrapped height always matches what will actually render. Used
+   only by JS (lockBubbleHeight()) to size the bubble correctly. */
+.rudi-bubble-measure {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  padding: 0 var(--sp-4);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .rudi-bubble-dots {
