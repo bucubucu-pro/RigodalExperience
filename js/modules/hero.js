@@ -102,7 +102,7 @@ RigodalModules.register('hero', {
             </div>
           </div>
 
-          <a class="weather-chip weather-chip-inline" id="weatherChip" href="https://www.idokep.hu/idojaras/Eger" target="_blank" rel="noopener">
+          <a class="weather-chip-inline" id="weatherChip" href="https://www.idokep.hu/idojaras/Eger" target="_blank" rel="noopener">
             <span class="weather-icon-inline" id="weatherIcon">☀️</span>
             <span class="weather-temp-inline" id="weatherTemp">24°C</span>
           </a>
