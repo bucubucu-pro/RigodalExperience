@@ -364,18 +364,15 @@ const RIGODAL_DATA = {
   ],
 
   // ---- Guestbook wall postcards ----
+  // NOTE: these quotes are shown as-is in every language (not translated)
+  // since they're real guest testimonials — translating a real quote
+  // would misrepresent what the guest actually wrote.
   guestbookPosts: [
     { quote: "Rudi made our kids' trip unforgettable. The treasure hunt was pure joy.", author: "Anna & family, Berlin", stars: 5 },
     { quote: "Best wine recommendations we've ever gotten from a host.", author: "Marco, Milan", stars: 5 },
     { quote: "Felt like visiting family, not renting a room.", author: "Kata, Budapest", stars: 5 }
-  ],
-
-  // ---- FAQ content ----
-  faqs: [
-    { q: "What time is check-in and check-out?", a: "Check-in is from 2:00 PM, check-out by 10:00 AM. Need flexibility? Just message Rudi." },
-    { q: "Is parking included?", a: "Yes, free private parking is available right outside the house." },
-    { q: "Are pets allowed?", a: "Small, well-behaved pets are welcome — just let us know in advance." },
-    { q: "How does the treasure hunt work?", a: "Open the Adventure tab, follow the trail of clues around the house and nearby landmarks, and collect feathers as you go." },
-    { q: "What if I have a tech question about the app?", a: "Ask Rudi directly in the chat — he's trained specifically on this guesthouse and Eger." }
   ]
+
+  // NOTE: FAQ content lives in translations.js (keys faq.q1..q5, faq.a1..a5)
+  // so it can be shown correctly in all 5 languages — not here.
 };
