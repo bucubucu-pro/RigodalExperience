@@ -360,16 +360,12 @@ const RIGODAL_DATA = {
       gmaps: "https://www.google.com/maps/search/?api=1&query=Fels%C5%91t%C3%A1rk%C3%A1ny+B%C3%BCkk+Nemzeti+Park",
       website: null
     }
-  ],
-
-  // ---- Treasure hunt quests (in order) ----
-  quests: [
-    { id: 1, name: "The Hidden Bird", hint: "Find the bird symbol in the garden.", feathers: 10 },
-    { id: 2, name: "Birdhouse Count", hint: "Count all the birdhouses on the property.", feathers: 10 },
-    { id: 3, name: "The Castle Riddle", hint: "Solve Rudi's riddle about Eger Castle.", feathers: 15 },
-    { id: 4, name: "The Viewpoint Selfie", hint: "Take a selfie at Rudi's favorite viewpoint.", feathers: 15 }
   ]
 
   // NOTE: FAQ content lives in translations.js (keys faq.q1..q5, faq.a1..a5)
   // so it can be shown correctly in all 5 languages — not here.
+
+  // NOTE: the old "quests" array that used to live here was removed —
+  // the real treasure hunt now lives entirely in hunt.html / js/hunt.js
+  // as a story-driven standalone experience, not this feather-based list.
 };

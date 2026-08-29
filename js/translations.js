@@ -107,9 +107,11 @@ const RIGODAL_TRANSLATIONS = {
     "explore.showMore": "Show more",
 
     "adventure.eyebrow": "Family adventure",
-    "adventure.title": "Rigó Rudi's Treasure Hunt",
-    "adventure.subtitle": "Solve, explore, and earn feathers together.",
-    "adventure.complete": "🎉 Adventure complete! +50 bonus feathers. Certificate coming soon.",
+    "adventure.title": "Rudi's Grand Adventure",
+    "adventure.subtitle": "Help Rudi find his grandmother's lost map.",
+    "adventure.startBtn": "Start the Adventure",
+    "adventure.continueBtn": "Continue the Adventure ({count}/7)",
+    "adventure.doneBtn": "Adventure complete! 🎉 Revisit it",
 
     "rewards.eyebrow": "Rudi's nest",
     "rewards.title": "Rewards Club",
@@ -276,9 +278,11 @@ const RIGODAL_TRANSLATIONS = {
     "explore.showMore": "Több mutatása",
 
     "adventure.eyebrow": "Családi kaland",
-    "adventure.title": "Rigó Rudi kincsvadászata",
-    "adventure.subtitle": "Fejtsétek meg, fedezzétek fel, gyűjtsetek tollakat együtt.",
-    "adventure.complete": "🎉 Kaland teljesítve! +50 bónusz toll. A tanúsítvány hamarosan.",
+    "adventure.title": "Rudi Nagy Kalandja",
+    "adventure.subtitle": "Segíts Rudinak megtalálni nagymamája elveszett térképét.",
+    "adventure.startBtn": "Indítsd el a kalandot",
+    "adventure.continueBtn": "Folytasd a kalandot ({count}/7)",
+    "adventure.doneBtn": "Kaland teljesítve! 🎉 Nézd meg újra",
 
     "rewards.eyebrow": "Rudi fészke",
     "rewards.title": "Hűségklub",
@@ -445,9 +449,11 @@ const RIGODAL_TRANSLATIONS = {
     "explore.showMore": "Mehr anzeigen",
 
     "adventure.eyebrow": "Familienabenteuer",
-    "adventure.title": "Rigó Rudis Schatzsuche",
-    "adventure.subtitle": "Löse Rätsel, entdecke und sammle gemeinsam Federn.",
-    "adventure.complete": "🎉 Abenteuer abgeschlossen! +50 Bonus-Federn. Urkunde folgt in Kürze.",
+    "adventure.title": "Rudis großes Abenteuer",
+    "adventure.subtitle": "Hilf Rudi, die verlorene Karte seiner Großmutter zu finden.",
+    "adventure.startBtn": "Abenteuer starten",
+    "adventure.continueBtn": "Abenteuer fortsetzen ({count}/7)",
+    "adventure.doneBtn": "Abenteuer abgeschlossen! 🎉 Noch einmal ansehen",
 
     "rewards.eyebrow": "Rudis Nest",
     "rewards.title": "Treueclub",
@@ -614,9 +620,11 @@ const RIGODAL_TRANSLATIONS = {
     "explore.showMore": "Pokaż więcej",
 
     "adventure.eyebrow": "Przygoda rodzinna",
-    "adventure.title": "Poszukiwanie skarbu Rigó Rudiego",
-    "adventure.subtitle": "Rozwiązujcie, odkrywajcie i zbierajcie pióra razem.",
-    "adventure.complete": "🎉 Przygoda zakończona! +50 piór bonusowych. Certyfikat wkrótce.",
+    "adventure.title": "Wielka przygoda Rudiego",
+    "adventure.subtitle": "Pomóż Rudiemu odnaleźć zaginioną mapę jego babci.",
+    "adventure.startBtn": "Rozpocznij przygodę",
+    "adventure.continueBtn": "Kontynuuj przygodę ({count}/7)",
+    "adventure.doneBtn": "Przygoda ukończona! 🎉 Zobacz ponownie",
 
     "rewards.eyebrow": "Gniazdo Rudiego",
     "rewards.title": "Klub lojalnościowy",
@@ -783,9 +791,11 @@ const RIGODAL_TRANSLATIONS = {
     "explore.showMore": "Voir plus",
 
     "adventure.eyebrow": "Aventure en famille",
-    "adventure.title": "La chasse au trésor de Rigó Rudi",
-    "adventure.subtitle": "Résolvez, explorez et gagnez des plumes ensemble.",
-    "adventure.complete": "🎉 Aventure terminée ! +50 plumes bonus. Certificat bientôt disponible.",
+    "adventure.title": "La grande aventure de Rudi",
+    "adventure.subtitle": "Aidez Rudi à retrouver la carte perdue de sa grand-mère.",
+    "adventure.startBtn": "Commencer l'aventure",
+    "adventure.continueBtn": "Continuer l'aventure ({count}/7)",
+    "adventure.doneBtn": "Aventure terminée ! 🎉 La revoir",
 
     "rewards.eyebrow": "Le nid de Rudi",
     "rewards.title": "Club de fidélité",

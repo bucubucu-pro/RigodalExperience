@@ -38,7 +38,7 @@ const RIGODAL_MODULES_CONFIG = [
   },
   {
     id: 'adventure',
-    enabled: false, // Turned off for now — focusing on core info modules first
+    enabled: true, // The real treasure hunt is built now — see hunt.html
     inNav: true,
     navIcon: '🪶',
     navLabelKey: 'nav.hunt',
