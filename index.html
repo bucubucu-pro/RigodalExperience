@@ -6,6 +6,28 @@
 <title>RigóDal Companion — Your Personal Guide to Eger</title>
 <meta name="description" content="RigóDal Companion — your personal guide to Eger, hosted by Rigó Rudi.">
 
+<!-- ============================================
+     PWA / "ADD TO HOME SCREEN" SETUP
+     Together these let a guest install this site as an app icon on
+     their phone (no app store needed). Personalized guest info (name,
+     check-in/out dates) already survives this automatically — see
+     js/guestResolver.js, which caches it in localStorage the first
+     time a guest opens their personalized link, independent of
+     whether they later open the site via that link, a bookmark, or
+     the installed home-screen icon.
+     ============================================ -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5C1A2E">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+
+<!-- iOS-specific: Safari doesn't read the manifest for these, so they're
+     duplicated here. Without these, "Add to Home Screen" on iPhone would
+     still work but use a plain browser-screenshot icon instead of Rudi. -->
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RigóDal">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
