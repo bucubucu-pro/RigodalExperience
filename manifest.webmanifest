@@ -1,0 +1,32 @@
+{
+  "name": "RigóDal Companion",
+  "short_name": "RigóDal",
+  "description": "Your personal guide to Eger, hosted by Rigó Rudi.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7F0E4",
+  "theme_color": "#5C1A2E",
+  "lang": "hu",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
