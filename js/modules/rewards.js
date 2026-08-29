@@ -1,9 +1,18 @@
 /* ============================================
    MODULE: REWARDS (Rewards Club / Rudi's Nest)
-   Reads feather progress from the same shared storage
-   key the adventure module writes to, but listens via
-   a custom event so this module works even if the
-   adventure module is disabled (nest just stays at 0).
+   Reads feather progress from a shared storage key
+   ('rigodal_progress') that a feather-earning module would
+   write to, listening via a custom event so this module
+   works even if that module is disabled (nest just stays at 0).
+
+   CURRENTLY DISCONNECTED: the treasure hunt was rebuilt as a
+   standalone story experience (hunt.html / js/hunt.js) that does
+   NOT use feathers or the 'rigodal_progress' key — it uses its own
+   'rigodal_hunt_v2' key instead (see js/modules/adventure.js). So
+   right now, nothing in the app actually awards feathers; if you
+   re-enable this module, the nest will show 0 until something is
+   wired up to award feathers again (e.g. reviews, referrals, or a
+   feather bonus added to the hunt's completion step in hunt.js).
    ============================================ */
 
 RigodalModules.register('rewards', {
