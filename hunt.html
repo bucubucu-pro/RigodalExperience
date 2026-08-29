@@ -14,30 +14,81 @@
 </head>
 <body class="hunt-body">
 
+<!-- Hidden SVG symbol library: reused (via <use>) as the faint
+     decorative background pattern behind the treasure map. Kept as
+     one shared definition so it's easy to restyle in one place. -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="huntBgPattern" viewBox="0 0 400 1200">
+      <!-- Compass rose, top area -->
+      <g transform="translate(200,120)" fill="none" stroke="#5C1A2E" stroke-width="2">
+        <circle r="70" />
+        <circle r="46" />
+        <path d="M0,-70 L0,70 M-70,0 L70,0" />
+        <path d="M-49,-49 L49,49 M-49,49 L49,-49" stroke-width="1" />
+      </g>
+      <!-- Fern fronds scattered down the page -->
+      <g fill="#2F4A3C">
+        <path d="M40,300 Q60,260 30,230 Q55,255 70,225 Q60,260 90,270 Q60,275 65,310 Q45,290 40,300 Z" />
+        <path d="M360,420 Q340,380 370,350 Q345,375 330,345 Q340,380 310,390 Q340,395 335,430 Q355,410 360,420 Z" />
+        <path d="M50,560 Q70,520 40,490 Q65,515 80,485 Q70,520 100,530 Q70,535 75,570 Q55,550 50,560 Z" />
+        <path d="M350,700 Q330,660 360,630 Q335,655 320,625 Q330,660 300,670 Q330,675 325,710 Q345,690 350,700 Z" />
+        <path d="M45,840 Q65,800 35,770 Q60,795 75,765 Q65,800 95,810 Q65,815 70,850 Q50,830 45,840 Z" />
+      </g>
+      <!-- Little stars near the top, dots scattered lower like a
+           faded old-map texture -->
+      <g fill="#D4A24C">
+        <circle cx="80" cy="60" r="3" /><circle cx="320" cy="90" r="2.4" />
+        <circle cx="150" cy="950" r="2.4" /><circle cx="260" cy="1000" r="3" />
+        <circle cx="100" cy="1050" r="2" /><circle cx="300" cy="1120" r="2.6" />
+      </g>
+      <!-- Large treasure-chest silhouette near the bottom -->
+      <g transform="translate(160,1000)" fill="#D4A24C">
+        <rect x="0" y="30" width="80" height="55" rx="6" />
+        <path d="M0,30 Q40,-10 80,30 Z" />
+        <rect x="34" y="45" width="12" height="16" rx="3" fill="#F7F0E4" />
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
 <header class="hunt-header">
   <a href="index.html" class="hunt-back-btn" aria-label="Vissza a főoldalra">←</a>
   <div class="hunt-header-title">🗺️ Rudi Nagy Kalandja</div>
   <div class="hunt-header-progress" id="huntProgressLabel">0/7 térképdarab</div>
 </header>
 
-<div class="hunt-story-intro">
-  <div class="hunt-story-intro-title">🪶 A történet</div>
-  <p class="hunt-story-intro-text">
-    Réges-régen, amikor Rigó Rudi még egészen kicsi fióka volt, a nagymamája
-    rajzolt neki egy különleges, hétrészes térképet Egerről. Minden darabja
-    egy-egy titkot rejtett: egy történetet, egy rejtvényt, egy játékot. De
-    egy nagyon szeles éjszakán a térkép darabjai szanaszét repültek, és Rudi
-    sosem tudta újra összerakni — egyedül túl nehéz volt.
-    <br><br>
-    Most, hogy megérkeztetek, Rudi végre nem egyedül keresi őket! Minden
-    feladat, amit megoldotok, egy elveszett térképdarabot hoz vissza, és
-    egyre közelebb visz nagymama titkos üzenetéhez. Készen álltok a kalandra?
-  </p>
-</div>
+<main class="hunt-parchment">
+  <div class="hunt-story-intro">
+    <div class="hunt-story-intro-title">🪶 A történet</div>
+    <p class="hunt-story-intro-text">
+      Réges-régen, amikor Rigó Rudi még egészen kicsi, pihe-puha fióka volt,
+      a nagymamája rajzolt neki egy különleges, hétrészes térképet Egerről —
+      tele nevetéssel, rejtvényekkel és apró titkokkal. De egy nagyon-nagyon
+      szeles éjszakán (Rudi szerint pontosan a hetedik legviharosabb éjszaka
+      aznap óta, hogy elkezdte számolni) a térkép darabjai fütyülve
+      elszálltak a szélben, egyenesen szerteszét a kertben és a házban.
+      Rudi hiába kereste őket reggeltől estig, még a csőrét is beütötte
+      egy ablakba izgalmában — egyedül egyszerűen túl nehéz volt.
+      <br><br>
+      Most, hogy megérkeztetek, Rudi végre nem egyedül nyomoz! Minden
+      feladat, amit megoldotok, egy elveszett térképdarabot varázsol elő —
+      és minden darab egy vidám kis történetet mesél el arról, milyen volt
+      Rudi, amikor még ő is épp csak tanulta felfedezni a világot. Minél
+      több darabot találtok, annál közelebb kerültök nagymama titkos,
+      utolsó üzenetéhez. Készen álltok? Rudi már várja a jelet — irány az
+      első állomás! 🐦
+    </p>
+  </div>
 
-<div class="hunt-map" id="huntMap"></div>
+  <div class="hunt-map" id="huntMap"></div>
 
-<div class="hunt-finale" id="huntFinale" style="display:none;"></div>
+  <div class="hunt-finale" id="huntFinale" style="display:none;"></div>
+</main>
+
+<!-- Persistent "Play" button — always visible, always opens whichever
+     quest is next in line. Hidden automatically once all 7 are done. -->
+<button class="hunt-play-fab" id="huntPlayFab" aria-label="Következő kaland indítása"></button>
 
 <!-- Quest modal -->
 <div class="hunt-sheet-backdrop" id="huntSheetBackdrop"></div>
