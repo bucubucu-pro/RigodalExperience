@@ -24,6 +24,14 @@ RigodalModules.register('hero', {
 
       <div class="hero-content">
 
+        <!-- App brand title — the very first thing in the hero, above
+             Rudi's speech bubble. Kept identical across all 5 languages
+             (like a proper brand name), tagline is fully translated. -->
+        <div class="hero-brand">
+          <h1 class="hero-brand-title" data-i18n="hero.brandTitle">RigóDal Companion</h1>
+          <p class="hero-brand-tagline" data-i18n="hero.brandTagline">Your guesthouse, your city, one tap away</p>
+        </div>
+
         <!-- Rudi's speech bubble: full-width row at the very top of the
              hero. Height is fixed via JS to the tallest of the (up to 3)
              rotating messages, so switching between a short and a long
