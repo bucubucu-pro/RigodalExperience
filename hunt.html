@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rudi Nagy Kalandja — RigóDal Companion</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/hunt.css">
+</head>
+<body class="hunt-body">
+
+<header class="hunt-header">
+  <a href="index.html" class="hunt-back-btn" aria-label="Vissza a főoldalra">←</a>
+  <div class="hunt-header-title">🗺️ Rudi Nagy Kalandja</div>
+  <div class="hunt-header-progress" id="huntProgressLabel">0/7 térképdarab</div>
+</header>
+
+<div class="hunt-story-intro">
+  <div class="hunt-story-intro-title">🪶 A történet</div>
+  <p class="hunt-story-intro-text">
+    Réges-régen, amikor Rigó Rudi még egészen kicsi fióka volt, a nagymamája
+    rajzolt neki egy különleges, hétrészes térképet Egerről. Minden darabja
+    egy-egy titkot rejtett: egy történetet, egy rejtvényt, egy játékot. De
+    egy nagyon szeles éjszakán a térkép darabjai szanaszét repültek, és Rudi
+    sosem tudta újra összerakni — egyedül túl nehéz volt.
+    <br><br>
+    Most, hogy megérkeztetek, Rudi végre nem egyedül keresi őket! Minden
+    feladat, amit megoldotok, egy elveszett térképdarabot hoz vissza, és
+    egyre közelebb visz nagymama titkos üzenetéhez. Készen álltok a kalandra?
+  </p>
+</div>
+
+<div class="hunt-map" id="huntMap"></div>
+
+<div class="hunt-finale" id="huntFinale" style="display:none;"></div>
+
+<!-- Quest modal -->
+<div class="hunt-sheet-backdrop" id="huntSheetBackdrop"></div>
+<div class="hunt-sheet" id="huntSheet">
+  <div class="hunt-sheet-handle"></div>
+  <div id="huntSheetContent"></div>
+</div>
+
+<script src="js/hunt.js"></script>
+</body>
+</html>
