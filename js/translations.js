@@ -19,7 +19,8 @@ const RIGODAL_TRANSLATIONS = {
     "hero.actionStay": "House Guide",
     "hero.actionExplore": "Explore Eger",
     "hero.actionHunt": "Treasure Hunt",
-    "hero.actionContact": "Contact Host",
+    "hero.actionCall": "Call Owner",
+    "hero.actionWhatsapp": "Message on WhatsApp",
     "hero.scrollCue": "Scroll to explore",
 
     "nav.home": "Home",
@@ -185,7 +186,8 @@ const RIGODAL_TRANSLATIONS = {
     "hero.actionStay": "Házirend",
     "hero.actionExplore": "Fedezd fel Egert",
     "hero.actionHunt": "Kincsvadászat",
-    "hero.actionContact": "Írj a házigazdának",
+    "hero.actionCall": "Hívás",
+    "hero.actionWhatsapp": "Írás WhatsAppon",
     "hero.scrollCue": "Görgess tovább",
 
     "nav.home": "Kezdőlap",
@@ -351,7 +353,8 @@ const RIGODAL_TRANSLATIONS = {
     "hero.actionStay": "Hausführer",
     "hero.actionExplore": "Eger entdecken",
     "hero.actionHunt": "Schatzsuche",
-    "hero.actionContact": "Gastgeber kontaktieren",
+    "hero.actionCall": "Anrufen",
+    "hero.actionWhatsapp": "Über WhatsApp schreiben",
     "hero.scrollCue": "Zum Entdecken scrollen",
 
     "nav.home": "Start",
@@ -517,7 +520,8 @@ const RIGODAL_TRANSLATIONS = {
     "hero.actionStay": "Przewodnik po domu",
     "hero.actionExplore": "Odkryj Eger",
     "hero.actionHunt": "Poszukiwanie skarbu",
-    "hero.actionContact": "Skontaktuj się z gospodarzem",
+    "hero.actionCall": "Zadzwoń",
+    "hero.actionWhatsapp": "Napisz na WhatsApp",
     "hero.scrollCue": "Przewiń, aby odkrywać",
 
     "nav.home": "Start",
@@ -683,7 +687,8 @@ const RIGODAL_TRANSLATIONS = {
     "hero.actionStay": "Guide de la maison",
     "hero.actionExplore": "Découvrir Eger",
     "hero.actionHunt": "Chasse au trésor",
-    "hero.actionContact": "Contacter l'hôte",
+    "hero.actionCall": "Appeler",
+    "hero.actionWhatsapp": "Écrire sur WhatsApp",
     "hero.scrollCue": "Faites défiler pour découvrir",
 
     "nav.home": "Accueil",

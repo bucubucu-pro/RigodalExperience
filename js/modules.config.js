@@ -59,9 +59,12 @@ const RIGODAL_MODULES_CONFIG = [
     navIcon: '💬',
     navLabelKey: 'nav.rudi',
     isAction: true, // opens overlay instead of scrolling to a section
-    inHeroActions: true,
-    heroIcon: '💬',
-    heroLabelKey: 'hero.actionContact'
+    // Not in the hero's 4-card grid anymore — the hero now shows real
+    // host contact options (Call + WhatsApp, hardcoded in hero.js)
+    // instead of a generic "Contact Host" card that opened the AI chat.
+    // Ask Rudi is still one tap away via the bottom nav tab and the
+    // floating chat button — nothing about the AI chat itself changed.
+    inHeroActions: false
   },
   {
     id: 'proof',
