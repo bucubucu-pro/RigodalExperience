@@ -108,8 +108,26 @@ RigodalModules.register('hero', {
           </a>
         </div>
 
-        <!-- Populated automatically from modules.config.js (inHeroActions: true) -->
-        <div class="hero-actions" id="heroActionsContainer"></div>
+        <!-- 4-card grid: 2 module-driven (from modules.config.js
+             inHeroActions:true) + 2 static host-contact cards below. -->
+        <div class="hero-actions">
+          <!-- Module-generated cards (House Guide, Explore Eger) —
+               display:contents makes this wrapper's children merge
+               into the parent grid as if they were direct children. -->
+          <div id="heroActionsContainer" class="hero-actions-slot"></div>
+
+          <!-- Real host contact: call and WhatsApp. Hardcoded here
+               (not module-driven) since these are external links
+               (tel: / wa.me), not links to a module's own section. -->
+          <a class="hero-action-card" href="tel:+36204405400">
+            <span class="hero-action-icon">📞</span>
+            <span class="hero-action-label" data-i18n="hero.actionCall">Call Owner</span>
+          </a>
+          <a class="hero-action-card" href="https://wa.me/36204405400" target="_blank" rel="noopener">
+            <span class="hero-action-icon">💬</span>
+            <span class="hero-action-label" data-i18n="hero.actionWhatsapp">Message on WhatsApp</span>
+          </a>
+        </div>
       </div>
 
       <div class="hero-scroll-cue">
