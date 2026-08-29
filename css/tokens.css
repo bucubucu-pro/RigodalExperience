@@ -69,5 +69,9 @@
   /* --- Layout --- */
   --nav-height: 58px;
   --max-width: 480px; /* mobile-first container cap */
-  --section-padding-y: var(--sp-8);
+  --section-padding-y: 40px; /* was --sp-8 (64px) — halved to tighten the
+                                 gap between sections (each section adds
+                                 this both top and bottom, so two stacked
+                                 sections previously had 128px of empty
+                                 space between their content) */
 }
