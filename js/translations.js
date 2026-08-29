@@ -7,6 +7,8 @@
 const RIGODAL_TRANSLATIONS = {
 
   en: {
+    "hero.brandTitle": "RigóDal Companion",
+    "hero.brandTagline": "Your guesthouse, your city, one tap away",
     "hero.greeting": "Hi! I've been expecting you 🐦",
     "hero.greetingNamed": "Hi {name}! I've been expecting you 🐦",
     "hero.checkinLabel": "Check-in in",
@@ -174,6 +176,8 @@ const RIGODAL_TRANSLATIONS = {
   },
 
   hu: {
+    "hero.brandTitle": "RigóDal Companion",
+    "hero.brandTagline": "A szállásod és Eger, egy koppintásra",
     "hero.greeting": "Szia! Már vártalak 🐦",
     "hero.greetingNamed": "Szia {name}! Már vártalak 🐦",
     "hero.checkinLabel": "Bejelentkezésig",
@@ -341,6 +345,8 @@ const RIGODAL_TRANSLATIONS = {
   },
 
   de: {
+    "hero.brandTitle": "RigóDal Companion",
+    "hero.brandTagline": "Deine Unterkunft und die Stadt – nur einen Klick entfernt",
     "hero.greeting": "Hallo! Ich habe dich schon erwartet 🐦",
     "hero.greetingNamed": "Hallo {name}! Ich habe dich schon erwartet 🐦",
     "hero.checkinLabel": "Check-in in",
@@ -508,6 +514,8 @@ const RIGODAL_TRANSLATIONS = {
   },
 
   pl: {
+    "hero.brandTitle": "RigóDal Companion",
+    "hero.brandTagline": "Twój nocleg i miasto – w jednym dotknięciu",
     "hero.greeting": "Cześć! Już na Ciebie czekałem 🐦",
     "hero.greetingNamed": "Cześć {name}! Już na Ciebie czekałem 🐦",
     "hero.checkinLabel": "Zameldowanie za",
@@ -675,6 +683,8 @@ const RIGODAL_TRANSLATIONS = {
   },
 
   fr: {
+    "hero.brandTitle": "RigóDal Companion",
+    "hero.brandTagline": "Votre logement, votre ville, à portée de main",
     "hero.greeting": "Salut ! Je t'attendais 🐦",
     "hero.greetingNamed": "Salut {name} ! Je t'attendais 🐦",
     "hero.checkinLabel": "Arrivée dans",
