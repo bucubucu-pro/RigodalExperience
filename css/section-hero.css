@@ -331,6 +331,14 @@
   margin-top: var(--sp-2);
 }
 
+/* Lets the dynamically-injected module cards (Házirend, Fedezd fel
+   Egert) behave as if they were direct children of .hero-actions,
+   so they sit in the same 2x2 grid as the static Call/WhatsApp
+   cards next to them, instead of being nested one level deeper. */
+.hero-actions-slot {
+  display: contents;
+}
+
 .hero-action-card {
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(16px);
