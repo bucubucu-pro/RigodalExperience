@@ -199,13 +199,21 @@
     resultEl.classList.add('is-visible');
 
     qrcodeEl.innerHTML = '';
-    new QRCode(qrcodeEl, {
-      text: fullUrl,
-      width: 180,
-      height: 180,
-      colorDark: '#5C1A2E',
-      colorLight: '#ffffff'
-    });
+    try {
+      new QRCode(qrcodeEl, {
+        text: fullUrl,
+        width: 180,
+        height: 180,
+        colorDark: '#5C1A2E',
+        colorLight: '#ffffff'
+      });
+    } catch (err) {
+      // QR library failed to load (e.g. CDN blocked/offline) — the
+      // link text above still works fine, just note the QR is missing
+      // instead of leaving a silent blank box.
+      qrcodeEl.innerHTML = '<p style="font-size:0.8rem;color:#7A6A63;">QR code unavailable right now — the link above still works.</p>';
+      console.warn('QR code generation failed:', err);
+    }
 
     copyBtn.textContent = 'Copy link';
     copyBtn.classList.remove('is-copied');
