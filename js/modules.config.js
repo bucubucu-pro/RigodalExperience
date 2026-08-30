@@ -80,7 +80,15 @@ const RIGODAL_MODULES_CONFIG = [
   },
   {
     id: 'faq',
-    enabled: true,
+    // Merged into the "chat" module — the standalone FAQ section
+    // served the same purpose (answering common questions), so all
+    // of its content now lives inside "Ask Rigó Rudi" as pre-built
+    // questions (see KNOWLEDGE_BASE in js/modules/chat.js, ids
+    // checkin-times / parking-included / pets / hunt-how / tech-help).
+    // The faq.q1-q5/a1-a5 translation keys are kept as-is in
+    // translations.js — the chat module reads the a1-a5 answers
+    // directly, so nothing there needs to change either.
+    enabled: false,
     inNav: false,
     inHeroActions: false
   }
