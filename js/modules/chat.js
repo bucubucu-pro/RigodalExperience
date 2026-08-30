@@ -8,9 +8,10 @@
 
    This module now also absorbs what used to be the separate
    FAQ section — both existed to answer common questions, so
-   they're merged into one place. The homepage teaser shows up
-   to 5 questions relevant to whatever stage of the stay the
-   guest is currently in (randomly sampled if more than 5
+   they're merged into one place, plus several new questions
+   covering things guests commonly ask about. The homepage teaser
+   shows up to 5 questions relevant to whatever stage of the stay
+   the guest is currently in (randomly sampled if more than 5
    match); the full chat overlay always shows every question.
 
    TO UPGRADE TO REAL AI: replace getReplyByKeyword()'s and
@@ -110,7 +111,14 @@ RigodalModules.register('chat', {
       { id: 'checkout', category: 'leaving-soon', keys: ['checkout', 'check-out', 'check out', 'kijelentkezés', 'auschecken', 'wymeldowanie', 'départ', 'depart'], chipKey: 'chat.suggestCheckout', replyKey: 'chat.kb.checkoutReply' },
       { id: 'pets', category: 'general', keys: ['pet', 'kisállat', 'haustier', 'zwierz', 'animal'], chipKey: 'chat.suggestPets', replyKey: 'faq.a3' },
       { id: 'hunt-how', category: 'general', keys: ['hunt', 'kalandot', 'kaland', 'schatzsuche', 'poszukiwanie', 'chasse'], chipKey: 'chat.suggestHunt', replyKey: 'faq.a4' },
-      { id: 'tech-help', category: 'general', keys: ['tech', 'app', 'alkalmazás', 'aplikacj', 'appli'], chipKey: 'chat.suggestTech', replyKey: 'faq.a5' }
+      { id: 'tech-help', category: 'general', keys: ['tech', 'app', 'alkalmazás', 'aplikacj', 'appli'], chipKey: 'chat.suggestTech', replyKey: 'faq.a5' },
+      { id: 'early-late', category: 'before-stay', keys: ['early check', 'late check', 'korai', 'késői', 'früher check', 'später check', 'wcześniejsz', 'późniejsz', 'anticipée', 'tardif'], chipKey: 'chat.suggestEarlyLate', replyKey: 'chat.kb.earlyLateReply' },
+      { id: 'atm', category: 'arriving-soon', keys: ['atm', 'cash', 'pénz', 'bankomat', 'geldautomat', 'distributeur'], chipKey: 'chat.suggestAtm', replyKey: 'chat.kb.atmReply' },
+      { id: 'washing-machine', category: 'during-stay', keys: ['washing', 'laundry', 'mosógép', 'waschmaschine', 'pralk', 'machine à laver'], chipKey: 'chat.suggestWashingMachine', replyKey: 'chat.kb.washingMachineReply' },
+      { id: 'extra-bedding', category: 'during-stay', keys: ['pillow', 'blanket', 'párna', 'takaró', 'kissen', 'decke', 'poduszk', 'koc', 'oreiller', 'couverture'], chipKey: 'chat.suggestExtraBedding', replyKey: 'chat.kb.extraBeddingReply' },
+      { id: 'host-languages', category: 'before-stay', keys: ['language', 'speak', 'nyelv', 'sprache', 'język', 'langue'], chipKey: 'chat.suggestHostLanguages', replyKey: 'chat.kb.hostLanguagesReply' },
+      { id: 'baby-gear', category: 'before-stay', keys: ['crib', 'high chair', 'baba', 'babybett', 'hochstuhl', 'łóżeczk', 'krzesełk', 'lit bébé', 'chaise haute'], chipKey: 'chat.suggestBabyGear', replyKey: 'chat.kb.babyGearReply' },
+      { id: 'walk-center', category: 'arriving-soon', keys: ['walk', 'center', 'belváros', 'zentrum', 'centrum', 'centre'], chipKey: 'chat.suggestWalkCenter', replyKey: 'chat.kb.walkCenterReply' }
     ];
 
     function getReplyByKeyword(userText) {
