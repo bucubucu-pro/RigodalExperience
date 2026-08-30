@@ -58,10 +58,16 @@ RigodalModules.register('chat', {
         </div>
       </div>
       <div class="chat-messages" id="chatMessages"></div>
-      <!-- Every question lives here, in a horizontally-scrolling grid
-           that wraps into multiple rows (see .chat-suggestions in
-           chat-overlay.css) so more are visible at a glance. -->
-      <div class="chat-suggestions" id="chatSuggestions"></div>
+      <!-- Every question lives here, arranged into 3 horizontal rows
+           that scroll right together as one block (see .chat-suggestions
+           in chat-overlay.css). Each row starts with a different
+           left-offset, so row 2 and row 3 don't line up under row 1 —
+           a staggered, brick-wall look instead of a strict aligned grid. -->
+      <div class="chat-suggestions" id="chatSuggestions">
+        <div class="chat-suggestions-row" id="chatSuggestionsRow1"></div>
+        <div class="chat-suggestions-row" id="chatSuggestionsRow2"></div>
+        <div class="chat-suggestions-row" id="chatSuggestionsRow3"></div>
+      </div>
       <div class="chat-input-row" id="chatInputRow" hidden>
         <input type="text" class="chat-input" id="chatInput" placeholder="Ask Rudi anything...">
         <button class="chat-send-btn" id="chatSendBtn">➤</button>
@@ -175,11 +181,21 @@ RigodalModules.register('chat', {
       `).join('');
     }
 
-    // Every question, unfiltered, for the full chat overlay
+    // Every question, unfiltered, for the full chat overlay — split
+    // round-robin across 3 rows (item 1→row1, item 2→row2, item 3→row3,
+    // item 4→row1, ...) so each row ends up with a different mix of
+    // short/long questions, naturally varying where each row's chips
+    // start and end — nothing lines up into a strict grid.
     function renderOverlaySuggestions() {
-      suggestionsEl.innerHTML = KNOWLEDGE_BASE.map((q) => `
-        <button class="chip" data-chat-key="${q.id}">${RIGODAL_I18N.t(q.chipKey)}</button>
-      `).join('');
+      const rows = [[], [], []];
+      KNOWLEDGE_BASE.forEach((q, i) => rows[i % 3].push(q));
+
+      rows.forEach((rowQuestions, i) => {
+        const rowEl = document.getElementById(`chatSuggestionsRow${i + 1}`);
+        rowEl.innerHTML = rowQuestions.map((q) => `
+          <button class="chip" data-chat-key="${q.id}">${RIGODAL_I18N.t(q.chipKey)}</button>
+        `).join('');
+      });
     }
 
     function addMessage(text, from) {
