@@ -18,36 +18,36 @@ const QUESTS = [
     station: 'Rudi Fészke',
     icon: '🪺',
     type: 'button',
-    task: 'Reppenjetek vissza a főoldalra, és olvassátok el (vagy hallgassátok meg, ahogy a szülő felolvassa!) Rigó Rudi történetét. Figyeljetek jól — lehet, hogy pont ez segít a következő állomáson!',
+    task: 'Nyissátok meg <a href="https://rigodalvendeghazeger.hu/rigo-rudi-vendeghazunk-kis-orzoje/" target="_blank" rel="noopener" style="color:var(--color-accent-strong); font-weight:700; text-decoration:underline;">Rigó Rudi igazi történetét</a> — arról, hogyan lett egy apró madárfiókából a vár hős kis védője, majd a vendégház csendes őrzője! (Vagy hallgassátok meg, ahogy a szülő felolvassa.) Utána gyertek vissza ide.',
     buttonLabel: 'Elolvastuk Rudi történetét!',
-    reward: 'Ahogy becsuktátok a történetet, egy vidám kis csörrenés hallatszott — egy régi, kék tollú térképdarab pottyant ki egy könyv lapjai közül, és szépen megpördült a levegőben, mielőtt land olt! Rudi majdnem hanyatt esett a meglepetéstől. „Ez... ez a nagymamám kézírása!" — csipogta izgatottan, és a szárnyával büszkén megpaskolta a mellkasát. „Most már tudom, hol kezdődött ez az egész kalandozás. Gyertek, keressük meg a többit is!"'
+    reward: 'Ahogy a történet végére értetek, valami icipici megcsillant a kép sarkában — egy apró, kék tollú térképdarabka volt, egy régi rajz szélébe rejtve! Rudi izgatottan pislogott, majd háromszor is megnézte: „Ezt még sosem vettem észre, pedig ott volt egész idő alatt! Pont ott, ahol a történetem elkezdődött." '
   },
   {
     id: 2,
     station: 'Gyümölcsös-kanyar',
     icon: '🌳',
     type: 'number',
-    task: 'Rudi nagyon szeret a gyümölcsfák tetején üldögélni és onnan integetni a vendégeknek. Sétáljatok ki a kertbe, és számoljátok meg, hány gyümölcsfa van összesen! Írjátok be a számot ide:',
+    task: 'A hős várvédők régen, amikor véget ért az ostrom, gyümölcsfákat ültettek a falak tövébe — hálából, hogy a vár kitartott. Rudi szerint pont ilyen fák nőnek a ti kertetekben is! Sétáljatok ki, és számoljátok meg, hány gyümölcsfa van összesen. Írjátok be a számot ide:',
     answer: '10',
-    reward: 'Rudi boldogan hujjogatott, és háromszor körberepülte a kertet örömében! „Pontosan ennyi fát ültetett a nagymamám — egyet minden évben, amikor egyre nagyobbra nőttem!" A második térképdarabon egy icipici, mosolygós fa rajza látszik. Rudi megveregette a törzsét, mintha egy régi barátot üdvözölne.'
+    reward: 'Ott, a legvénebb fa tövében, a gyökerek között megbújva bukkant elő a második térképdarab — rajta egy icipici, mosolygós fa rajza! „A várvédők mindig fát ültettek, amikor békét ünnepeltek" — csippantette Rudi büszkén, és peckesen körberepülte a fát örömében.'
   },
   {
     id: 3,
     station: 'Művész-zug',
     icon: '🎨',
     type: 'button',
-    task: 'Kérjetek egy papírt és színes ceruzát, és rajzoljátok le, ti hogyan képzelitek el Rigó Rudit! Lehet vicces, lehet csillogó, lehet akár szuperhős-jelmezben is — Rudi biztosan imádni fogja. Ha kész a remekmű, nyomjátok meg a gombot!',
+    task: 'Kérjetek egy papírt és színes ceruzát, és rajzoljátok le, ti hogyan képzelitek el Rigó Rudit — akár a hős várvédőt, akár a mai kerti őrzőt! Ha kész a remekmű, nyomjátok meg a gombot.',
     buttonLabel: 'Kész a rajz!',
-    reward: 'Amikor Rudi meglátta (képzeletben!) a rajzotokat, akkorát pördült örömében, hogy három tollpihéje is kirepült! „Ez vagyok ÉN?! Ilyen menőnek még sosem láttam magam!" — kiabálta nevetve. A harmadik térképdarab egy icipici ecsetet rejt — kiderült, hogy Rudi nagymamája is imádott festeni, pont úgy, mint most ti.'
+    reward: 'Miközben a rajzot csodálta, Rudi észrevette, hogy egy régi vázlatfüzet lapjai közé csúszva ott lapul a harmadik térképdarab is — egy icipici ecset volt rárajzolva! „Egyszer egy várvédő is lefestett engem, amíg a toronyban énekeltem" — mesélte Rudi büszkén, és peckesen kihúzta magát, mint egy igazi hős.'
   },
   {
     id: 4,
     station: 'Vár Kaputornya',
     icon: '🏰',
     type: 'text',
-    task: 'Rudi nagymamájának ez volt a kedvenc rejtvénye, amit mindig nagy hangon, titokzatos hangsúllyal mondott el: „Magas kőfal, régi lakó, ágyúgolyó nem árt neki, hívták már Egri Csillagnak is — vajon mi lehet ez a rejtélyes valami?" Írjátok be, mit gondoltok:',
+    task: 'Rudi kedvenc rejtvénye ez, amit még a régi várvédőktől tanult: „Magas kőfal, régi lakó, ágyúgolyó nem árt neki, hívták már Egri Csillagnak is — vajon mi lehet ez a rejtélyes valami?" Írjátok be, mit gondoltok:',
     answer: 'kacsa',
-    reward: 'Rudi olyan hangosan nevetett, hogy majdnem leesett az ágról! „Pont erre gondoltam én is, ez telibe talált!" — csippantotta, és peckesen körbesétált, mint egy kis várkapitány. A negyedik térképdarabon Eger vára rajzolódik ki — itt szeretett a nagymama üldögélni napnyugtakor, és nézni, ahogy a nap aranyszínűre festi a tornyokat.'
+    reward: 'Rudi olyan hangosan nevetett, hogy majdnem leesett az ágról! „Pont erre gondoltam én is, ez telibe talált!" A negyedik térképdarabot egy régi kőrésben pillantottátok meg, pont ott, ahol egykor a védők őrködtek. Rajta Eger vára látszik — Rudi kedvenc helye, ahonnan egykor bátorító dalával figyelmeztette a fáradt katonákat.'
   },
   {
     id: 5,
@@ -56,16 +56,16 @@ const QUESTS = [
     type: 'button',
     task: 'Keressétek meg a Vendégkönyvet (vagy egy sima papírlapot), és írjatok bele közösen egy vidám üzenetet — egy titkos kézjelet, egy rajzot, vagy egy mondatot arról, hogy mi tetszett a legjobban eddig! Ha megvan, nyomjátok meg a gombot.',
     buttonLabel: 'Megírtuk az üzenetet!',
-    reward: 'Rudi tapsikolt örömében (na jó, inkább csapkodta a szárnyát) — „Imádom esténként, lámpafény mellett olvasgatni a vendégek üzeneteit, ez lesz az egyik kedvencem!" Az ötödik térképdarab egy apró, csillogó tollpihe rajza — Rudi mindig egy ilyet hagy hátra azoknak, akiket igazán, de igazán megkedvelt. Most ti is köztük vagytok!'
+    reward: 'A vendégkönyv lapjai közt, egy régebbi bejegyzés mellé bújva bukkant elő az ötödik térképdarab — egy icipici, csillogó tollpihe rajza. „Régen dalban köszönték meg a segítségemet az emberek, most meg vendégkönyvben — ez is épp olyan szép!" — csiripelte meghatottan Rudi.'
   },
   {
     id: 6,
-    station: 'Titkos Ajtók Folyosója',
+    station: 'Várkapuk Folyosója',
     icon: '🚪',
     type: 'number',
-    task: 'Rudi biztos benne, hogy minden ajtó mögött egy új kis kaland lakik. Járjátok körbe a házat, és számoljátok meg, hány ajtót találtok — a bejárati ajtó, a szobaajtók, sőt, még a szekrényajtók is számítanak! Írjátok be a számot:',
+    task: 'A várnak egykor rengeteg kapuja és ajtaja volt, amit a védőknek éjjel-nappal őrizniük kellett. Járjátok körbe a házat, és számoljátok meg, hány ajtót találtok — a bejárati ajtó, a szobaajtók, sőt, még a szekrényajtók is számítanak! Írjátok be a számot:',
     answer: '10',
-    reward: 'Rudi izgatottan ugrándozott egyik lábáról a másikra. „Ennyi ajtó mögött ennyi történet lakik! A nagymamám mindig azt mondogatta: minden ajtó egy új kaland eleje." A hatodik térképdarab egy icipici, csillogó aranykulcsot rejt — pont olyat, amilyet Rudi is büszkén a szárnya alatt tart, útra készen.'
+    reward: '„Pont ennyi kaput kellett egykor őriznünk!" — számolgatta Rudi izgatottan, miközben egyik lábáról a másikra ugrált. A hatodik térképdarabot az egyik ajtó tetején, a szemöldökfa fölött pillantottátok meg, rajta egy icipici, csillogó aranykulcs rajzával.'
   },
   {
     id: 7,
@@ -73,12 +73,11 @@ const QUESTS = [
     icon: '🗝️',
     type: 'button',
     isFinal: true,
-    task: 'Már csak egy dolog van hátra: nyissátok meg a „Kérdezd Rigó Rudit" beszélgetést, és súgjatok neki egy igazi titkot — mi volt eddig a kedvenc pillanatotok ezen az utazáson? Ha elküldtétek az üzenetet, nyomjátok meg a gombot itt, és nézzük meg együtt, mi történik!',
+    task: 'Már csak egy dolog van hátra: nyissátok meg a „Kérdezd Rigó Rudit" beszélgetést, és súgjatok neki egy igazi titkot — mi volt eddig a kedvenc pillanatotok ezen az utazáson? Ha elküldtétek az üzenetet, nyomjátok meg a gombot itt!',
     buttonLabel: 'Elsúgtuk a titkot Rudinak!',
-    reward: 'Ahogy Rudi meghallotta a titkotokat, hatalmasat pislogott, majd izgatottan előhúzta az utolsó, hetedik térképdarabot a szárnya alól — nagymamája búcsúüzenetét. Apró, gyöngybetűs írással ez állt rajta: „Kedves Rudikám, a legszebb kincs nem az, amit megtalálunk, hanem akikkel együtt keressük. Vigyázz rájuk, ahogy én vigyáztam rád." Rudi szeme csillogott, és boldogan, hangosan csiviteli: „Köszönöm, hogy velem tartottatok! Mostantól örökre a kalandtársaim vagytok — Junior Felfedezők, a javából!" 🎉'
+    reward: 'Ahogy elsúgtátok a titkotokat, Rudi boldogan felrepült, és ott, a kert legmagasabb ágán megtalálta az utolsó, hetedik térképdarabot — rajta egy icipici vár és egy dallam kottája. „Régen a falakat őriztem" — mondta csendesen Rudi —, „ma már nem kőfalakat védek, hanem pillanatokat, pont amilyen ez is volt most veletek. Köszönöm, hogy megtaláltátok minden darabomat — mostantól ti is a történetem részei vagytok!" 🎉'
   }
 ];
-
 const STORAGE_KEY = 'rigodal_hunt_v2';
 
 function loadProgress() {
