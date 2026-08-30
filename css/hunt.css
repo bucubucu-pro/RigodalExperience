@@ -115,6 +115,11 @@ body.hunt-body {
 .hunt-map {
   position: relative;
   width: 100%;
+  min-height: 900px; /* fallback for browsers without aspect-ratio
+                         support — without this, the map would collapse
+                         to 0 height on those browsers, since all its
+                         children are position:absolute and don't
+                         contribute to the parent's height */
   aspect-ratio: 400 / 1200;
   overflow: hidden;
 }
