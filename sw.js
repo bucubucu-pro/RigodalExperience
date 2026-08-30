@@ -46,11 +46,18 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Successful network response — cache a copy for offline use later
+        // Successful network response — cache a copy for offline use
+        // later. Wrapped defensively: cache.put() can throw for a few
+        // edge-case response types (e.g. 206 Partial Content, which
+        // font files sometimes trigger via range requests) — none of
+        // that should ever be allowed to affect the actual page load,
+        // which already has its response via the return below.
         const responseClone = response.clone();
-        caches.open(CACHE_VERSION).then((cache) => {
-          cache.put(event.request, responseClone);
-        });
+        caches.open(CACHE_VERSION)
+          .then((cache) => cache.put(event.request, responseClone))
+          .catch(() => { /* caching this particular request failed —
+                             harmless, the live network response above
+                             still reaches the page normally */ });
         return response;
       })
       .catch(() => {
