@@ -27,7 +27,7 @@ const QUESTS = [
     station: 'Gyümölcsös-kanyar',
     icon: '🌳',
     type: 'number',
-    task: 'A hős várvédők régen, amikor véget ért az ostrom, gyümölcsfákat ültettek a falak tövébe — hálából, hogy a vár kitartott. Rudi szerint pont ilyen fák nőnek a ti kertetekben is! Sétáljatok ki, és számoljátok meg, hány gyümölcsfa van összesen. Írjátok be a számot ide:',
+    task: 'A hős várvédők régen, amikor véget ért az ostrom, gyümölcsfákat ültettek a falak tövébe — hálából, hogy a vár kitartott. Rudi szerint pont ilyen fák nőnek ebben a kertben is! Sétáljatok ki, és számoljátok meg, hány gyümölcsfa van összesen. Írjátok be a számot ide:',
     answer: '10',
     reward: 'Ott, a legvénebb fa tövében, a gyökerek között megbújva bukkant elő a második térképdarab — rajta egy icipici, mosolygós fa rajza! „A várvédők mindig fát ültettek, amikor békét ünnepeltek" — csippantette Rudi büszkén, és peckesen körberepülte a fát örömében.'
   },
@@ -147,7 +147,21 @@ function renderMap() {
   // Rudi always stands at the NEXT quest that isn't done yet — never
   // lingering at a completed one. Once everything is done, he stays
   // at the final treasure node.
-  const rudiPos = NODE_POSITIONS[currentIndex];
+  //
+  // He's offset diagonally toward the node's bottom-right corner
+  // (not centered directly on top of it) — partially overlapping the
+  // circle rather than covering it, and importantly staying clear of
+  // the "Ide kattints!" hint bubble, which stays anchored right above
+  // the node's own (unmoved) position. Previously both Rudi and the
+  // hint were stacked on the exact same point, so they'd collide.
+  const nodePos = NODE_POSITIONS[currentIndex];
+  const RUDI_OFFSET_X = 6;   // percent — nudges Rudi right of the node
+  const RUDI_OFFSET_Y = 2;   // percent — nudges Rudi down (the map is
+                              // 3x taller than wide, so this reads as a
+                              // similar pixel offset to the X nudge —
+                              // together they place Rudi diagonally at
+                              // the node's bottom-right corner)
+  const rudiPos = { x: nodePos.x + RUDI_OFFSET_X, y: nodePos.y + RUDI_OFFSET_Y };
 
   mapEl.innerHTML = `
     <svg class="hunt-map-bg" viewBox="0 0 400 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -167,7 +181,7 @@ function renderMap() {
           <path d="M53 40 Q54 47 61 48 Q56 51 51 49 Q49 44 53 40 Z" fill="#F0A030"/>
         </svg>
       </div>
-      <div class="hunt-rudi-hint" style="left:${rudiPos.x}%; top:${rudiPos.y}%;">Ide kattints! 👆</div>
+      <div class="hunt-rudi-hint" style="left:${nodePos.x}%; top:${nodePos.y}%;">Ide kattints! 👆</div>
     ` : ''}
   `;
 
@@ -209,10 +223,25 @@ function renderFinale() {
   finaleEl.style.display = 'block';
   finaleEl.innerHTML = `
     <div class="hunt-finale-icon">🎉🗝️</div>
-    <div class="hunt-finale-title">Junior Felfedezők vagytok!</div>
+    <div class="hunt-finale-title">Mostantól ti is felfedezők vagytok!</div>
     <div class="hunt-finale-text">${QUESTS[QUESTS.length - 1].reward}</div>
+    <button class="hunt-finale-restart-btn" id="huntFinaleRestartBtn">🔄 Játsszunk újra!</button>
   `;
+  document.getElementById('huntFinaleRestartBtn').addEventListener('click', restartHunt);
 }
+
+// --- Restart: clears all progress and starts the adventure over from
+// scratch. Confirms first since this can't be undone. ---
+function restartHunt() {
+  const confirmed = confirm('Biztosan törlöd az eddigi haladást, és újrakezdjük a kalandot az elejéről?');
+  if (!confirmed) return;
+  progress = { completed: [] };
+  saveProgress(progress);
+  renderMap();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('huntRestartBtn').addEventListener('click', restartHunt);
 
 // --- Quest modal ---
 const backdrop = document.getElementById('huntSheetBackdrop');
