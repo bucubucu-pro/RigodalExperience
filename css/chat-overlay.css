@@ -132,13 +132,26 @@
   30% { transform: translateY(-6px); opacity: 1; }
 }
 
+/* Every question in the merged knowledge base lives here — arranged
+   into a horizontally-scrolling grid, 3 rows tall, so guests can see
+   far more questions at a glance than a single scrolling row allowed,
+   while keeping the horizontal-scroll interaction they already liked. */
 .chat-suggestions {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(3, auto);
   gap: var(--sp-2);
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0 var(--sp-4) var(--sp-3);
   scrollbar-width: none;
   flex-shrink: 0;
+  max-height: 168px; /* keeps 3 rows of chips from ever pushing the
+                         input/hint footer off screen on short devices */
+}
+
+.chat-suggestions .chip {
+  white-space: nowrap;
 }
 
 .chat-suggestions::-webkit-scrollbar { display: none; }
