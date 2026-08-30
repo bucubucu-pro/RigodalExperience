@@ -16,11 +16,25 @@ const RIGODAL_I18N = (function () {
   const DEFAULT_LANG = 'hu';
 
   function getLang() {
-    return localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
+    try {
+      return localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
+    } catch (e) {
+      // localStorage can throw in strict private-browsing modes or
+      // locked-down browser configs — fall back to the default
+      // language rather than letting this break every module that
+      // calls t() (which is nearly all of them).
+      return DEFAULT_LANG;
+    }
   }
 
   function setLang(lang) {
-    localStorage.setItem(STORAGE_KEY, lang);
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch (e) {
+      // Same as above — if we can't persist the choice, the site
+      // still works for this session, it just won't remember the
+      // language on the next visit.
+    }
   }
 
   function t(key) {

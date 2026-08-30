@@ -165,7 +165,7 @@ function renderMap() {
 
   mapEl.innerHTML = `
     <svg class="hunt-map-bg" viewBox="0 0 400 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <use href="#huntBgPattern" />
+      <use href="#huntBgPattern" xlink:href="#huntBgPattern" />
     </svg>
     <svg class="hunt-map-svg" viewBox="0 0 400 1200" preserveAspectRatio="none">
       <path class="hunt-map-path" d="M 88,84 C 88,164 312,134 312,228 C 312,308 88,312 88,372 C 88,452 312,456 312,516 C 312,596 88,600 88,660 C 88,740 312,744 312,804 C 312,880 200,880 200,1080" />
@@ -278,8 +278,18 @@ function openQuest(index, readOnly) {
         return;
       }
       const input = document.getElementById('huntAnswerInput');
-      const value = input.value.trim().toLowerCase();
-      const isCorrect = value === String(quest.answer).toLowerCase();
+      const rawValue = input.value.trim();
+      let isCorrect;
+
+      if (quest.type === 'number') {
+        // Compare as numbers, not raw strings — so "010", "10 ", or
+        // "10.0" all still correctly match the answer "10". A plain
+        // string comparison would wrongly reject those.
+        isCorrect = rawValue !== '' && Number(rawValue) === Number(quest.answer);
+      } else {
+        isCorrect = rawValue.toLowerCase() === String(quest.answer).toLowerCase();
+      }
+
       if (isCorrect) {
         completeQuest(index);
         renderRewardView();

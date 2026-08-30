@@ -28,18 +28,34 @@
 const RigodalGuest = (function () {
   const STORAGE_KEY = 'rigodal_guest';
 
+  // A malformed date string (e.g. a hand-edited link with a typo)
+  // would make `new Date(...)` produce an "Invalid Date" — comparisons
+  // and math against that silently produce NaN/incorrect results
+  // downstream (e.g. the hero countdown ring). Rejecting bad dates
+  // right here, at the single source of truth, is simpler than trying
+  // to guard against NaN everywhere that reads booking.checkIn/checkOut.
+  function isValidDateString(value) {
+    return !!value && !isNaN(new Date(value).getTime());
+  }
+
   function resolveFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const name = params.get('name');
-    const checkIn = params.get('in');
-    const checkOut = params.get('out');
+    const checkInRaw = params.get('in');
+    const checkOutRaw = params.get('out');
 
-    if (!name && !checkIn && !checkOut) return null;
+    if (!name && !checkInRaw && !checkOutRaw) return null;
+
+    // Only accept dates that actually parse — anything malformed falls
+    // back to the existing placeholder date instead of poisoning the
+    // countdown with NaN.
+    const checkIn = isValidDateString(checkInRaw) ? checkInRaw : RIGODAL_DATA.booking.checkIn;
+    const checkOut = isValidDateString(checkOutRaw) ? checkOutRaw : RIGODAL_DATA.booking.checkOut;
 
     return {
       guestName: name || RIGODAL_DATA.booking.guestName,
-      checkIn: checkIn || RIGODAL_DATA.booking.checkIn,
-      checkOut: checkOut || RIGODAL_DATA.booking.checkOut
+      checkIn: checkIn,
+      checkOut: checkOut
     };
   }
 
