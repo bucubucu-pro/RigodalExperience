@@ -153,14 +153,30 @@ RigodalModules.register('stay', {
       const copyBtn = document.getElementById('copyWifiBtn');
       if (copyBtn) {
         copyBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText(wifiPassword).then(() => {
+          function showCopiedFeedback() {
             copyBtn.textContent = t('sheet.copied');
             copyBtn.classList.add('is-copied');
             setTimeout(() => {
               copyBtn.textContent = t('sheet.copy');
               copyBtn.classList.remove('is-copied');
             }, 1500);
-          });
+          }
+
+          function showManualCopyFallback() {
+            // Clipboard API missing or blocked (older browser, insecure
+            // context, permission denied, etc.) — the password is
+            // already visible in the <code> element right next to this
+            // button, so guide the guest to select it manually instead
+            // of failing silently.
+            copyBtn.textContent = t('sheet.copyManually');
+            setTimeout(() => { copyBtn.textContent = t('sheet.copy'); }, 2500);
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(wifiPassword).then(showCopiedFeedback).catch(showManualCopyFallback);
+          } else {
+            showManualCopyFallback();
+          }
         });
       }
     }
@@ -187,18 +203,11 @@ RigodalModules.register('stay', {
     // regardless of stay stage — review works best as the final "on
     // your way out" card, and emergency is a constant reference point
     // rather than something that should jump around the grid.
+    // Stage detection itself now lives in js/stayStage.js (shared
+    // across stay.js/chat.js/hero.js) — see that file to change the
+    // arriving-soon/leaving-soon thresholds.
     // ============================================
-    function getStayStage() {
-      const now = new Date();
-      const inDate = new Date(RIGODAL_DATA.booking.checkIn);
-      const outDate = new Date(RIGODAL_DATA.booking.checkOut);
-      const hoursToCheckin = (inDate - now) / (1000 * 60 * 60);
-      const hoursToCheckout = (outDate - now) / (1000 * 60 * 60);
-
-      if (now < inDate) return hoursToCheckin <= 24 ? 'arriving-soon' : 'before-stay';
-      if (now < outDate) return hoursToCheckout <= 12 ? 'leaving-soon' : 'during-stay';
-      return 'after-stay';
-    }
+    const getStayStage = RigodalStayStage.get;
 
     // Priority order per stage for the "flexible" middle cards only —
     // ids not listed keep their original relative order and are

@@ -139,22 +139,12 @@ RigodalModules.register('chat', {
     }
 
     // ============================================
-    // Stay-stage detection — same thresholds as js/modules/stay.js's
-    // getStayStage() (kept as a separate small copy here rather than
-    // a shared import, since this project has no build step / module
-    // bundler to share code across files without adding a new global).
+    // Stay-stage detection now lives in js/stayStage.js (shared
+    // across stay.js/chat.js/hero.js) — see that file to change the
+    // arriving-soon/leaving-soon thresholds in one place instead of
+    // several.
     // ============================================
-    function getStayStage() {
-      const now = new Date();
-      const inDate = new Date(RIGODAL_DATA.booking.checkIn);
-      const outDate = new Date(RIGODAL_DATA.booking.checkOut);
-      const hoursToCheckin = (inDate - now) / (1000 * 60 * 60);
-      const hoursToCheckout = (outDate - now) / (1000 * 60 * 60);
-
-      if (now < inDate) return hoursToCheckin <= 24 ? 'arriving-soon' : 'before-stay';
-      if (now < outDate) return hoursToCheckout <= 12 ? 'leaving-soon' : 'during-stay';
-      return 'after-stay';
-    }
+    const getStayStage = RigodalStayStage.get;
 
     function shuffle(array) {
       const copy = array.slice();

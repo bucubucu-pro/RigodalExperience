@@ -241,17 +241,14 @@ RigodalModules.register('hero', {
       messages.push(name ? greetingTemplate.replace('{name}', name) : RIGODAL_I18N.t('hero.greeting'));
 
       // 2. Stay-stage contextual message (arriving soon / leaving soon / quiet hours)
-      const { checkIn, checkOut } = RIGODAL_DATA.booking;
-      const now = new Date();
-      const inDate = new Date(checkIn);
-      const outDate = new Date(checkOut);
-      const hoursToCheckin = (inDate - now) / (1000 * 60 * 60);
-      const hoursToCheckout = (outDate - now) / (1000 * 60 * 60);
-      const hour = now.getHours();
+      // Stage detection lives in js/stayStage.js (shared across
+      // stay.js/chat.js/hero.js) — see that file to change thresholds.
+      const stage = RigodalStayStage.get();
+      const hour = new Date().getHours();
 
-      if (now < inDate && hoursToCheckin <= 24) {
+      if (stage === 'arriving-soon') {
         messages.push(RIGODAL_I18N.t('stay.bannerArrivingSoon'));
-      } else if (now >= inDate && now < outDate && hoursToCheckout <= 12) {
+      } else if (stage === 'leaving-soon') {
         messages.push(RIGODAL_I18N.t('stay.bannerLeavingSoon'));
       } else if (hour >= 22 || hour < 7) {
         messages.push(RIGODAL_I18N.t('stay.bannerQuietHours'));
