@@ -6,6 +6,13 @@
    PLUS the full-screen overlay markup, injected once
    into a dedicated overlay mount point.
 
+   This module now also absorbs what used to be the separate
+   FAQ section — both existed to answer common questions, so
+   they're merged into one place. The homepage teaser shows up
+   to 5 questions relevant to whatever stage of the stay the
+   guest is currently in (randomly sampled if more than 5
+   match); the full chat overlay always shows every question.
+
    TO UPGRADE TO REAL AI: replace getReplyByKeyword()'s and
    getReplyById()'s bodies with a fetch() call to your AI
    backend and keep everything else as-is.
@@ -28,11 +35,9 @@ RigodalModules.register('chat', {
               <div style="font-size:var(--fs-xs); color:var(--color-success);" data-i18n="chat.online">● Online</div>
             </div>
           </div>
-          <div class="chat-suggested-list">
-            <button class="chat-suggested-item" data-open-module="chat" data-chat-key="breakfast" data-i18n="chat.q1">🍳 Where can I have breakfast?</button>
-            <button class="chat-suggested-item" data-open-module="chat" data-chat-key="sunday" data-i18n="chat.q2">📅 What's open on Sunday?</button>
-            <button class="chat-suggested-item" data-open-module="chat" data-chat-key="ac" data-i18n="chat.q3">❄️ How do I use the AC?</button>
-          </div>
+          <!-- Populated by init() — up to 5 questions relevant to the
+               guest's current stay stage, randomly sampled if more match. -->
+          <div class="chat-suggested-list" id="chatTeaserList"></div>
           <button class="btn btn-primary btn-block" style="margin-top:20px;" data-open-module="chat" data-i18n="chat.startBtn">Start chatting</button>
         </div>
       </div>
@@ -52,13 +57,10 @@ RigodalModules.register('chat', {
         </div>
       </div>
       <div class="chat-messages" id="chatMessages"></div>
-      <div class="chat-suggestions" id="chatSuggestions">
-        <button class="chip" data-chat-key="breakfast" data-i18n="chat.suggestBreakfast">🍳 Breakfast spots</button>
-        <button class="chip" data-chat-key="sunday" data-i18n="chat.suggestSunday">📅 Sunday hours</button>
-        <button class="chip" data-chat-key="ac" data-i18n="chat.suggestAC">❄️ AC help</button>
-        <button class="chip" data-chat-key="parking" data-i18n="chat.suggestParking">🚗 Parking</button>
-        <button class="chip" data-chat-key="wine" data-i18n="chat.suggestWine">🍷 Wine tips</button>
-      </div>
+      <!-- Every question lives here, in a horizontally-scrolling grid
+           that wraps into multiple rows (see .chat-suggestions in
+           chat-overlay.css) so more are visible at a glance. -->
+      <div class="chat-suggestions" id="chatSuggestions"></div>
       <div class="chat-input-row" id="chatInputRow" hidden>
         <input type="text" class="chat-input" id="chatInput" placeholder="Ask Rudi anything...">
         <button class="chat-send-btn" id="chatSendBtn">➤</button>
@@ -78,24 +80,37 @@ RigodalModules.register('chat', {
     const messagesEl = document.getElementById('chatMessages');
     const closeBtn = document.getElementById('chatCloseBtn');
     const suggestionsEl = document.getElementById('chatSuggestions');
+    const teaserListEl = document.getElementById('chatTeaserList');
     const rudiFab = document.getElementById('rudiFab');
     const chatInput = document.getElementById('chatInput');
     const chatSendBtn = document.getElementById('chatSendBtn');
 
-    // Knowledge base keywords stay language-agnostic (checked against
-    // free-typed text, in any language), but the REPLIES are pulled live
-    // from translations.js via RIGODAL_I18N.t() — so the chatbot always
-    // answers in whichever language is currently active. Each entry also
-    // has an "id" so suggestion chips can jump straight to a reply without
-    // relying on keyword matching at all.
+    // ============================================
+    // UNIFIED QUESTION BANK — merges the old separate FAQ section
+    // (check-in times, parking-included, pets, hunt-how-it-works,
+    // tech help) with the original chat knowledge base (breakfast,
+    // Sunday hours, AC, wine, wifi, where-to-park, checkout) into
+    // one list. Nothing is duplicated in translations.js: reply
+    // text reuses the existing chat.kb.* and faq.a* keys as-is.
+    //
+    // "category" tags which stage of the stay each question is most
+    // relevant for — used only by the homepage teaser (the full
+    // overlay always shows everything, unfiltered). "general"
+    // questions are relevant in every stage.
+    // ============================================
     const KNOWLEDGE_BASE = [
-      { id: 'breakfast', keys: ['breakfast', 'reggeli', 'frühstück', 'śniadanie', 'petit-déjeuner', 'petit dejeuner'], replyKey: 'chat.kb.breakfastReply' },
-      { id: 'sunday', keys: ['sunday', 'vasárnap', 'sonntag', 'niedziel', 'dimanche'], replyKey: 'chat.kb.sundayReply' },
-      { id: 'ac', keys: ['air condition', ' ac', 'klíma', 'klima', 'klimatyzacj', 'climatisation', 'clim'], replyKey: 'chat.kb.acReply' },
-      { id: 'parking', keys: ['park', 'parkolás', 'parkplatz', 'parking'], replyKey: 'chat.kb.parkingReply' },
-      { id: 'wine', keys: ['winery', 'wine', 'bor', 'wein', 'wino', 'vin'], replyKey: 'chat.kb.wineReply' },
-      { id: 'wifi', keys: ['wifi', 'wi-fi', 'internet'], replyKey: 'chat.kb.wifiReply' },
-      { id: 'checkout', keys: ['checkout', 'check-out', 'check out', 'kijelentkezés', 'auschecken', 'wymeldowanie', 'départ', 'depart'], replyKey: 'chat.kb.checkoutReply' }
+      { id: 'breakfast', category: 'during-stay', keys: ['breakfast', 'reggeli', 'frühstück', 'śniadanie', 'petit-déjeuner', 'petit dejeuner'], chipKey: 'chat.suggestBreakfast', replyKey: 'chat.kb.breakfastReply' },
+      { id: 'sunday', category: 'during-stay', keys: ['sunday', 'vasárnap', 'sonntag', 'niedziel', 'dimanche'], chipKey: 'chat.suggestSunday', replyKey: 'chat.kb.sundayReply' },
+      { id: 'ac', category: 'during-stay', keys: ['air condition', ' ac', 'klíma', 'klima', 'klimatyzacj', 'climatisation', 'clim'], chipKey: 'chat.suggestAC', replyKey: 'chat.kb.acReply' },
+      { id: 'wine', category: 'during-stay', keys: ['winery', 'wine', 'bor', 'wein', 'wino', 'vin'], chipKey: 'chat.suggestWine', replyKey: 'chat.kb.wineReply' },
+      { id: 'wifi', category: 'arriving-soon', keys: ['wifi', 'wi-fi', 'internet'], chipKey: 'chat.suggestWifi', replyKey: 'chat.kb.wifiReply' },
+      { id: 'parking-where', category: 'arriving-soon', keys: ['park', 'parkolás', 'parkplatz', 'parking'], chipKey: 'chat.suggestParking', replyKey: 'chat.kb.parkingReply' },
+      { id: 'checkin-times', category: 'before-stay', keys: ['check-in', 'checkin', 'bejelentkezés', 'einchecken', 'zameldowanie', 'arrivée'], chipKey: 'chat.suggestCheckin', replyKey: 'faq.a1' },
+      { id: 'parking-included', category: 'before-stay', keys: ['included', 'benne van', 'inklusive', 'wliczone', 'inclus'], chipKey: 'chat.suggestParkingIncluded', replyKey: 'faq.a2' },
+      { id: 'checkout', category: 'leaving-soon', keys: ['checkout', 'check-out', 'check out', 'kijelentkezés', 'auschecken', 'wymeldowanie', 'départ', 'depart'], chipKey: 'chat.suggestCheckout', replyKey: 'chat.kb.checkoutReply' },
+      { id: 'pets', category: 'general', keys: ['pet', 'kisállat', 'haustier', 'zwierz', 'animal'], chipKey: 'chat.suggestPets', replyKey: 'faq.a3' },
+      { id: 'hunt-how', category: 'general', keys: ['hunt', 'kalandot', 'kaland', 'schatzsuche', 'poszukiwanie', 'chasse'], chipKey: 'chat.suggestHunt', replyKey: 'faq.a4' },
+      { id: 'tech-help', category: 'general', keys: ['tech', 'app', 'alkalmazás', 'aplikacj', 'appli'], chipKey: 'chat.suggestTech', replyKey: 'faq.a5' }
     ];
 
     function getReplyByKeyword(userText) {
@@ -107,6 +122,56 @@ RigodalModules.register('chat', {
     function getReplyById(id) {
       const match = KNOWLEDGE_BASE.find((k) => k.id === id);
       return RIGODAL_I18N.t(match ? match.replyKey : 'chat.kb.fallbackReply');
+    }
+
+    // ============================================
+    // Stay-stage detection — same thresholds as js/modules/stay.js's
+    // getStayStage() (kept as a separate small copy here rather than
+    // a shared import, since this project has no build step / module
+    // bundler to share code across files without adding a new global).
+    // ============================================
+    function getStayStage() {
+      const now = new Date();
+      const inDate = new Date(RIGODAL_DATA.booking.checkIn);
+      const outDate = new Date(RIGODAL_DATA.booking.checkOut);
+      const hoursToCheckin = (inDate - now) / (1000 * 60 * 60);
+      const hoursToCheckout = (outDate - now) / (1000 * 60 * 60);
+
+      if (now < inDate) return hoursToCheckin <= 24 ? 'arriving-soon' : 'before-stay';
+      if (now < outDate) return hoursToCheckout <= 12 ? 'leaving-soon' : 'during-stay';
+      return 'after-stay';
+    }
+
+    function shuffle(array) {
+      const copy = array.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // Picks up to 5 questions relevant to the current stay stage
+    // (stage-tagged + always-relevant "general" ones). If more than 5
+    // match, 5 are chosen at random each time this runs.
+    function pickTeaserQuestions() {
+      const stage = getStayStage();
+      const pool = KNOWLEDGE_BASE.filter((q) => q.category === stage || q.category === 'general');
+      return pool.length > 5 ? shuffle(pool).slice(0, 5) : pool;
+    }
+
+    function renderTeaser() {
+      const questions = pickTeaserQuestions();
+      teaserListEl.innerHTML = questions.map((q) => `
+        <button class="chat-suggested-item" data-open-module="chat" data-chat-key="${q.id}">${RIGODAL_I18N.t(q.chipKey)}</button>
+      `).join('');
+    }
+
+    // Every question, unfiltered, for the full chat overlay
+    function renderOverlaySuggestions() {
+      suggestionsEl.innerHTML = KNOWLEDGE_BASE.map((q) => `
+        <button class="chip" data-chat-key="${q.id}">${RIGODAL_I18N.t(q.chipKey)}</button>
+      `).join('');
     }
 
     function addMessage(text, from) {
@@ -161,16 +226,19 @@ RigodalModules.register('chat', {
       if (rudiFab) rudiFab.classList.remove('is-hidden-for-chat');
     }
 
-    // Any element anywhere on the page with data-open-module="chat" opens this.
-    // If it also has data-chat-key, its own (translated) label is sent as
-    // the user's message and the matching reply is looked up by id —
-    // never by re-parsing hardcoded English text.
-    document.querySelectorAll('[data-open-module="chat"]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.chatKey;
-        const label = btn.textContent.trim();
-        openChat(key, label);
-      });
+    // Any element anywhere on the page with data-open-module="chat" opens
+    // this. If it also has data-chat-key, its own (translated) label is
+    // sent as the user's message and the matching reply is looked up by
+    // id — never by re-parsing hardcoded English text. Uses event
+    // delegation on document.body so it works for the teaser's chips too,
+    // which are (re)rendered dynamically and wouldn't otherwise be caught
+    // by a one-time querySelectorAll at init time.
+    document.body.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-open-module="chat"]');
+      if (!btn) return;
+      const key = btn.dataset.chatKey;
+      const label = btn.textContent.trim();
+      openChat(key, label);
     });
 
     closeBtn.addEventListener('click', closeChat);
@@ -187,5 +255,12 @@ RigodalModules.register('chat', {
         if (e.key === 'Enter') sendMessage(chatInput.value);
       });
     }
+
+    renderTeaser();
+    renderOverlaySuggestions();
+    document.addEventListener('rigodal:langchange', () => {
+      renderTeaser();
+      renderOverlaySuggestions();
+    });
   }
 });
