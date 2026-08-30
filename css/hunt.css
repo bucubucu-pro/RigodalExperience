@@ -36,12 +36,24 @@ body.hunt-body {
   height: 40px;
   border-radius: var(--radius-full);
   background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.18);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
   color: var(--color-white);
   flex-shrink: 0;
+  transition: background var(--duration-fast) var(--ease-settle),
+              transform var(--duration-fast) var(--ease-settle);
+}
+
+.hunt-back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.hunt-back-btn:active {
+  background: rgba(255,255,255,0.22);
+  transform: scale(0.92);
 }
 
 .hunt-header-title {
@@ -136,12 +148,16 @@ body.hunt-body {
   opacity: 0.75;
 }
 
-/* Rudi's position marker — animates smoothly between nodes as progress updates */
+/* Rudi's position marker — animates smoothly between nodes as progress
+   updates. Sits offset toward the current node's bottom-right corner
+   (via the left/top percentages set in JS), simply centered on that
+   offset point — no extra directional transform layered on top, so
+   the offset from JS is exactly where he visually lands. */
 .hunt-rudi-token {
   position: absolute;
   width: 44px;
   height: 44px;
-  transform: translate(-50%, -78%);
+  transform: translate(-50%, -50%);
   transition: left 0.8s var(--ease-settle), top 0.8s var(--ease-settle);
   z-index: 6;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
@@ -150,8 +166,8 @@ body.hunt-body {
 }
 
 @keyframes hunt-rudi-bob {
-  0%, 100% { transform: translate(-50%, -78%); }
-  50% { transform: translate(-50%, -88%); }
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, -58%); }
 }
 
 .hunt-rudi-token svg { width: 100%; height: 100%; }
@@ -413,6 +429,47 @@ body.hunt-body {
   color: var(--color-text);
   margin-bottom: var(--sp-5);
   text-align: left;
+}
+
+/* --- Restart button: clears progress and starts the adventure over.
+       Placed subtly below the map (not in the header) so it's easy to
+       find but impossible to tap by accident. --- */
+.hunt-restart-row {
+  padding: 0 var(--sp-5) var(--sp-5);
+  text-align: center;
+}
+
+.hunt-restart-btn {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-full);
+  border: 1.5px dashed rgba(92,26,46,0.25);
+  transition: color var(--duration-fast) var(--ease-settle),
+              border-color var(--duration-fast) var(--ease-settle);
+}
+
+.hunt-restart-btn:active {
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+}
+
+/* Same restart action, offered again inside the finale screen so
+   replaying feels like a natural next step after finishing. */
+.hunt-finale-restart-btn {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-accent-strong);
+  background: var(--color-white);
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.hunt-finale-restart-btn:active {
+  transform: scale(0.96);
 }
 
 /* --- Final celebration screen --- */
