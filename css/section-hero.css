@@ -414,3 +414,27 @@
   0%, 100% { transform: translate(-50%, 0); opacity: 0.7; }
   50% { transform: translate(-50%, 6px); opacity: 1; }
 }
+
+/* ============================================
+   SCROLL-START JANK FIX
+   Elements that animate in on page load (hero title, Rudi's speech
+   bubble, hero action cards, the bobbing Rudi avatar, the scroll
+   cue) don't get their own GPU compositor layer until the browser
+   actually needs one — and if that "just in time" promotion happens
+   to land at the exact moment the guest starts scrolling, it causes
+   a one-time hitch right at the start, which then smooths out for
+   the rest of the scroll.
+
+   Adding `will-change` up front means the browser prepares that
+   layer proactively, during the idle moment right after the page
+   paints, instead of reactively at the exact moment animation and
+   scroll collide.
+   ============================================ */
+
+.hero-brand,
+.rudi-bubble-row,
+.hero-action-card,
+.rudi-avatar,
+.hero-scroll-cue {
+  will-change: opacity, transform;
+}
