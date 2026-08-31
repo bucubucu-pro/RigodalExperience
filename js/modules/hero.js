@@ -116,22 +116,32 @@ RigodalModules.register('hero', {
           </a>
         </div>
 
-        <!-- 4-card grid: 2 module-driven (from modules.config.js
-             inHeroActions:true) + 2 static host-contact cards below. -->
+        <!-- 5-card grid: 1 static Directions card first, then 2
+             module-driven cards, then Call + WhatsApp. -->
         <div class="hero-actions">
+          <!-- Directions is placed first on purpose (guests need to
+               find the place before anything else applies). Real
+               contact links are hardcoded here (not module-driven)
+               since these are external links (tel: / wa.me / Google
+               Maps), not links to a module's own section. Their
+               actual href values are filled in by init() below, from
+               js/data.js -> business — edit the phone/whatsapp/
+               directions values there, not here. -->
+          <a class="hero-action-card" id="heroDirectionsCard" href="#" target="_blank" rel="noopener">
+            <span class="hero-action-icon">🧭</span>
+            <span class="hero-action-label" data-i18n="hero.actionDirections">Get Directions</span>
+          </a>
+
           <!-- Module-generated cards (House Guide, Explore Eger) —
                display:contents makes this wrapper's children merge
                into the parent grid as if they were direct children. -->
           <div id="heroActionsContainer" class="hero-actions-slot"></div>
 
-          <!-- Real host contact: call and WhatsApp. Hardcoded here
-               (not module-driven) since these are external links
-               (tel: / wa.me), not links to a module's own section. -->
-          <a class="hero-action-card" href="tel:+36204405400">
+          <a class="hero-action-card" id="heroCallCard" href="#">
             <span class="hero-action-icon">📞</span>
             <span class="hero-action-label" data-i18n="hero.actionCall">Call Owner</span>
           </a>
-          <a class="hero-action-card" href="https://wa.me/36204405400" target="_blank" rel="noopener">
+          <a class="hero-action-card" id="heroWhatsappCard" href="#" target="_blank" rel="noopener">
             <span class="hero-action-icon">💬</span>
             <span class="hero-action-label" data-i18n="hero.actionWhatsapp">Message on WhatsApp</span>
           </a>
@@ -147,6 +157,17 @@ RigodalModules.register('hero', {
 
   init: function () {
     const RING_CIRCUMFERENCE = 264;
+
+    // Fill in the real contact/directions links from js/data.js ->
+    // business, instead of hardcoding phone numbers or URLs directly
+    // in this module's HTML template.
+    const biz = RIGODAL_DATA.business || {};
+    const callCard = document.getElementById('heroCallCard');
+    const whatsappCard = document.getElementById('heroWhatsappCard');
+    const directionsCard = document.getElementById('heroDirectionsCard');
+    if (callCard && biz.phone) callCard.href = 'tel:' + biz.phone;
+    if (whatsappCard && biz.whatsappNumber) whatsappCard.href = 'https://wa.me/' + biz.whatsappNumber;
+    if (directionsCard && biz.directionsUrl) directionsCard.href = biz.directionsUrl;
 
     const ring = document.getElementById('countdownRing');
     const valueEl = document.getElementById('countdownValue');

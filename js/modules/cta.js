@@ -8,13 +8,16 @@ RigodalModules.register('cta', {
     <section class="section cta-section" data-section>
       <h2 class="section-title" data-i18n="cta.title">Stay with Rudi</h2>
       <p class="section-subtitle" data-i18n="cta.subtitle">Your next Eger memory starts here.</p>
-      <a href="#" class="btn btn-gold" style="min-width:220px;" data-i18n="cta.button">Stay with Rudi</a>
-      <div class="cta-microcopy" data-i18n="cta.microcopy">🪶 +100 feathers for booking direct</div>
+      <a href="#" id="ctaBookBtn" target="_blank" rel="noopener" class="btn btn-gold" style="min-width:220px;" data-i18n="cta.button">Stay with Rudi</a>
     </section>
   `,
 
   init: function () {
-    // No dynamic behavior yet — booking link target can be set here
-    // once a real booking system/URL is available.
+    // Real booking link lives in js/data.js -> business.bookingUrl —
+    // edit it there, not here, if the URL ever changes.
+    const bookBtn = document.getElementById('ctaBookBtn');
+    if (bookBtn && RIGODAL_DATA.business && RIGODAL_DATA.business.bookingUrl) {
+      bookBtn.href = RIGODAL_DATA.business.bookingUrl;
+    }
   }
 });
