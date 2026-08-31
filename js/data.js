@@ -18,8 +18,22 @@ const RIGODAL_DATA = {
   // ---- Business info ----
   // googleReviewUrl: the direct link that opens Google's "write a
   // review" box for this guesthouse.
+  // ---- Business info ----
+  // Central place for every real-world contact detail / external link
+  // the site uses (phone, email, booking, directions, reviews). Edit
+  // values here once — the hero action cards, the footer, and the
+  // "Book Direct" button all read from this object instead of having
+  // the same number/link hardcoded in multiple files.
   business: {
-    googleReviewUrl: "https://g.page/r/CdjABHZgoNi9EBI/review"
+    googleReviewUrl: "https://g.page/r/CdjABHZgoNi9EBI/review",
+    bookingUrl: "https://rigodalvendeghazeger.hu/foglalas-2-0/",
+    directionsUrl: "https://maps.app.goo.gl/hNEH7RGtkhGDvY8v6?g_st=ac",
+    // Phone, shown/used exactly as written (tel: links accept spaces fine).
+    phone: "+36 20 440 5400",
+    // WhatsApp needs digits only, no spaces or "+" — kept separate
+    // from `phone` above because wa.me links break otherwise.
+    whatsappNumber: "36204405400",
+    email: "rigodalvendeghaz@gmail.com"
   },
 
   // ---- Places for Explore Eger ----

@@ -67,13 +67,13 @@ const RIGODAL_MODULES_CONFIG = [
     inHeroActions: false
   },
   {
-    id: 'proof',
+    id: 'cta',
     enabled: true,
     inNav: false,
     inHeroActions: false
   },
   {
-    id: 'cta',
+    id: 'proof',
     enabled: true,
     inNav: false,
     inHeroActions: false
